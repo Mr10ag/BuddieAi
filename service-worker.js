@@ -7,7 +7,7 @@
 // cached by the app itself via IndexedDB/Cache Storage, and we don't
 // want to interfere with that.
 
-const CACHE_NAME = "buddie-ai-shell-v2";
+const CACHE_NAME = "buddie-ai-shell-v3";
 const SHELL_FILES = [
   "./",
   "./index.html",

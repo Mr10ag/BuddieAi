@@ -132,7 +132,7 @@
 
 <header>
   <img src="data:image/png;base64,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" alt="">
-  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.13</span></h1>
+  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.13.1</span></h1>
   <span id="storage-mode-badge" style="font-size:10px;color:var(--bad);display:none"></span>
   <div id="target-bar" onclick="editTarget()">🎯 No active project target — tap to set</div>
   <span id="model-badge" style="font-size:11px;color:var(--dim);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px 8px;white-space:nowrap;flex-shrink:0" title="Model status — visible from every tab, not just Settings">🧠 …</span>
@@ -2635,7 +2635,7 @@ async function seedMemoryIfEmpty(){
 // own. What this DOES guarantee: whatever version is in the file you replace + reload
 // is exactly what runs — nothing changes silently mid-session. This banner just makes
 // that visible so you can confirm an update actually landed after you swap the file.
-const BUILD_VERSION = "v2.13"; // v2.2 added the virtual pet + shop; v2.3 added the second-AI critic;
+const BUILD_VERSION = "v2.13.1"; // v2.2 added the virtual pet + shop; v2.3 added the second-AI critic;
 // v2.13 — speed + accuracy pass (bugs found reviewing the whole file, no feature changes):
 // (1) BIGGEST ACCURACY FIX: the Settings "scraper helper model" was fully functional to
 //     load, but nothing on the real ingestion path (throttledSourceFetch, used by every
