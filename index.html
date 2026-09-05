@@ -32,9 +32,19 @@
   nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
   nav button{flex:1;background:none;border:none;color:var(--dim);padding:10px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
   nav button.active{color:var(--accent);border-bottom:2px solid var(--accent);text-shadow:0 0 8px rgba(0,246,255,.7)}
-  #view-container{flex:1;position:relative;min-height:0;overflow:hidden}
-  .view{display:none;position:absolute;inset:0;overflow:hidden}
-  .view.active{display:flex}
+  #view-container{flex:1;position:relative;min-height:0;overflow:hidden;background:var(--bg)}
+  /* v2.13.2 fix: every view now paints an OPAQUE background and sits in its own
+     stacking context. Previously `.view` had no background at all, so any gap
+     between its own child elements (padding, margins, empty space) was fully
+     transparent — meaning if a browser ever failed to un-paint a hidden tab
+     (a known Android/Chrome WebView compositing bug when toggling display via
+     class alone on an absolutely-positioned element), that stale content showed
+     straight through the visible tab's transparent gaps. An opaque background +
+     explicit z-index ordering makes the active view fully cover the viewport
+     no matter what state a hidden view's paint is stuck in underneath it. */
+  .view{display:none;position:absolute;inset:0;overflow:hidden;background:var(--bg);z-index:0}
+  .view.active{display:flex;z-index:1}
+  .view[hidden]{display:none!important}
   /* CHAT + CANVAS */
   #chat-view{flex-direction:column}
   #split{flex:1;display:flex;overflow:hidden}
@@ -177,19 +187,19 @@
 </div>
 
 <!-- PROJECTS -->
-<div class="view" id="projects-view">
+<div class="view" id="projects-view" hidden>
   <button class="primary" style="align-self:flex-start;margin-bottom:10px" onclick="newProject()">+ New Project</button>
   <div id="project-list"></div>
 </div>
 
 <!-- PET -->
-<div class="view" id="pet-view">
+<div class="view" id="pet-view" hidden>
   <div id="pet-stage"></div>
   <div id="pet-shop"></div>
 </div>
 
 <!-- MEMORY -->
-<div class="view" id="memory-view">
+<div class="view" id="memory-view" hidden>
   <div class="mem-col">
     <div class="col-label">🧅 Tor Review Queue <span style="color:var(--dim);font-weight:normal">— nothing here is saved anywhere until you tap Keep</span></div>
     <div class="status-line" style="padding:6px 10px 0">Text-only results from Tor searches wait here first. Tap Keep to move an item into Pre-Verified (normal path from there), or Discard to erase it for good. Anything the content filter flagged never reaches this list at all.</div>
@@ -208,7 +218,7 @@
 </div>
 
 <!-- SETTINGS -->
-<div class="view" id="settings-view">
+<div class="view" id="settings-view" hidden>
   <div class="field">
     <label>Local network / scraper endpoint (your own WiFi service, e.g. http://192.168.1.50:8787)</label>
     <input id="wifi-endpoint" placeholder="http://192.168.x.x:PORT">
@@ -805,11 +815,21 @@ document.querySelectorAll("nav button").forEach(b=>{
       // the old tab's content ghosted on screen underneath the new one.
       // Setting the inline style directly forces a real repaint regardless.
       v.style.display = "none";
+      // v2.13.2: also set the native `hidden` attribute. This is a different
+      // mutation than a class/style change, so it forces layout recalculation
+      // through a separate browser code path — extra insurance against the
+      // same ghosting bug on WebViews where even the inline-style fix above
+      // occasionally doesn't trigger a repaint of the outgoing view.
+      v.hidden = true;
     });
     b.classList.add("active");
     const activeView = document.getElementById(b.dataset.view);
     activeView.classList.add("active");
     activeView.style.display = "flex";
+    activeView.hidden = false;
+    // Force a synchronous reflow between hiding the old view and showing the
+    // new one, so the browser can't coalesce/skip the repaint of either step.
+    void activeView.offsetHeight;
     if(b.dataset.view==="memory-view") renderMemory();
     if(b.dataset.view==="projects-view") renderProjects();
     if(b.dataset.view==="pet-view") renderPetView();
