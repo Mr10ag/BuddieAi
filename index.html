@@ -1,0 +1,2925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Buddie AI</title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFqUlEQVR4nO3dPXbbOBiFYchn+ilzsoRM6eV4gVlOSnsJOS69gkxjObQsSgDxR37v+3QpIpLQvQBoWfQpTfTvt//+zDy+9uPt9fk047jDDmrYVWpEKboewNCrlV5l6PKiBl+9tC5C0xcz+BqlVRGavIjB1yy1RXioPQHDr5lq81dVAMOvPajJ4ablw+Brr0q3RMUrgOHXnpXms6gAhl9HUJLT7AIYfh1Jbl6zCmD4dUQ5ub1bAMOvI7uX3+rPAaQju1kAZ39FcCvHqwUw/IpkLc9XC2D4FdG1XHsPILQvBXD2V2SX+XYFENqnAjj7i2CZc1cAoX0UwNlfJOe8uwIIzQII7ZSS2x9xuQIIzQIIzQIIzQII7cEbYJG5AgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjtn9knQPDj569N/+/l6bHxmejSyd8Famtr2HNZirYsQAO9Q7/GMtSzABVmBf+SRdjOAhTaS+jXWIYyFiDT3oN/ySLk8cegGY4W/pSOec4zuALcECVErgbrXAFWRAl/SrGupTVXgAvRw+Jq8JkrwEL08KfEuMYSFuAdKRika73HAiRmIIjXfA2+AOQgkK/9DF0AA+AYYAtAf+OXyGOBLAD5DV9DHRNcAahvdA7i2OAKIC2hCkCc4UrRxghTANobW4M0VpgCSNcgCkCa0VqhjFn4AlDeyB4IYxe+ANItoQtAmMF6iz6GoQsg3RO2ANFnrpEij2XYAkg5fDhupWvfse01Y448FkXIL8WPCEXOl8tbncfIY9Wex9G4BdogNwgtAjPyWEQWQGjhCrC35/PXzMwjj5Uj4v1GuAJIJSyA0CyA0CxAodJ9cM2+eeSxqEIVwAD0F22MQxVglNwQtAjLyGMR+asQG50DN+LXE0Yei8YCVBoZQMPenlsgoVkAoVkAoVkAoVkAoVkAoVkAoVkAoVkAoYUqgN+L7S/aGIcqgFTKAgjNAgjNAggtXAGi3aTtScSxDVcAqYQFEFrIAkRcqmeLOqYhCzDKHkKxh3M4MguwwcvT40fwZgZweQ4WYZuwBegZiD1+Ob3nOUUuV9gCjDQjIJFDOVLoAoxcBUYG8vJYzv7bhS5AbzNKMDL8BCH/RtilGX80o/UxZzwVLvrsnxKkACnNC0vtcXu97tbjRuOjERtZe37n8t+5ob0VPrc8bWFWgJTGhafX7Hn0898jVAFSGj+D1obpaOd7NG6BOlsGODdcbnPGwa0AKRmwNbTZPyXo5wDEN/oe6pggC5AS9w2/hjwW2AKkxH7jz+hjgC5ASuwAkK/9DF+AlJhBIF7zNRbgHSkQpGu9xwIsEIJBuMYSyM8BckT7rMDgX+cKsCJSYCJdS2uuABmOuhoY/PtcATIcMUhHPOcZXAEK7X01MPhlLECFvZTB0G9nARqYVQSDX88CNOZ3dY/FAgywtRSGvT8LIDR/DCo0CyA0CyA0CyA0CyA0CyA0H4y14sfPX79nn0NrL0+P32efw974OcCFiMG/ZBH+cgu0QAh/SpzrzGEBhGYB3tFmRdr1rrEAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQnt4e30+zT6JPaA9KoR2vWtcAYAM/18WYIEQDMI1ljillJJPh/sq4mNDDP9XFkBoDyml5I2wiN5en0/eAwjNAgjtowBug0RyzrsrgNA+FcBVQATLnLsCCO1LAVwFFNllvl0BhHa1AK4CiuharldXAEugSNbyfHMLZAkUwa0cew8gtLsFcBXQkd3Lb9YKYAl0RDm5zd4CWQIdSW5ei+4BLIGOoCSnxTfBlkB7VprPqjD7VUrtxdaJuerHoK4G2oOaHFZ/DmAJNFNt/pqG1y2RRmk18XaZvS2Cemm94+i6fbEIaqXXVnvY/t0yqNSI+8v/ATaQ7h8YNg8KAAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFqUlEQVR4nO3dPXbbOBiFYchn+ilzsoRM6eV4gVlOSnsJOS69gkxjObQsSgDxR37v+3QpIpLQvQBoWfQpTfTvt//+zDy+9uPt9fk047jDDmrYVWpEKboewNCrlV5l6PKiBl+9tC5C0xcz+BqlVRGavIjB1yy1RXioPQHDr5lq81dVAMOvPajJ4ablw+Brr0q3RMUrgOHXnpXms6gAhl9HUJLT7AIYfh1Jbl6zCmD4dUQ5ub1bAMOvI7uX3+rPAaQju1kAZ39FcCvHqwUw/IpkLc9XC2D4FdG1XHsPILQvBXD2V2SX+XYFENqnAjj7i2CZc1cAoX0UwNlfJOe8uwIIzQII7ZSS2x9xuQIIzQIIzQIIzQII7cEbYJG5AgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjtn9knQPDj569N/+/l6bHxmejSyd8Famtr2HNZirYsQAO9Q7/GMtSzABVmBf+SRdjOAhTaS+jXWIYyFiDT3oN/ySLk8cegGY4W/pSOec4zuALcECVErgbrXAFWRAl/SrGupTVXgAvRw+Jq8JkrwEL08KfEuMYSFuAdKRika73HAiRmIIjXfA2+AOQgkK/9DF0AA+AYYAtAf+OXyGOBLAD5DV9DHRNcAahvdA7i2OAKIC2hCkCc4UrRxghTANobW4M0VpgCSNcgCkCa0VqhjFn4AlDeyB4IYxe+ANItoQtAmMF6iz6GoQsg3RO2ANFnrpEij2XYAkg5fDhupWvfse01Y448FkXIL8WPCEXOl8tbncfIY9Wex9G4BdogNwgtAjPyWEQWQGjhCrC35/PXzMwjj5Uj4v1GuAJIJSyA0CyA0CxAodJ9cM2+eeSxqEIVwAD0F22MQxVglNwQtAjLyGMR+asQG50DN+LXE0Yei8YCVBoZQMPenlsgoVkAoVkAoVkAoVkAoVkAoVkAoVkAoVkAoYUqgN+L7S/aGIcqgFTKAgjNAgjNAggtXAGi3aTtScSxDVcAqYQFEFrIAkRcqmeLOqYhCzDKHkKxh3M4MguwwcvT40fwZgZweQ4WYZuwBegZiD1+Ob3nOUUuV9gCjDQjIJFDOVLoAoxcBUYG8vJYzv7bhS5AbzNKMDL8BCH/RtilGX80o/UxZzwVLvrsnxKkACnNC0vtcXu97tbjRuOjERtZe37n8t+5ob0VPrc8bWFWgJTGhafX7Hn0898jVAFSGj+D1obpaOd7NG6BOlsGODdcbnPGwa0AKRmwNbTZPyXo5wDEN/oe6pggC5AS9w2/hjwW2AKkxH7jz+hjgC5ASuwAkK/9DF+AlJhBIF7zNRbgHSkQpGu9xwIsEIJBuMYSyM8BckT7rMDgX+cKsCJSYCJdS2uuABmOuhoY/PtcATIcMUhHPOcZXAEK7X01MPhlLECFvZTB0G9nARqYVQSDX88CNOZ3dY/FAgywtRSGvT8LIDR/DCo0CyA0CyA0CyA0CyA0CyA0H4y14sfPX79nn0NrL0+P32efw974OcCFiMG/ZBH+cgu0QAh/SpzrzGEBhGYB3tFmRdr1rrEAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQnt4e30+zT6JPaA9KoR2vWtcAYAM/18WYIEQDMI1ljillJJPh/sq4mNDDP9XFkBoDyml5I2wiN5en0/eAwjNAgjtowBug0RyzrsrgNA+FcBVQATLnLsCCO1LAVwFFNllvl0BhHa1AK4CiuharldXAEugSNbyfHMLZAkUwa0cew8gtLsFcBXQkd3Lb9YKYAl0RDm5zd4CWQIdSW5ei+4BLIGOoCSnxTfBlkB7VprPqjD7VUrtxdaJuerHoK4G2oOaHFZ/DmAJNFNt/pqG1y2RRmk18XaZvS2Cemm94+i6fbEIaqXXVnvY/t0yqNSI+8v/ATaQ7h8YNg8KAAAAAElFTkSuQmCC">
+<meta name="theme-color" content="#05060f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Buddie AI">
+<link rel="manifest" href="manifest.json">
+<style>
+  :root{
+    --bg:#05060f; --bg2:#12132b; --panel:#14163a; --border:#3a2f8f;
+    --accent:#00f6ff; --accent2:#ff2ec4; --text:#f2f4ff; --dim:#9a9fd9;
+    --ok:#39ff88; --warn:#ffe500; --bad:#ff2d55;
+    --glow-accent:0 0 6px rgba(0,246,255,.85),0 0 16px rgba(0,246,255,.45);
+    --glow-accent2:0 0 6px rgba(255,46,196,.85),0 0 16px rgba(255,46,196,.45);
+    --glow-ok:0 0 6px rgba(57,255,136,.8),0 0 14px rgba(57,255,136,.4);
+    --glow-warn:0 0 6px rgba(255,229,0,.8),0 0 14px rgba(255,229,0,.4);
+    --glow-bad:0 0 6px rgba(255,45,85,.8),0 0 14px rgba(255,45,85,.4);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(circle at 20% -10%,#1a0f3d 0%,var(--bg) 45%);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow:hidden;display:flex;flex-direction:column;letter-spacing:.01em}
+  header{background:linear-gradient(180deg,var(--panel),var(--bg2));border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(0,246,255,.25),0 2px 10px rgba(0,0,0,.5);padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap}
+  header img{width:30px;height:30px;border-radius:8px;box-shadow:var(--glow-accent)}
+  header h1{font-size:16px;margin:0;flex-shrink:0;font-weight:800;letter-spacing:.02em;text-shadow:0 0 12px rgba(0,246,255,.5)}
+  #target-bar{flex:1;min-width:120px;background:var(--bg);border:1px solid var(--accent);border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;color:var(--accent);text-shadow:0 0 6px rgba(0,246,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;box-shadow:inset 0 0 8px rgba(0,246,255,.12)}
+  nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+  nav button{flex:1;background:none;border:none;color:var(--dim);padding:10px;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+  nav button.active{color:var(--accent);border-bottom:2px solid var(--accent);text-shadow:0 0 8px rgba(0,246,255,.7)}
+  #view-container{flex:1;position:relative;min-height:0;overflow:hidden}
+  .view{display:none;position:absolute;inset:0;overflow:hidden}
+  .view.active{display:flex}
+  /* CHAT + CANVAS */
+  #chat-view{flex-direction:column}
+  #split{flex:1;display:flex;overflow:hidden}
+  #chat-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);min-width:0}
+  #canvas-col{flex:1;display:flex;flex-direction:column;min-width:0}
+  #canvas-col.hidden{display:none}
+  #canvas-col.full{flex:1}
+  .col-label{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);padding:6px 10px;border-bottom:1px solid var(--border)}
+  #messages{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:85%;padding:8px 12px;border-radius:10px;font-size:14px;line-height:1.4}
+  .msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--accent2),#a913c9);color:#0a0014;font-weight:600;box-shadow:var(--glow-accent2)}
+  .msg.ai{align-self:flex-start;background:var(--bg2);border:1px solid var(--accent);box-shadow:0 0 10px rgba(0,246,255,.15)}
+  .msg.step{align-self:stretch;background:none;border:1px dashed var(--border);color:var(--dim);font-size:12px}
+  #canvas-body{flex:1;overflow-y:auto;padding:10px;font-size:13px}
+  .canvas-step{border-left:3px solid var(--accent);padding:6px 10px;margin-bottom:8px;background:var(--bg2);border-radius:0 6px 6px 0;box-shadow:-2px 0 8px -2px rgba(0,246,255,.4)}
+  .canvas-step .t{font-size:11px;color:var(--dim)}
+  #input-row{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border);background:var(--bg2)}
+  #input-row textarea{flex:1;resize:none;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:14px;height:40px}
+  #input-row textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--glow-accent)}
+  /* LED BUTTONS */
+  /* v2.12 perf fix: the old led-pulse animation ran `infinite` on every .primary button
+     for as long as it was on screen — animating a blurred box-shadow forces a full
+     repaint of that region every frame (box-shadow can't be GPU-composited the way
+     transform/opacity can), so 2+ buttons visible at once meant 2+ permanent repaint
+     loops running the whole time the app was open, regardless of model/tab activity.
+     This keeps the same visual identity (a settled glow) without animating forever. */
+  button.primary{background:linear-gradient(180deg,#1de6ff,#00b8c9);border:1px solid #7ff5ff;color:#001217;font-weight:800;letter-spacing:.02em;border-radius:8px;padding:0 16px;cursor:pointer;box-shadow:0 0 6px rgba(0,246,255,.85),0 0 16px rgba(0,246,255,.45),inset 0 1px 0 rgba(255,255,255,.5);transition:transform .08s,box-shadow .15s}
+  button.primary:hover{box-shadow:0 0 14px rgba(0,246,255,1),0 0 34px rgba(0,246,255,.8),inset 0 1px 0 rgba(255,255,255,.6)}
+  button.primary:active{transform:scale(.96)}
+  button.primary:disabled{animation:none;opacity:.4;cursor:not-allowed;box-shadow:none}
+  button.ghost{background:#0b0c22;border:1px solid var(--accent);color:var(--accent);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:12px;font-weight:600;box-shadow:0 0 5px rgba(0,246,255,.35),inset 0 0 6px rgba(0,246,255,.08);transition:box-shadow .15s,transform .08s}
+  button.ghost:hover{box-shadow:var(--glow-accent),inset 0 0 8px rgba(0,246,255,.2)}
+  button.ghost:active{transform:scale(.96)}
+  button.ghost::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 4px 1px var(--accent);margin-right:6px;vertical-align:middle}
+  /* SEARCH BAR */
+  #search-bar{display:flex;gap:8px;padding:8px 10px;background:var(--bg2);border-bottom:1px solid var(--border)}
+  #search-bar input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:13px}
+  #search-bar input:focus{outline:none;border-color:var(--accent2);box-shadow:var(--glow-accent2)}
+  /* MEMORY VIEW */
+  #memory-view{flex-direction:row;overflow:hidden}
+  .mem-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden}
+  .mem-col:last-child{border-right:none}
+  .mem-list{flex:1;overflow-y:auto;padding:8px}
+  .mem-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px;font-size:12px}
+  .mem-item .meta{color:var(--dim);font-size:11px;margin-top:4px;display:flex;justify-content:space-between}
+  .mem-item pre{white-space:pre-wrap;margin:4px 0;font-family:inherit;font-size:12px}
+  .badge{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:700;border:1px solid transparent}
+  .badge.ok{background:rgba(57,255,136,.12);color:var(--ok);border-color:rgba(57,255,136,.5);box-shadow:var(--glow-ok)}
+  .badge.warn{background:rgba(255,229,0,.12);color:var(--warn);border-color:rgba(255,229,0,.5);box-shadow:var(--glow-warn)}
+  /* SETTINGS */
+  #settings-view{flex-direction:column;overflow-y:auto;padding:16px;gap:14px}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .field label{font-size:12px;color:var(--dim)}
+  .field input, .field select{background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:13px}
+  .status-line{font-size:12px;color:var(--dim);margin-top:4px}
+  /* PROJECTS */
+  #projects-view{flex-direction:column;padding:12px;overflow-y:auto}
+  .project-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+  .project-card:hover{border-color:var(--accent);box-shadow:var(--glow-accent)}
+  .project-card h3{margin:0 0 4px;font-size:14px}
+  .project-card p{margin:0;font-size:12px;color:var(--dim)}
+  /* KEYBOARD NAV */
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+  .project-card:focus-visible{outline:3px solid var(--accent)}
+  /* PET */
+  #pet-view{flex-direction:column;overflow-y:auto;padding:12px}
+  #pet-stage{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px}
+  #pet-emoji{font-size:64px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+  #pet-emoji.wobble{animation:wobble 1.8s ease-in-out infinite}
+  @keyframes wobble{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+  #pet-name{font-weight:600;margin-top:6px}
+  #pet-status-line{font-size:12px;color:var(--dim);margin-top:2px}
+  .bar-row{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px}
+  .bar-row .label{width:46px;text-align:left;color:var(--dim);flex-shrink:0}
+  .bar-track{flex:1;height:10px;border-radius:6px;background:var(--bg);border:1px solid var(--border);overflow:hidden}
+  .bar-fill{height:100%;border-radius:6px;transition:width .3s ease}
+  .bar-fill.ok{background:var(--ok)}
+  .bar-fill.warn{background:var(--warn)}
+  .bar-fill.bad{background:var(--bad)}
+  .bar-num{width:34px;text-align:right;color:var(--dim);flex-shrink:0}
+  .death-warning{margin-top:10px;font-size:12px;color:var(--bad);font-weight:600}
+  #token-badge{font-size:11px;color:var(--warn);background:var(--bg);border:1px solid var(--warn);border-radius:8px;padding:4px 8px;white-space:nowrap;flex-shrink:0;box-shadow:var(--glow-warn)}
+  .shop-section{margin-top:16px}
+  .shop-section h4{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);margin:0 0 8px}
+  .shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+  .shop-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:8px;text-align:center;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+  .shop-item:not(:disabled):not(.disabled):hover{border-color:var(--accent2);box-shadow:var(--glow-accent2)}
+  .shop-item:disabled,.shop-item.disabled{opacity:.45;cursor:not-allowed}
+  .shop-item .icon{font-size:28px}
+  .shop-item .name{font-size:11px;margin-top:2px}
+  .shop-item .price{font-size:11px;color:var(--warn);margin-top:2px}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFqUlEQVR4nO3dPXbbOBiFYchn+ilzsoRM6eV4gVlOSnsJOS69gkxjObQsSgDxR37v+3QpIpLQvQBoWfQpTfTvt//+zDy+9uPt9fk047jDDmrYVWpEKboewNCrlV5l6PKiBl+9tC5C0xcz+BqlVRGavIjB1yy1RXioPQHDr5lq81dVAMOvPajJ4ablw+Brr0q3RMUrgOHXnpXms6gAhl9HUJLT7AIYfh1Jbl6zCmD4dUQ5ub1bAMOvI7uX3+rPAaQju1kAZ39FcCvHqwUw/IpkLc9XC2D4FdG1XHsPILQvBXD2V2SX+XYFENqnAjj7i2CZc1cAoX0UwNlfJOe8uwIIzQII7ZSS2x9xuQIIzQIIzQIIzQII7cEbYJG5AgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjtn9knQPDj569N/+/l6bHxmejSyd8Famtr2HNZirYsQAO9Q7/GMtSzABVmBf+SRdjOAhTaS+jXWIYyFiDT3oN/ySLk8cegGY4W/pSOec4zuALcECVErgbrXAFWRAl/SrGupTVXgAvRw+Jq8JkrwEL08KfEuMYSFuAdKRika73HAiRmIIjXfA2+AOQgkK/9DF0AA+AYYAtAf+OXyGOBLAD5DV9DHRNcAahvdA7i2OAKIC2hCkCc4UrRxghTANobW4M0VpgCSNcgCkCa0VqhjFn4AlDeyB4IYxe+ANItoQtAmMF6iz6GoQsg3RO2ANFnrpEij2XYAkg5fDhupWvfse01Y448FkXIL8WPCEXOl8tbncfIY9Wex9G4BdogNwgtAjPyWEQWQGjhCrC35/PXzMwjj5Uj4v1GuAJIJSyA0CyA0CxAodJ9cM2+eeSxqEIVwAD0F22MQxVglNwQtAjLyGMR+asQG50DN+LXE0Yei8YCVBoZQMPenlsgoVkAoVkAoVkAoVkAoVkAoVkAoVkAoVkAoYUqgN+L7S/aGIcqgFTKAgjNAgjNAggtXAGi3aTtScSxDVcAqYQFEFrIAkRcqmeLOqYhCzDKHkKxh3M4MguwwcvT40fwZgZweQ4WYZuwBegZiD1+Ob3nOUUuV9gCjDQjIJFDOVLoAoxcBUYG8vJYzv7bhS5AbzNKMDL8BCH/RtilGX80o/UxZzwVLvrsnxKkACnNC0vtcXu97tbjRuOjERtZe37n8t+5ob0VPrc8bWFWgJTGhafX7Hn0898jVAFSGj+D1obpaOd7NG6BOlsGODdcbnPGwa0AKRmwNbTZPyXo5wDEN/oe6pggC5AS9w2/hjwW2AKkxH7jz+hjgC5ASuwAkK/9DF+AlJhBIF7zNRbgHSkQpGu9xwIsEIJBuMYSyM8BckT7rMDgX+cKsCJSYCJdS2uuABmOuhoY/PtcATIcMUhHPOcZXAEK7X01MPhlLECFvZTB0G9nARqYVQSDX88CNOZ3dY/FAgywtRSGvT8LIDR/DCo0CyA0CyA0CyA0CyA0CyA0H4y14sfPX79nn0NrL0+P32efw974OcCFiMG/ZBH+cgu0QAh/SpzrzGEBhGYB3tFmRdr1rrEAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQnt4e30+zT6JPaA9KoR2vWtcAYAM/18WYIEQDMI1ljillJJPh/sq4mNDDP9XFkBoDyml5I2wiN5en0/eAwjNAgjtowBug0RyzrsrgNA+FcBVQATLnLsCCO1LAVwFFNllvl0BhHa1AK4CiuharldXAEugSNbyfHMLZAkUwa0cew8gtLsFcBXQkd3Lb9YKYAl0RDm5zd4CWQIdSW5ei+4BLIGOoCSnxTfBlkB7VprPqjD7VUrtxdaJuerHoK4G2oOaHFZ/DmAJNFNt/pqG1y2RRmk18XaZvS2Cemm94+i6fbEIaqXXVnvY/t0yqNSI+8v/ATaQ7h8YNg8KAAAAAElFTkSuQmCC" alt="">
+  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.13</span></h1>
+  <span id="storage-mode-badge" style="font-size:10px;color:var(--bad);display:none"></span>
+  <div id="target-bar" onclick="editTarget()">🎯 No active project target — tap to set</div>
+  <span id="model-badge" style="font-size:11px;color:var(--dim);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px 8px;white-space:nowrap;flex-shrink:0" title="Model status — visible from every tab, not just Settings">🧠 …</span>
+  <span id="token-badge">🪙 0</span>
+</header>
+<div id="error-banner" style="display:none;background:#1a0007;color:#ff8fa8;border-bottom:1px solid var(--bad);box-shadow:0 0 10px rgba(255,45,85,.4);padding:8px 14px;font-size:12px;font-family:monospace;word-break:break-word;"></div>
+
+<nav>
+  <button class="active" data-view="chat-view">Chat / Canvas</button>
+  <button data-view="projects-view">Projects</button>
+  <button data-view="pet-view">Pet</button>
+  <button data-view="memory-view">Memory</button>
+  <button data-view="settings-view">Settings</button>
+</nav>
+
+<div id="view-container">
+
+<!-- CHAT + CANVAS -->
+<div class="view active" id="chat-view">
+  <div id="search-bar">
+    <input id="search-input" placeholder="Comma-separated topics: e.g. active listening, negotiation, public speaking...">
+    <button class="ghost" id="tor-toggle-btn" onclick="toggleTorMode()" title="Route this search through your Tor bridge (set its address in Settings first). Off by default. Results go to a review queue, never auto-saved.">🧅 Tor: Off</button>
+    <button class="primary" onclick="runSearch()">Find</button>
+    <button class="ghost" onclick="runProject()" title="Auto-research the current project target using verified sources">▶ Run Project</button>
+    <button class="ghost" onclick="regroundAI()" title="Force Buddie to re-read the full chat (and target/plan if a project is active) — use this if it seems to be looping or hallucinating">🧭 Reground</button>
+  </div>
+  <div id="split">
+    <div id="chat-col">
+      <div class="col-label">Chat</div>
+      <div id="messages"></div>
+      <div id="input-row">
+        <textarea id="chat-input" placeholder="Message Buddie..."></textarea>
+        <button class="primary" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+    <div id="canvas-col">
+      <div class="col-label">Canvas — live project work <button class="ghost" style="float:right" onclick="toggleCanvas()">Hide</button></div>
+      <div id="plan-panel" style="padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;display:none"></div>
+      <div id="canvas-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="view" id="projects-view">
+  <button class="primary" style="align-self:flex-start;margin-bottom:10px" onclick="newProject()">+ New Project</button>
+  <div id="project-list"></div>
+</div>
+
+<!-- PET -->
+<div class="view" id="pet-view">
+  <div id="pet-stage"></div>
+  <div id="pet-shop"></div>
+</div>
+
+<!-- MEMORY -->
+<div class="view" id="memory-view">
+  <div class="mem-col">
+    <div class="col-label">🧅 Tor Review Queue <span style="color:var(--dim);font-weight:normal">— nothing here is saved anywhere until you tap Keep</span></div>
+    <div class="status-line" style="padding:6px 10px 0">Text-only results from Tor searches wait here first. Tap Keep to move an item into Pre-Verified (normal path from there), or Discard to erase it for good. Anything the content filter flagged never reaches this list at all.</div>
+    <div class="mem-list" id="tor-review-list"></div>
+  </div>
+  <div class="mem-col">
+    <div class="col-label">Pre-Verified Folder <button class="primary" id="verify-btn" style="float:right" onclick="verifyAll()">🔎 AI Verify All (≥89% → Post-Verified)</button></div>
+    <div class="status-line" id="verify-status" style="padding:6px 10px 0"></div>
+    <div class="mem-list" id="pre-list"></div>
+  </div>
+  <div class="mem-col">
+    <div class="col-label">Post-Verified Memory <span id="word-total" style="color:var(--dim);font-weight:normal"></span> <button class="ghost" id="compact-btn" style="float:right" onclick="compactMemory()">Compact</button></div>
+    <div class="status-line" id="compact-status" style="padding:6px 10px 0"></div>
+    <div class="mem-list" id="post-list"></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="view" id="settings-view">
+  <div class="field">
+    <label>Local network / scraper endpoint (your own WiFi service, e.g. http://192.168.1.50:8787)</label>
+    <input id="wifi-endpoint" placeholder="http://192.168.x.x:PORT">
+    <div class="status-line">Your tablet is already on WiFi just to load this page — this field isn't about connecting to WiFi. It's a separate restriction: browsers block a webpage from directly fetching most other sites' content (CORS), no matter how good your connection is. Buddie sends search-bar queries here first; run a small local proxy on your network to fetch pages for Buddie. Leave blank to use direct fetch (works for open APIs only, like Wikipedia/arXiv).</div>
+  </div>
+  <div class="field">
+    <label>Tor / .onion relay endpoint (optional, advanced — a SOCKS→HTTP bridge you run yourself)</label>
+    <input id="tor-endpoint" placeholder="http://127.0.0.1:PORT">
+    <div class="status-line">
+      A browser tab cannot reach the Tor network on its own — there's no such thing as "Tor from HTML." This field only points Buddie at a bridge <em>you</em> run locally (e.g. a small script proxying through Tor's SOCKS port), same pattern as the scraper endpoint above, kept separate and under its own hard rules:
+      <br>• Only fires when you tap the 🧅 Tor toggle next to the search bar — off by default, never turns itself on.
+      <br>• Sends your typed query terms exactly as written — no expansion, no related-topic guessing.
+      <br>• Text only. Buddie strips markup and keeps plain text; it never fetches, follows, or saves images, video, binaries, or file downloads of any kind, from this endpoint or any other.
+      <br>• Every result is scanned by a built-in explicit-content filter before it touches storage. Anything flagged is discarded immediately — only a "blocked" note is logged, the flagged text itself is never kept, shown, or written anywhere.
+      <br>• Nothing from this endpoint is auto-saved. Results land in a separate review queue (Memory tab) and only enter Pre-Verified if you personally tap "Keep" on that specific item.
+      <br>You're responsible for what your own bridge script does and for the legality of using it where you live — Buddie's part is limited to the rules above.
+    </div>
+  </div>
+  <div class="field">
+    <label>Local AI model (runs fully on-device via WebGPU, no cloud, no Ollama)</label>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+      <label style="flex-direction:row;align-items:center;gap:4px;display:flex;font-size:12px;color:var(--dim)">
+        <input type="checkbox" id="model-filter-full-catalog" onchange="renderModelOptions()"> Show full catalog instead (advanced — includes non-chat/oversized entries)
+      </label>
+    </div>
+    <select id="model-select"><option value="">Loading model catalog…</option></select>
+    <div class="status-line">v2.8: narrowed down to the 10 best text-chat models between roughly 500MB and 3B parameters, sorted smallest/fastest first — everything below was either a duplicate, a non-chat model (embeddings, vision, etc.), or outside that size range, and got left off the list rather than making you scroll a huge dropdown. Check the box above to see the full raw catalog instead.</div>
+
+    <div style="margin-top:10px;font-size:12px;color:var(--dim)">Where should the model files come from?</div>
+    <label style="flex-direction:row;align-items:center;gap:6px;display:flex;margin-top:4px">
+      <input type="radio" name="model-source" value="cdn" checked onchange="onModelSourceChange()"> Download once from the internet (default), then cached in this browser permanently — offline after that.
+    </label>
+    <label style="flex-direction:row;align-items:center;gap:6px;display:flex;margin-top:4px">
+      <input type="radio" name="model-source" value="local" onchange="onModelSourceChange()"> Use files I already have, served from my own network (no internet at all).
+    </label>
+    <div id="local-model-fields" style="display:none;margin-top:8px">
+      <input id="local-model-url" placeholder="http://192.168.1.x:PORT/models/  (folder you're hosting yourself)">
+      <div class="status-line">Prepare this once: download the model folder for your chosen model from its official Hugging Face MLC repo onto a PC, then serve that folder on your WiFi (same trick as serving this app). Point this field at that address. Buddie will fetch the weights from there instead of the internet — fully on your own network from then on.</div>
+    </div>
+
+    <button class="primary" style="margin-top:8px;width:fit-content" onclick="loadModel()">Load Model</button>
+    <button class="ghost" style="margin-top:8px;width:fit-content" onclick="updateWeights()">Update Weights (force re-download)</button>
+    <div class="status-line" id="model-status">Model not loaded.</div>
+    <div class="status-line" id="webgpu-status">Checking WebGPU support…</div>
+    <div class="status-line" id="speed-status"></div>
+    <button class="ghost" style="margin-top:6px;width:fit-content" onclick="benchmarkModel()">🔁 Re-test speed</button>
+  </div>
+  <div class="field">
+    <label>Cloud dev keys — optional, round-robin pool (all calls still fall back to the local model above if every key fails or none are added)</label>
+    <div class="status-line">
+      Add as many keys from as many providers as you have. Every reply request tries the next healthy key in rotation; a key that errors out (bad key, rate-limited, or blocked by the browser's CORS rules — some providers don't allow direct browser calls at all) gets put on a cooldown and skipped automatically, so only keys that actually connect stay in active use. If every key is cooling down or none are configured, Buddie transparently uses the local on-device model instead — nothing ever just fails silently.
+      <br>⚠️ Keys are stored only in this device's local IndexedDB (same as everything else in this app) — never written into the HTML file itself, never sent anywhere except straight to that provider's own API. Still, this is a browser page holding raw API keys in memory to call providers directly — treat it like any other place you'd paste a real dev key, and use keys you're comfortable exposing client-side (e.g. capped-spend/test keys), not a production key.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+      <select id="cloud-key-provider" onchange="onCloudProviderChange()" style="flex:1;min-width:120px">
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="gemini">Google (Gemini)</option>
+        <option value="custom">Custom (OpenAI-compatible endpoint)</option>
+      </select>
+    </div>
+    <div class="status-line"><a id="cloud-key-get-link" href="#" target="_blank" rel="noopener" style="color:var(--accent)">Get an OpenAI key →</a></div>
+    <input id="cloud-key-label" placeholder="label for this key, e.g. \"personal acct\" or \"work key #2\" (your own note — helps when managing several of the same provider)" style="margin-top:6px">
+    <input id="cloud-key-model" placeholder="model name, e.g. gpt-4o-mini" style="margin-top:6px">
+    <input id="cloud-key-baseurl" placeholder="https://your-endpoint/v1/chat/completions" style="margin-top:6px;display:none">
+    <input id="cloud-key-value" type="password" placeholder="paste API key" style="margin-top:6px">
+    <button class="ghost" style="margin-top:6px;width:fit-content" onclick="addCloudKey()">+ Add key to rotation</button>
+    <div id="cloud-keys-list" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"></div>
+    <label style="flex-direction:row;align-items:center;gap:6px;display:flex;margin-top:6px">
+      <input type="checkbox" id="prefer-cloud-toggle" checked onchange="metaSet('preferCloud', this.checked)"> Prefer cloud rotation over local model when at least one key is healthy
+    </label>
+  </div>
+  <div class="field">
+    <label>Scraper helper model — tiny, local, separate from your chat model (condenses raw search-source text before it's stored or sent anywhere, so both memory and any cloud calls above stay lean)</label>
+    <select id="scraper-model-select"><option value="">Loading model catalog…</option></select>
+    <button class="ghost" style="margin-top:6px;width:fit-content" onclick="loadScraperModel()">Load Scraper Model</button>
+    <div class="status-line" id="scraper-model-status">Not loaded — raw source text will be stored/sent uncondensed until this is loaded.</div>
+  </div>
+    <label style="flex-direction:row;align-items:center;gap:6px;display:flex">
+      <input type="checkbox" id="autoscore-toggle" checked onchange="metaSet('autoScoreEnabled', this.checked)"> Enable auto-scoring (rates every reply instantly using built-in rules, in addition to your own 👍/👎, and learns how much its own opinion should count)
+    </label>
+    <div class="status-line">v2.4 removed the second-model "critic" — it cost a whole extra AI call per reply just to grade the first one. Auto-scoring replaces it with a free, instant, rule-based check (topical relevance, hedging language, placeholder/error detection, and self-reported-confidence consistency) — no extra model call, no extra wait. Its score nudges confidence calibration alongside your own thumbs, and Buddie keeps tuning how much weight to give it based on how often it agrees with your real feedback.</div>
+  </div>
+  <div class="field">
+    <label>Storage check</label>
+    <button class="ghost" onclick="testStoragePersistence()">Test if memory is really saving</button>
+    <button class="ghost" onclick="forceUpdateCheck()">🔄 Force Update Check (get a fresh copy, no cache)</button>
+    <div class="status-line" id="storage-test-status"></div>
+  </div>
+  <div class="field">
+    <label>Memory save folder</label>
+    <button class="ghost" onclick="chooseMemoryFolder()">Choose a folder on this device</button>
+    <button class="ghost" onclick="reconnectMemoryFolder()">Reconnect folder (after reload)</button>
+    <div class="status-line" id="memory-folder-status">No folder chosen — verified memory only lives in this browser's storage until you export it manually below.</div>
+  </div>
+  <div class="field">
+    <label>Memory & Data</label>
+    <button class="ghost" onclick="exportMemory()">Export all memory as .md files now</button>
+    <button class="ghost" onclick="wipeMemory()">Wipe all local memory</button>
+    <button class="ghost" onclick="clearChatHistory()">Clear chat + canvas history</button>
+    <div class="status-line">v2.5.2: chat messages and the canvas/project-work log now save to this device and reload with you — kept separate from "Wipe all local memory" since the conversation transcript and verified knowledge are different things. The last 400 chat messages / 500 canvas steps are kept; older ones roll off automatically.</div>
+  </div>
+  <div class="status-line">
+    Buddie AI stores everything in this browser's local IndexedDB, on this device only. Nothing leaves your tablet except the search bar's lookups (sent only to the endpoint you set above) and the one-time model download.
+  </div>
+</div>
+
+</div><!-- /view-container -->
+
+<script type="module">
+  import * as webllm from "https://cdn.jsdelivr.net/npm/@mlc-ai/web-llm/+esm";
+  window.webllm = webllm;
+  // v2.5: the old dropdown was 5 models I typed in by hand — several small/rare ones
+  // that exist in the library were simply missing, and there was no guarantee the
+  // hand-typed IDs still matched what the CDN actually serves. Reading the catalog
+  // straight from webllm.prebuiltAppConfig.model_list means every model the library
+  // ships is available (old, rare, and tiny included) and the IDs are always valid
+  // because they came from the library itself, not from memory.
+  if(typeof window.renderModelOptions === "function") window.renderModelOptions();
+
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("service-worker.js").catch(()=>{
+      // Not fatal - app still works, it just won't be a full installable PWA
+      // (this can happen if it's opened over file:// or plain http instead of https/localhost)
+    });
+  }
+</script>
+<script>
+/* ================= ERROR VISIBILITY ================= */
+// Browsers hide real error text ("Script error.") for scripts loaded from other origins.
+// This surfaces whatever detail IS available directly in the UI so problems are debuggable on a tablet
+// without needing a plugged-in computer/devtools.
+function showErrorBanner(msg){
+  const el = document.getElementById("error-banner");
+  if(!el) return;
+  el.style.display = "block";
+  el.textContent = "⚠ " + msg;
+}
+window.onerror = function(message, source, lineno, colno, error){
+  showErrorBanner(`${message} (${source ? source.split("/").pop() : "unknown"}:${lineno||"?"})` + (error && error.stack ? "" : " — if this just says 'Script error.' with no detail, it's likely the WebLLM library failing to load (check your internet connection or the local model server address)."));
+};
+window.addEventListener("unhandledrejection", (e)=>{
+  showErrorBanner("Unhandled error: " + (e.reason && e.reason.message ? e.reason.message : String(e.reason)));
+});
+
+/* ================= SECURITY: escape untrusted content before inserting into the page ================= */
+// Anything that came from the web, a scraped page, or free-text typed into a field that
+// gets rendered via innerHTML must be escaped — otherwise a malicious page could inject
+// a <script> tag into memory content and have it execute. This is the actual code-
+// injection "firewall" this app needed; applied everywhere below that builds HTML from
+// scraped text, project names/goals, or plan content.
+function escapeHtml(str){
+  return String(str ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[c]));
+}
+
+/* ================= DB LAYER (memory folders, with in-memory fallback) ================= */
+let db;
+let dbReadyResolve;
+const dbReadyPromise = new Promise(res => dbReadyResolve = res);
+const DB_NAME = "buddie-ai-db";
+// If IndexedDB truly can't open on this device/browser, fall back to a plain
+// in-memory store so the app still works for the session rather than refusing
+// to start. Data won't survive closing the tab in that mode — clearly flagged.
+let usingFallbackStore = false;
+const memStore = { pre_verified:[], post_verified:[], projects:[], plans:[], meta:[], tor_review:[], chat_log:[], canvas_log:[] };
+let memIdCounter = 1;
+
+function openDB(){
+  return new Promise((res,rej)=>{
+    let req;
+    try{
+      req = indexedDB.open(DB_NAME, 4); // v2.5.2: bumped 3→4 to add chat_log + canvas_log — the chat transcript and canvas/project-work log were living only in the DOM and vanished on every reload
+    }catch(err){ rej(err); return; }
+    req.onupgradeneeded = (e)=>{
+      const d = e.target.result;
+      if(!d.objectStoreNames.contains("pre_verified")) d.createObjectStore("pre_verified",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("post_verified")) d.createObjectStore("post_verified",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("projects")) d.createObjectStore("projects",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("plans")) d.createObjectStore("plans",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("meta")) d.createObjectStore("meta",{keyPath:"key"});
+      if(!d.objectStoreNames.contains("tor_review")) d.createObjectStore("tor_review",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("chat_log")) d.createObjectStore("chat_log",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("canvas_log")) d.createObjectStore("canvas_log",{keyPath:"id",autoIncrement:true});
+    };
+    req.onsuccess = (e)=>{ db=e.target.result; dbReadyResolve(db); res(db); };
+    req.onerror = (e)=>rej(e.target.error || new Error("IndexedDB failed to open"));
+    req.onblocked = ()=>{ console.warn("IndexedDB open blocked — another tab/instance may be holding an older version open."); };
+  });
+}
+function enableFallbackStore(){
+  usingFallbackStore = true;
+  dbReadyResolve(null); // unblock anything already waiting on dbReadyPromise
+  const badge = document.getElementById("storage-mode-badge");
+  if(badge){ badge.style.display = "inline"; badge.textContent = "⚠️ Temporary storage (won't be saved)"; }
+}
+function tx(store, mode="readonly"){ return db.transaction(store, mode).objectStore(store); }
+function dbErr(r, store, op){
+  // The raw IndexedDB request event has no .message — rejecting with it directly
+  // meant every catch(err){ ...err.message } caller downstream saw "undefined"
+  // instead of the actual reason a save failed. Reject with a real Error instead.
+  return r.error || new Error(`IndexedDB ${op} on "${store}" failed`);
+}
+async function dbAdd(store, obj){
+  await dbReadyPromise;
+  if(usingFallbackStore){ const id = memIdCounter++; memStore[store].push({...obj, id}); return id; }
+  return new Promise((res,rej)=>{ const r=tx(store,"readwrite").add(obj); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(dbErr(r,store,"add")); });
+}
+async function dbGetAll(store){
+  await dbReadyPromise;
+  if(usingFallbackStore) return [...memStore[store]];
+  // PERF (v2.13): every browser this app can actually run in (needs WebGPU, so modern
+  // Chrome/Edge/etc.) supports the native IDBObjectStore.getAll(), which reads the whole
+  // store in one bulk operation. The old code always walked a cursor one record at a
+  // time instead — correct, but noticeably slower for stores with more than a few dozen
+  // rows (chat_log/canvas_log at their 400/500-entry caps, or a heavily-scraped
+  // pre_verified/post_verified folder), and this function is called constantly
+  // (renderMemory alone calls it 3x on every single invocation). Falls back to the old
+  // cursor walk only if getAll() isn't available at all.
+  const os = tx(store);
+  if(typeof os.getAll === "function"){
+    return new Promise((res,rej)=>{ const r=os.getAll(); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(dbErr(r,store,"read")); });
+  }
+  return new Promise((res,rej)=>{ const out=[]; const r=os.openCursor(); r.onsuccess=(e)=>{ const c=e.target.result; if(c){ out.push(c.value); c.continue(); } else res(out); }; r.onerror=()=>rej(dbErr(r,store,"read")); });
+}
+async function dbDelete(store, id){
+  await dbReadyPromise;
+  if(usingFallbackStore){ memStore[store] = memStore[store].filter(x => x.id !== id); return; }
+  return new Promise((res,rej)=>{ const r=tx(store,"readwrite").delete(id); r.onsuccess=()=>res(); r.onerror=()=>rej(dbErr(r,store,"delete")); });
+}
+async function dbPut(store, obj){
+  await dbReadyPromise;
+  if(usingFallbackStore){
+    const keyField = store === "meta" ? "key" : "id";
+    const idx = memStore[store].findIndex(x => x[keyField] === obj[keyField]);
+    if(idx >= 0) memStore[store][idx] = obj;
+    else { if(keyField==="id" && obj.id===undefined) obj.id = memIdCounter++; memStore[store].push(obj); }
+    return;
+  }
+  return new Promise((res,rej)=>{ const r=tx(store,"readwrite").put(obj); r.onsuccess=()=>res(); r.onerror=()=>rej(dbErr(r,store,"write")); });
+}
+async function metaGet(key){
+  await dbReadyPromise;
+  if(usingFallbackStore){ const found = memStore.meta.find(x=>x.key===key); return found ? found.value : null; }
+  return new Promise((res)=>{ const r=tx("meta").get(key); r.onsuccess=()=>res(r.result?r.result.value:null); r.onerror=()=>{ console.warn(`metaGet("${key}") failed:`, r.error); res(null); }; });
+}
+function metaSet(key,value){ return dbPut("meta",{key,value}); }
+
+/* ================= VIRTUAL PET ================= */
+// Buddie's own virtual pet. Lives entirely in the "meta" store under key "petState"
+// (no schema/version change needed). Buddie (the AI) is the one who owns and manages
+// this pet — as of v2.4 it always buys its own food, water, and eggs using tokens
+// earned from your chat feedback (see aiSpendStep()); there's no manual buy option
+// or on/off toggle anymore — you rate replies, Buddie decides what to spend on.
+const EGG_HATCH_THUMBS = 30;               // 👍 reactions needed to hatch an egg
+const DRAIN_INTERVAL_MS = 8*60*60*1000;    // bars drain 3x/24h = every 8h
+const DRAIN_AMOUNT = 34;                   // ~1/3 of the bar per drain tick
+const DEATH_AFTER_ZERO_MS = 60*60*1000;    // dies if a bar sits at 0 for 60+ minutes
+const MAX_CATCHUP_TICKS = 90;              // safety cap so a long-closed tab doesn't loop forever
+
+const EGG_TYPES = [
+  {key:"common", name:"Common Egg", emoji:"🥚", price:15, hatchEmoji:"🐥", ring:"#e2e8f0"},
+  {key:"forest", name:"Forest Egg", emoji:"🥚", price:25, hatchEmoji:"🐸", ring:"#4ade80"},
+  {key:"ocean",  name:"Ocean Egg",  emoji:"🥚", price:25, hatchEmoji:"🐢", ring:"#38bdf8"},
+  {key:"dragon", name:"Dragon Egg", emoji:"🥚", price:60, hatchEmoji:"🐲", ring:"#f87171"},
+  {key:"mystic", name:"Mystic Egg", emoji:"🥚", price:100,hatchEmoji:"🦄", ring:"#818cf8"}
+];
+const FOOD_ITEMS = [
+  {key:"snack", name:"Snack",  emoji:"🍪", price:5,  amount:20},
+  {key:"meal",  name:"Meal",   emoji:"🍗", price:12, amount:50},
+  {key:"feast", name:"Feast",  emoji:"🍱", price:22, amount:100}
+];
+const WATER_ITEMS = [
+  {key:"cup",    name:"Water Cup",    emoji:"🥤", price:4,  amount:20},
+  {key:"bottle", name:"Water Bottle", emoji:"💧", price:9,  amount:50},
+  {key:"jug",    name:"Water Jug",    emoji:"🚰", price:18, amount:100}
+];
+
+function defaultPet(){
+  return {
+    tokens:0, stage:"none", eggType:null, hatchEmoji:null,
+    health:100, food:100, water:100,
+    thumbsUpSinceEgg:0,
+    zeroSince:{health:null, food:null, water:null},
+    lastDrainAt: Date.now(),
+    purchaseLog:[] // v2.4: every token spend Buddie makes on its own, newest first — see aiSpendStep()
+  };
+}
+async function loadPet(){
+  const p = await metaGet("petState");
+  return p ? {...defaultPet(), ...p, zeroSince:{...defaultPet().zeroSince, ...(p.zeroSince||{})}, purchaseLog:p.purchaseLog||[]} : defaultPet();
+}
+function logPurchase(p, line){
+  p.purchaseLog = [{ts:Date.now(), line}, ...(p.purchaseLog||[])].slice(0,12);
+}
+function savePet(p){ return metaSet("petState", p); }
+
+function updateTokenBadge(p){
+  const el = document.getElementById("token-badge");
+  if(el) el.textContent = `🪙 ${p.tokens}`;
+}
+
+function hatchPet(p){
+  const egg = EGG_TYPES.find(e=>e.key===p.eggType);
+  p.stage = "pet";
+  p.hatchEmoji = egg ? egg.hatchEmoji : "🐣";
+  p.health = 100; p.food = 100; p.water = 100;
+  p.zeroSince = {health:null, food:null, water:null};
+  p.lastDrainAt = Date.now();
+  p.thumbsUpSinceEgg = 0;
+}
+
+// Applies drain ticks that should have happened since lastDrainAt (covers time the
+// tab was closed too, since it's based on a real stored timestamp), then checks
+// whether any bar has been sitting at 0 long enough for the pet to die.
+function processPetTick(p){
+  if(p.stage !== "pet"){ return p; } // eggs and "none"/"dead" don't drain
+  const now = Date.now();
+  let ticks = Math.floor((now - p.lastDrainAt) / DRAIN_INTERVAL_MS);
+  if(ticks > 0){
+    ticks = Math.min(ticks, MAX_CATCHUP_TICKS);
+    p.food = Math.max(0, p.food - ticks*DRAIN_AMOUNT);
+    p.water = Math.max(0, p.water - ticks*DRAIN_AMOUNT);
+    if(p.food <= 0 || p.water <= 0){
+      p.health = Math.max(0, p.health - ticks*DRAIN_AMOUNT);
+    }
+    p.lastDrainAt = now;
+  }
+  ["health","food","water"].forEach(bar=>{
+    if(p[bar] <= 0){
+      if(!p.zeroSince[bar]) p.zeroSince[bar] = now;
+    } else {
+      p.zeroSince[bar] = null;
+    }
+  });
+  const diedBar = ["health","food","water"].find(bar => p.zeroSince[bar] && (now - p.zeroSince[bar]) > DEATH_AFTER_ZERO_MS);
+  if(diedBar){
+    p.stage = "dead";
+    p.deathReason = diedBar;
+  }
+  return p;
+}
+
+function cheapestAffordable(items, tokens){
+  return items.filter(i=>i.price<=tokens).sort((a,b)=>a.price-b.price)[0] || null;
+}
+function priciestAffordable(items, tokens){
+  return items.filter(i=>i.price<=tokens).sort((a,b)=>b.price-a.price)[0] || null;
+}
+// v2.4: Buddie is the only one who spends its own tokens — there is no manual "buy"
+// button anymore (see renderPetView). This runs on every petTick (every 30s while the
+// app is open, plus once on load) and makes every spending decision itself:
+//  - tops up food/water with the cheapest item that clears the low-bar threshold, as
+//    soon as either bar dips below 45, so it never waits until the bar is critical.
+//  - once it has no pet (never hatched one, or the last one died) and can afford at
+//    least the cheapest egg, it buys itself a new one — picking the priciest egg it can
+//    currently afford, since that's a one-time choice worth spending up for rather than
+//    always grabbing the cheapest option.
+// Every purchase is written to p.purchaseLog so you can see exactly what it bought and
+// when — full transparency into its own spending, without you having to approve it.
+function aiSpendStep(p){
+  if(p.stage === "pet"){
+    if(p.food < 45){
+      const buy = cheapestAffordable(FOOD_ITEMS, p.tokens);
+      if(buy){ p.tokens -= buy.price; p.food = Math.min(100, p.food + buy.amount); p.zeroSince.food = null; logPurchase(p, `Bought ${buy.name} (🪙${buy.price}) — food was low`); }
+    }
+    if(p.water < 45){
+      const buy = cheapestAffordable(WATER_ITEMS, p.tokens);
+      if(buy){ p.tokens -= buy.price; p.water = Math.min(100, p.water + buy.amount); p.zeroSince.water = null; logPurchase(p, `Bought ${buy.name} (🪙${buy.price}) — water was low`); }
+    }
+  } else if(p.stage === "none" || p.stage === "dead"){
+    const egg = priciestAffordable(EGG_TYPES, p.tokens);
+    if(egg){
+      p.tokens -= egg.price;
+      p.stage = "egg";
+      p.eggType = egg.key;
+      p.thumbsUpSinceEgg = 0;
+      p.deathReason = null;
+      logPurchase(p, `Bought a ${egg.name} (🪙${egg.price}) — best egg it could afford`);
+    }
+  }
+  return p;
+}
+
+let petTickRunning = false;
+async function petTick(){
+  if(petTickRunning) return;
+  petTickRunning = true;
+  try{
+    let p = await loadPet();
+    p = processPetTick(p);
+    p = aiSpendStep(p);
+    await savePet(p);
+    updateTokenBadge(p);
+    if(document.getElementById("pet-view") && document.getElementById("pet-view").classList.contains("active")) renderPetView(p);
+  } finally {
+    petTickRunning = false;
+  }
+}
+
+function barClass(v){ return v <= 25 ? "bad" : v <= 55 ? "warn" : "ok"; }
+function petMood(p){
+  const min = Math.min(p.health, p.food, p.water);
+  if(min <= 0) return {emoji:p.hatchEmoji, wobble:true, text:"In danger — feed or water immediately!"};
+  if(min < 30) return {emoji:p.hatchEmoji, wobble:true, text:"Not doing great — hungry or thirsty."};
+  if(min < 60) return {emoji:p.hatchEmoji, wobble:false, text:"Okay, could use some care."};
+  return {emoji:p.hatchEmoji, wobble:false, text:"Happy and healthy!"};
+}
+function barRow(label, val){
+  return `<div class="bar-row"><span class="label">${label}</span>
+    <div class="bar-track"><div class="bar-fill ${barClass(val)}" style="width:${Math.max(0,Math.min(100,val))}%"></div></div>
+    <span class="bar-num">${Math.round(val)}</span></div>`;
+}
+function timeLeftText(p, bar){
+  const since = p.zeroSince[bar];
+  if(!since) return "";
+  const msLeft = DEATH_AFTER_ZERO_MS - (Date.now()-since);
+  if(msLeft <= 0) return "";
+  const mins = Math.ceil(msLeft/60000);
+  return `${bar} at 0 — dies in ~${mins} min if not restored`;
+}
+
+function renderPetView(p){
+  const stageEl = document.getElementById("pet-stage");
+  const shopEl = document.getElementById("pet-shop");
+  if(!stageEl || !shopEl) return;
+  if(!p){ loadPet().then(pet=>{ pet = processPetTick(pet); pet = aiSpendStep(pet); savePet(pet); updateTokenBadge(pet); renderPetView(pet); }); return; }
+
+  if(p.stage === "none"){
+    stageEl.innerHTML = `<div id="pet-stage-inner"><div id="pet-emoji">🐣</div>
+      <div id="pet-name">No pet yet</div>
+      <div id="pet-status-line">Buddie will buy itself an egg automatically once it has enough tokens (from 👍 on chat replies) — it hatches after ${EGG_HATCH_THUMBS} 👍 reactions.</div></div>`;
+  } else if(p.stage === "egg"){
+    const egg = EGG_TYPES.find(e=>e.key===p.eggType);
+    stageEl.innerHTML = `<div id="pet-stage-inner"><div id="pet-emoji">${egg?egg.emoji:"🥚"}</div>
+      <div id="pet-name">${egg?egg.name:"Egg"} — incubating</div>
+      <div id="pet-status-line">${p.thumbsUpSinceEgg}/${EGG_HATCH_THUMBS} 👍 reactions collected. Rate Buddie's chat replies 👍 to help it hatch.</div></div>`;
+  } else if(p.stage === "dead"){
+    stageEl.innerHTML = `<div id="pet-stage-inner"><div id="pet-emoji">💀</div>
+      <div id="pet-name">Your pet died</div>
+      <div id="pet-status-line">Its ${escapeHtml(p.deathReason||"health")} bar sat empty too long. Buddie will buy a new egg itself once it has enough tokens again.</div></div>`;
+  } else {
+    const mood = petMood(p);
+    stageEl.innerHTML = `<div id="pet-stage-inner">
+      <div id="pet-emoji" class="${mood.wobble?'wobble':''}">${mood.emoji}</div>
+      <div id="pet-name">Your pet</div>
+      <div id="pet-status-line">${escapeHtml(mood.text)}</div>
+      ${barRow("Health", p.health)}
+      ${barRow("Food", p.food)}
+      ${barRow("Water", p.water)}
+      ${["health","food","water"].filter(b=>p.zeroSince[b]).map(b=>`<div class="death-warning">⚠ ${escapeHtml(timeLeftText(p,b))}</div>`).join("")}
+    </div>`;
+  }
+
+  // v2.4: no buy buttons here anymore — Buddie spends its own tokens on its own
+  // schedule (see aiSpendStep, called every petTick). This panel is read-only: current
+  // balance, reference prices, and a transparent log of exactly what it bought and why.
+  const priceRef = `<div class="shop-section"><h4>Reference prices (Buddie buys these itself)</h4><div class="shop-grid">${
+    [...EGG_TYPES.map(e=>({...e})), ...FOOD_ITEMS.map(f=>({...f,emoji:f.emoji})), ...WATER_ITEMS.map(w=>({...w,emoji:w.emoji}))]
+      .map(i=>`<div class="shop-item" style="cursor:default">
+        <div class="icon">${i.emoji}</div>
+        <div class="name">${escapeHtml(i.name)}</div>
+        <div class="price">🪙 ${i.price}</div>
+      </div>`).join("")
+  }</div></div>`;
+
+  const log = (p.purchaseLog||[]).length
+    ? `<div class="shop-section"><h4>Buddie's recent purchases</h4>${
+        p.purchaseLog.map(entry=>`<div class="status-line" style="margin-bottom:4px">${new Date(entry.ts).toLocaleString()} — ${escapeHtml(entry.line)}</div>`).join("")
+      }</div>`
+    : `<div class="shop-section"><h4>Buddie's recent purchases</h4><div class="status-line">Nothing bought yet — it spends automatically once it has enough tokens.</div></div>`;
+
+  shopEl.innerHTML = `<div class="status-line" style="margin-bottom:8px">🪙 ${p.tokens} tokens — Buddie earns 1 per 👍 on a chat reply, loses 2 per 👎, and decides on its own what to spend them on.</div>` + log + priceRef;
+}
+
+/* ================= STORAGE SELF-TEST ================= */
+// Writes a real record, then re-reads it fresh from the database (not from memory)
+// to prove persistence is actually working — and clearly says which mode it's in.
+async function testStoragePersistence(){
+  const statusEl = document.getElementById("storage-test-status");
+  statusEl.textContent = "Testing...";
+  try{
+    const testKey = "storageTest_" + Date.now();
+    await metaSet(testKey, "ok");
+    const readBack = await metaGet(testKey);
+    if(usingFallbackStore){
+      statusEl.textContent = readBack === "ok"
+        ? "⚠️ Write/read works, but you're in TEMPORARY fallback mode — nothing survives closing this tab. Fix the underlying storage issue (see the red banner) for real persistence."
+        : "❌ Storage test failed even in fallback mode — something is seriously wrong, try reloading.";
+    } else {
+      statusEl.textContent = readBack === "ok"
+        ? "✅ Real persistent storage confirmed — memory will survive closing this tab and reopening the app."
+        : "❌ Wrote successfully but couldn't read it back — storage may be corrupted. Try reloading, or clearing this site's data in Chrome and starting fresh.";
+    }
+  }catch(err){
+    statusEl.textContent = "❌ Storage test failed: " + err.message;
+  }
+}
+
+/* ================= FORCE UPDATE CHECK ================= */
+// True silent auto-push isn't possible for a static file with no server behind it —
+// this is the honest, real equivalent: guarantees a completely fresh fetch of this
+// page from your server, ignoring any cached copy, in one tap.
+function forceUpdateCheck(){
+  const url = new URL(window.location.href);
+  url.searchParams.set("_fresh", Date.now());
+  window.location.href = url.toString();
+}
+
+
+/* ================= MEMORY FORMAT ================= */
+// Compact, AI-friendly: YAML frontmatter + short plain-language facts (mirrors Claude-style memory files)
+function toMemoryDoc({topic, source, confidence, facts}){
+  const fm = `---\ntopic: ${topic}\nsource: ${source||"unknown"}\nconfidence: ${confidence}\nverified: ${new Date().toISOString().slice(0,10)}\n---\n`;
+  return fm + facts.map(f=>`- ${f}`).join("\n");
+}
+
+/* ================= MEMORY RETRIEVAL (RAG) ================= */
+// BUG FIX (v2.9): the entire scraper -> verify -> Post-Verified pipeline existed, but
+// NOTHING ever read Post-Verified memory back into a chat prompt. sendChat() and the
+// project-completion summary asked the model to answer/summarize using only its own
+// weights, never the actual verified facts sitting in the database. That's the root
+// cause of "it's not finding the right answers, nothing's connecting" — the research
+// and the chat were two disconnected systems. This does simple keyword-overlap
+// retrieval (no embedding model available on-device) and is used by both sendChat()
+// and runProject()'s completion summary below.
+function scoreDocForQuery(queryWords, item){
+  const hay = (item.topic + " " + item.doc).toLowerCase();
+  let score = 0;
+  for(const w of queryWords) if(w.length > 2 && hay.includes(w)) score++;
+  // Small bump for higher-confidence memory so equally-relevant items prefer the more trusted one.
+  return score + (item.confidence || 0) * 0.1;
+}
+async function retrieveRelevantMemory(queryText, limit=5, maxChars=1400){
+  const post = await dbGetAll("post_verified");
+  if(!post.length) return {context:"", used:[]};
+  const queryWords = tokenize(queryText);
+  const scored = post
+    .map(item => ({item, score: scoreDocForQuery(queryWords, item)}))
+    .filter(s => s.score > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, limit);
+  if(!scored.length) return {context:"", used:[]};
+  let context = "";
+  const used = [];
+  for(const {item} of scored){
+    const chunk = `[${item.topic}] ${item.doc.replace(/^---[\s\S]*?---\n/, "").trim()}\n`;
+    if(context.length + chunk.length > maxChars) break;
+    context += chunk;
+    used.push(item.topic);
+  }
+  return {context, used};
+}
+
+/* ================= KEYBOARD / ARROW-KEY NAVIGATION ================= */
+// Arrow keys move between selectable options (tabs, buttons, project cards).
+// Typing in text fields and native <select> option-cycling are left alone.
+document.addEventListener("keydown", (e)=>{
+  const active = document.activeElement;
+  const tag = active ? active.tagName : "";
+  if(tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return; // don't hijack typing or native dropdown behavior
+
+  const navKeys = ["ArrowDown","ArrowUp","ArrowLeft","ArrowRight","Enter"," "];
+  if(!navKeys.includes(e.key)) return;
+
+  const focusables = Array.from(document.querySelectorAll("button, [tabindex='0']"))
+    .filter(el => el.offsetParent !== null); // only currently visible elements
+  if(!focusables.length) return;
+
+  let idx = focusables.indexOf(active);
+  if(idx === -1) idx = 0;
+
+  if(e.key === "ArrowDown" || e.key === "ArrowRight"){
+    e.preventDefault();
+    focusables[(idx+1) % focusables.length].focus();
+  } else if(e.key === "ArrowUp" || e.key === "ArrowLeft"){
+    e.preventDefault();
+    focusables[(idx-1+focusables.length) % focusables.length].focus();
+  } else if((e.key === "Enter" || e.key === " ") && active && active.tagName !== "BUTTON"){
+    e.preventDefault();
+    active.click();
+  }
+});
+
+/* ================= NAV ================= */
+document.querySelectorAll("nav button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    b.classList.add("active");
+    document.getElementById(b.dataset.view).classList.add("active");
+    if(b.dataset.view==="memory-view") renderMemory();
+    if(b.dataset.view==="projects-view") renderProjects();
+    if(b.dataset.view==="pet-view") renderPetView();
+  };
+});
+
+/* ================= TARGET / NORTH STAR ================= */
+let currentTarget = null;
+async function loadTarget(){
+  currentTarget = await metaGet("currentTarget");
+  document.getElementById("target-bar").textContent = currentTarget ? `🎯 ${currentTarget}` : "🎯 No active project target — tap to set";
+}
+function editTarget(){
+  const t = prompt("Set the current project target (Buddie re-reads this before every reply/action):", currentTarget||"");
+  if(t!==null){ currentTarget=t.trim(); metaSet("currentTarget", currentTarget); loadTarget(); }
+}
+
+/* ================= CHAT (with confidence + optional feedback) ================= */
+// v2.5.2: every message is now written to chat_log as it's added — previously the chat
+// only ever lived in the DOM and a reload silently wiped the whole conversation.
+function renderMsgDiv(msgId, role, text, confidencePct){
+  const div = document.createElement("div");
+  div.className = "msg "+role;
+  div.id = msgId;
+
+  const textNode = document.createElement("div");
+  textNode.textContent = text;
+  div.appendChild(textNode);
+
+  if(role === "ai" && typeof confidencePct === "number"){
+    const footer = document.createElement("div");
+    footer.style.cssText = "margin-top:6px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--dim)";
+    footer.innerHTML = `<span>Confidence: ${confidencePct}%</span>
+      <button class="ghost" id="${msgId}-up" style="padding:2px 8px;font-size:12px" onclick="rateReply('${msgId}', ${confidencePct}, 'up')">👍</button>
+      <button class="ghost" id="${msgId}-down" style="padding:2px 8px;font-size:12px" onclick="rateReply('${msgId}', ${confidencePct}, 'down')">👎</button>
+      <span id="${msgId}-feedback-ack"></span>
+      <span id="${msgId}-auto" style="color:var(--accent2)"></span>`;
+    div.appendChild(footer);
+  }
+  document.getElementById("messages").appendChild(div);
+  return div;
+}
+async function addMsg(role, text, confidencePct){
+  const dbId = await dbAdd("chat_log", { role, text, confidencePct: (typeof confidencePct==="number"?confidencePct:null), timestamp:new Date().toISOString() });
+  const msgId = "msg-" + dbId;
+  const div = renderMsgDiv(msgId, role, text, confidencePct);
+  div.scrollIntoView({behavior:"smooth"});
+  return msgId;
+}
+// Restores a message that's already in chat_log — no re-save, just re-draw.
+function renderStoredMsg(item){
+  renderMsgDiv("msg-"+item.id, item.role, item.text, typeof item.confidencePct==="number"?item.confidencePct:undefined);
+}
+const CHAT_LOG_CAP = 400; // keep the DB and the DOM from growing forever over weeks of use
+async function loadChatLog(){
+  const all = await dbGetAll("chat_log");
+  all.sort((a,b)=>a.id-b.id);
+  if(all.length > CHAT_LOG_CAP){
+    const excess = all.slice(0, all.length - CHAT_LOG_CAP);
+    for(const item of excess) await dbDelete("chat_log", item.id);
+  }
+  const kept = all.slice(-CHAT_LOG_CAP);
+  kept.forEach(renderStoredMsg);
+  if(kept.length) document.getElementById("messages").lastElementChild?.scrollIntoView();
+  return kept.length;
+}
+// Feedback is optional — this only fires if the user chooses to tap a button.
+// It nudges a running calibration factor rather than the raw model, since a browser
+// LLM's weights can't be fine-tuned live; this affects how confident FUTURE self-reports
+// are trusted/displayed, based on whether past confidence actually matched user judgment.
+async function rateReply(msgId, reportedConfidence, direction){
+  // BUG FIX (v2.13): neither button was ever disabled, so tapping 👍/👎 repeatedly on the
+  // same reply kept incrementing calib.up/down and awarding/deducting pet tokens every
+  // single time — a slow double-tap or an accidental extra click silently skewed the
+  // confidence-calibration signal and the pet economy well beyond "one vote per reply".
+  const upBtn = document.getElementById(msgId + "-up");
+  const downBtn = document.getElementById(msgId + "-down");
+  if((upBtn && upBtn.disabled) || (downBtn && downBtn.disabled)) return; // already rated
+  if(upBtn) upBtn.disabled = true;
+  if(downBtn) downBtn.disabled = true;
+
+  const calib = (await metaGet("confidenceCalibration")) || {up:0, down:0, autoUp:0, autoDown:0, adjustment:0};
+  if(direction === "up") calib.up++; else calib.down++;
+  calib.adjustment = computeCalibAdjustment(calib);
+  await metaSet("confidenceCalibration", calib);
+
+  // If the auto-scorer already rated this same reply, check whether its implicit vote
+  // agreed with your real one — this is how Buddie learns whether the weight it just
+  // tried is actually trustworthy, and leans toward weights that keep agreeing with you.
+  const pending = autoScorePending[msgId];
+  if(pending){
+    await recordAutoWeightScore(pending.weight, pending.direction === direction);
+    delete autoScorePending[msgId];
+  }
+
+  // Thumbs feed the pet economy: +1 token per 👍, -2 tokens per 👎 (never below 0).
+  // A 👍 while an egg is incubating also counts toward its 30-thumbs-up hatch requirement.
+  const p = await loadPet();
+  let ackExtra = "";
+  if(direction === "up"){
+    p.tokens += 1;
+    if(p.stage === "egg"){
+      p.thumbsUpSinceEgg = (p.thumbsUpSinceEgg||0) + 1;
+      if(p.thumbsUpSinceEgg >= EGG_HATCH_THUMBS){
+        hatchPet(p);
+        ackExtra = ` — your egg hatched into a ${p.hatchEmoji}!`;
+      } else {
+        ackExtra = ` (+1 token, egg at ${p.thumbsUpSinceEgg}/${EGG_HATCH_THUMBS} 👍 to hatch)`;
+      }
+    } else {
+      ackExtra = " (+1 token)";
+    }
+  } else {
+    p.tokens = Math.max(0, p.tokens - 2);
+    ackExtra = " (-2 tokens)";
+  }
+  await savePet(p);
+  updateTokenBadge(p);
+  if(document.getElementById("pet-view").classList.contains("active")) renderPetView(p);
+
+  const ack = document.getElementById(msgId + "-feedback-ack");
+  if(ack) ack.textContent = (direction === "up" ? "— thanks, noted ✓" : "— noted, will calibrate down slightly ✓") + ackExtra;
+}
+
+/* ================= AUTO-SCORING (replaces the old second-AI "critic") ================= */
+// v2.4: the critic used to burn a full extra local-model call on every single reply just
+// to grade the first one — doubling compute cost and wait time for every message. This
+// replaces it with a deterministic, rule-based scorer: no model call, no wait, runs
+// instantly and for free. It looks at the reply itself (not a second opinion from the
+// same model asked to "be independent," which was never truly independent anyway).
+//
+// How much the auto-score's opinion should count (vs. your own thumbs) isn't fixed —
+// Buddie learns it, the same way it already learns which memory-compression style and
+// which sources to trust (see pickCompressionStrategy / sourceWeights). Each time the
+// auto-scorer rates a reply, Buddie tries one of several candidate weights (mostly the
+// best-performing one so far, occasionally a different one just to keep testing),
+// remembers which weight it used, and — if you later tap 👍/👎 on that same reply —
+// checks whether the auto-score's implicit vote agreed with your real one. A weight that
+// keeps agreeing with you earns trust and gets used more.
+const CANDIDATE_AUTO_WEIGHTS = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
+const DEFAULT_AUTO_WEIGHT = 0.3;   // used only before any learning history exists
+const AUTO_UP_AT = 70;             // auto-score >= this counts as an implicit 👍
+const AUTO_DOWN_AT = 40;           // auto-score <= this counts as an implicit 👎
+const AUTO_EXPLORE_RATE = 0.25;    // ~1 in 4 ratings, deliberately try a different weight
+
+// Which reply each still-unscored auto-score belongs to, so a later human thumbs-tap
+// on that same message can be checked against it. Lives only in memory (this session).
+const autoScorePending = {};
+
+async function pickAutoWeight(){
+  const scores = (await metaGet("autoWeightScores")) || {};
+  const withHistory = CANDIDATE_AUTO_WEIGHTS.filter(w => scores[w] && (scores[w].pass + scores[w].fail) >= 3);
+  if(withHistory.length === 0 || Math.random() < AUTO_EXPLORE_RATE){
+    return CANDIDATE_AUTO_WEIGHTS[Math.floor(Math.random() * CANDIDATE_AUTO_WEIGHTS.length)];
+  }
+  let best = withHistory[0], bestRate = -1;
+  for(const w of withHistory){
+    const s = scores[w];
+    const rate = s.pass / (s.pass + s.fail);
+    if(rate > bestRate){ bestRate = rate; best = w; }
+  }
+  return best;
+}
+async function recordAutoWeightScore(weight, agreedWithHuman){
+  const scores = (await metaGet("autoWeightScores")) || {};
+  const s = scores[weight] || {pass:0, fail:0};
+  if(agreedWithHuman) s.pass++; else s.fail++;
+  scores[weight] = s;
+  await metaSet("autoWeightScores", scores);
+}
+
+// Combines human thumbs + auto-scores into one adjustment, at a finer (1-decimal)
+// resolution than thumbs alone could give. Uses whatever weight Buddie has most
+// recently learned/tried (calib.autoWeight).
+function computeCalibAdjustment(calib){
+  const autoWeight = calib.autoWeight ?? DEFAULT_AUTO_WEIGHT;
+  const humanTotal = (calib.up||0) + (calib.down||0);
+  const autoTotal = (calib.autoUp||0) + (calib.autoDown||0);
+  if(!humanTotal && !autoTotal) return 0;
+  const humanSignal = humanTotal ? ((calib.up||0) - (calib.down||0)) / humanTotal : 0;   // -1..1
+  const autoSignal = autoTotal ? ((calib.autoUp||0) - (calib.autoDown||0)) / autoTotal : 0; // -1..1
+  const humanWeight = humanTotal ? (1-autoWeight) : 0;
+  const autoW = autoTotal ? autoWeight : 0;
+  const norm = humanWeight + autoW || 1;
+  const combined = (humanSignal*humanWeight + autoSignal*autoW) / norm;
+  return Math.round(combined * 100) / 10; // one-decimal resolution, roughly -10..+10
+}
+
+async function loadAutoScoreSetting(){
+  const v = await metaGet("autoScoreEnabled");
+  return v === null ? true : !!v; // on by default
+}
+
+// Deterministic 0-100 quality score for a reply — no model call. Pure rules:
+//  - placeholder/error text (e.g. "no model loaded") scores near 0
+//  - near-empty or just-echoing-the-question replies score low
+//  - some topical overlap with the user's message scores higher
+//  - heavy hedging language ("i'm not sure", "maybe", "i don't know") scores lower,
+//    and scores lower still if the AI's own self-reported confidence was high anyway
+//    (that mismatch is exactly the kind of thing worth flagging)
+const STOPWORDS = new Set(["the","a","an","is","are","was","were","to","of","in","on","and","or","for","it","this","that","i","you","your","my","me","be","as","with","at","by","do","does","what","how","why","can","could","would","should","please","tell","about"]);
+const HEDGE_PATTERNS = [/i'?m not sure/i, /i don'?t know/i, /maybe/i, /perhaps/i, /i think(?!\s+it'?s\s+worth)/i, /not certain/i, /hard to say/i, /unclear/i];
+function tokenize(text){
+  return (text||"").toLowerCase().match(/[a-z0-9']+/g) || [];
+}
+function autoScoreReply(userText, aiText, confidencePct){
+  const reasons = [];
+  const trimmed = (aiText||"").trim();
+
+  if(!trimmed || /^\[no local model loaded/i.test(trimmed) || /^\[unhandled|error/i.test(trimmed)){
+    return {score:0, reason:"placeholder/error text, not a real answer"};
+  }
+
+  let score = 60; // neutral baseline
+
+  const wordCount = trimmed.split(/\s+/).length;
+  if(wordCount < 4){ score -= 20; reasons.push("very short reply"); }
+  else if(wordCount > 400){ score -= 5; reasons.push("unusually long reply"); }
+
+  const userTokens = new Set(tokenize(userText).filter(t=>!STOPWORDS.has(t) && t.length>2));
+  const aiTokens = new Set(tokenize(aiText).filter(t=>!STOPWORDS.has(t) && t.length>2));
+  if(userTokens.size){
+    let overlap = 0;
+    userTokens.forEach(t=>{ if(aiTokens.has(t)) overlap++; });
+    const overlapRate = overlap / userTokens.size;
+    if(overlapRate === 0){ score -= 15; reasons.push("no topical overlap with the question"); }
+    else if(overlapRate > 0.3){ score += 10; reasons.push("clearly on-topic"); }
+  }
+
+  if(trimmed.toLowerCase() === (userText||"").trim().toLowerCase()){
+    score -= 30; reasons.push("just echoed the question back");
+  }
+
+  const hedgeHits = HEDGE_PATTERNS.filter(p=>p.test(trimmed)).length;
+  if(hedgeHits > 0){
+    score -= hedgeHits * 8;
+    reasons.push(`${hedgeHits} hedging phrase(s)`);
+    if(typeof confidencePct === "number" && confidencePct >= 80){
+      score -= 10; reasons.push("hedged despite reporting high confidence");
+    }
+  }
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  return {score, reason: reasons.join(", ") || "no issues flagged"};
+}
+
+// Runs right after a reply is already on screen. Since this is pure local computation
+// (no model call, no network), it completes essentially instantly — but it's still kept
+// out of the main send path so a slow metaGet/metaSet never delays the next message.
+async function autoScoreAndCalibrate(msgId, userText, aiText, confidencePct){
+  const scoreEl = document.getElementById(msgId + "-auto");
+  const on = await loadAutoScoreSetting();
+  if(!on){ return; }
+
+  const {score, reason} = autoScoreReply(userText, aiText, confidencePct);
+  const weight = await pickAutoWeight();
+  if(scoreEl) scoreEl.textContent = ` · 🤖 Auto-score: ${score}/100 — ${reason} (weight ${weight})`;
+
+  const direction = score >= AUTO_UP_AT ? "up" : score <= AUTO_DOWN_AT ? "down" : null;
+  if(direction) autoScorePending[msgId] = {direction, weight};
+
+  const calib = (await metaGet("confidenceCalibration")) || {up:0, down:0, autoUp:0, autoDown:0, adjustment:0};
+  if(direction === "up") calib.autoUp = (calib.autoUp||0) + 1;
+  else if(direction === "down") calib.autoDown = (calib.autoDown||0) + 1;
+  calib.autoWeight = weight; // this is the weight now in effect, whether exploring or exploiting
+  calib.adjustment = computeCalibAdjustment(calib);
+  await metaSet("confidenceCalibration", calib);
+}
+
+function addCanvasStep(title, body){
+  const div = document.createElement("div");
+  div.className = "canvas-step";
+  div.innerHTML = `<div class="t">${new Date().toLocaleTimeString()} — ${escapeHtml(title)}</div><div>${escapeHtml(body)}</div>`;
+  document.getElementById("canvas-body").appendChild(div);
+  div.scrollIntoView({behavior:"smooth"});
+  dbAdd("canvas_log", {title, body, timestamp:new Date().toISOString()}).catch(()=>{});
+}
+const CANVAS_LOG_CAP = 500;
+async function loadCanvasLog(){
+  const all = await dbGetAll("canvas_log");
+  all.sort((a,b)=>a.id-b.id);
+  if(all.length > CANVAS_LOG_CAP){
+    const excess = all.slice(0, all.length - CANVAS_LOG_CAP);
+    for(const item of excess) await dbDelete("canvas_log", item.id);
+  }
+  const kept = all.slice(-CANVAS_LOG_CAP);
+  const body = document.getElementById("canvas-body");
+  kept.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "canvas-step";
+    div.innerHTML = `<div class="t">${new Date(item.timestamp).toLocaleTimeString()} — ${escapeHtml(item.title)}</div><div>${escapeHtml(item.body)}</div>`;
+    body.appendChild(div);
+  });
+  if(kept.length) body.lastElementChild?.scrollIntoView();
+}
+/* ================= REGROUND (anti-drift / anti-hallucination check) ================= */
+// Manually forces a full re-read of ground truth: chat history alone if no project is
+// active, or chat + target + every locked plan step's status if one is. Use this if
+// Buddie seems to be looping, repeating itself, or drifting from what's actually true.
+async function regroundAI(){
+  await loadTarget();
+  const plan = currentTarget ? await getActivePlanFor(currentTarget) : null;
+  renderPlanPanel(plan);
+
+  const chatText = Array.from(document.querySelectorAll("#messages .msg")).map(el=>{
+    const role = el.classList.contains("user") ? "User" : "Buddie";
+    const firstLine = el.firstChild ? el.firstChild.textContent : el.textContent;
+    return `${role}: ${firstLine}`;
+  }).slice(-20).join("\n");
+
+  let prompt;
+  if(plan){
+    prompt = `Re-orient yourself using ONLY the ground truth below — do not rely on anything you assumed earlier in this session.\n\nTarget: ${currentTarget}\n\nLocked plan steps:\n${plan.steps.map((s,i)=>`${i+1}. [${s.status}] ${s.text}`).join("\n")}\n\nRecent conversation:\n${chatText}\n\nIn 2-3 sentences: state the actual current status against this plan, and what should happen next. If anything you said earlier in this conversation conflicts with the facts above, say so plainly instead of smoothing over it.`;
+  } else {
+    prompt = `Re-orient yourself using ONLY the conversation below — there is no active project target. Recent conversation:\n${chatText}\n\nIn 2-3 sentences: summarize what has actually been established so far, and flag anything you may have said that seems inconsistent, repeated, or unsupported.`;
+  }
+
+  addCanvasStep("Regrounding", "Re-reading full context from scratch to check for drift or hallucination...");
+  const result = await askAI(prompt);
+  addCanvasStep("Reground result", result);
+}
+async function sendChat(){
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if(!text) return;
+  await addMsg("user", text);
+  input.value="";
+  // READ TARGET AND LOCKED PLAN FIRST — required before any reply/action, every time.
+  await loadTarget();
+  const plan = await getActivePlanFor(currentTarget);
+  renderPlanPanel(plan);
+  const planStatusText = plan
+    ? `\nLocked plan (do not deviate from this):\n${plan.steps.map((s,i)=>`${i+1}. [${s.status}] ${s.text}`).join("\n")}`
+    : "";
+  addCanvasStep("Read target + plan", currentTarget ? `Target: "${currentTarget}"${plan ? " — locked plan loaded" : " — no plan yet"}` : "No target set — proceeding without one.");
+
+  const calib = (await metaGet("confidenceCalibration")) || {adjustment:0};
+  // v2.9: pull in verified memory relevant to this message + the project target so the
+  // reply is grounded in what Buddie actually researched, instead of only its own raw
+  // model weights. See retrieveRelevantMemory() above.
+  const {context: memoryContext, used: memoryUsed} = await retrieveRelevantMemory(`${currentTarget||""} ${text}`);
+  const memoryBlock = memoryContext
+    ? `\nVERIFIED MEMORY (treat as ground truth; prefer this over your own guesses when it's relevant):\n${memoryContext}`
+    : `\nVERIFIED MEMORY: none found relevant to this message yet. Say so plainly if the question needs research rather than guessing — the user can run a search or ▶ Run Project to build it.`;
+  if(memoryUsed.length) addCanvasStep("Grounded reply", `Pulled ${memoryUsed.length} verified memory item(s) into context: ${memoryUsed.join(", ")}`);
+  const rawReply = await askAI(`Project target: ${currentTarget||"(none set)"}${planStatusText}${memoryBlock}\n\nUser: ${text}\n\nAfter your answer, on a new final line only, output exactly: CONFIDENCE: NN — where NN is 0-100, your own honest estimate of how confident you are in this specific answer.`);
+
+  let confidencePct = 60; // sensible default if parsing fails
+  let displayText = rawReply;
+  const match = rawReply.match(/CONFIDENCE:\s*(\d{1,3})\s*$/i);
+  if(match){
+    confidencePct = Math.min(100, parseInt(match[1],10));
+    displayText = rawReply.slice(0, match.index).trim();
+  }
+  confidencePct = Math.max(0, Math.min(100, confidencePct + calib.adjustment));
+
+  const aiMsgId = await addMsg("ai", displayText, confidencePct);
+  autoScoreAndCalibrate(aiMsgId, text, displayText, confidencePct); // fire-and-forget: fills in once it's done, doesn't block the next message
+}
+
+/* ================= LOCAL LLM (WebLLM) ================= */
+let engine = null;
+// v2.5: builds the model dropdown from the live WebLLM catalog instead of a hand-typed
+// list, so small/rare/old models the library supports (down to ~135M-360M parameter
+// models, not just the handful anyone thinks to type in) actually show up. Sorted
+// smallest-VRAM-first by default since smaller generally means faster load + faster
+// generation on tablet-class GPUs — exactly what matters for inference speed.
+async function renderModelOptions(){
+  const sel = document.getElementById("model-select");
+  if(!sel) return;
+  if(!window.webllm || !webllm.prebuiltAppConfig || !Array.isArray(webllm.prebuiltAppConfig.model_list)){
+    sel.innerHTML = `<option value="">Model catalog not loaded yet — check your internet connection, then reload.</option>`;
+    return;
+  }
+  const showFullCatalog = document.getElementById("model-filter-full-catalog")?.checked ?? false;
+  // Rough parameter count parsed out of the model_id itself (e.g. "...-1.5B-...", "...-360M-...")
+  // — used only for sorting/filtering/labeling, not sent anywhere.
+  function paramCount(id){
+    const b = id.match(/(\d+(?:\.\d+)?)B/i); if(b) return parseFloat(b[1]) * 1000;
+    const m = id.match(/(\d+(?:\.\d+)?)M/i); if(m) return parseFloat(m[1]);
+    return null;
+  }
+  // Strips the quantization/build suffix so different quants of the same base model
+  // (q4f16_1 vs q4f32_1 vs q0f16, different ctx window builds, etc.) collapse to one
+  // entry instead of eating multiple of the 10 slots with near-duplicates.
+  function baseName(id){
+    return id.replace(/-q\d\w*(_\d)?(-MLC)?$/i, "").replace(/-MLC$/i, "").toLowerCase();
+  }
+  const NON_CHAT_PATTERN = /embed|vision|clip|whisper|bge-|e5-|reward|guard|moderation|-vl-|ocr/i;
+  let list = webllm.prebuiltAppConfig.model_list.map(m => ({
+    id: m.model_id,
+    vram: typeof m.vram_required_MB === "number" ? m.vram_required_MB : null,
+    lowRes: !!m.low_resource_required,
+    params: paramCount(m.model_id)
+  }));
+
+  if(!showFullCatalog){
+    list = list.filter(m => !NON_CHAT_PATTERN.test(m.id));
+    // Size window: roughly 500MB-3B. VRAM (actual footprint) is the primary filter when
+    // known; parameter count is the fallback/secondary cap so a 3B+ model can't sneak in
+    // even if its vram_required_MB happens to be missing from this catalog build.
+    list = list.filter(m => {
+      const vramOk = m.vram === null || (m.vram >= 350 && m.vram <= 3200);
+      const paramsOk = m.params === null || m.params <= 3000;
+      return vramOk && paramsOk && (m.vram !== null || m.params !== null);
+    });
+    // Dedup to the smallest variant per base model.
+    const bestPerBase = new Map();
+    for(const m of list){
+      const key = baseName(m.id);
+      const existing = bestPerBase.get(key);
+      const size = m.vram ?? m.params ?? 999999;
+      const existingSize = existing ? (existing.vram ?? existing.params ?? 999999) : Infinity;
+      if(!existing || size < existingSize) bestPerBase.set(key, m);
+    }
+    list = Array.from(bestPerBase.values());
+  }
+
+  list.sort((a,b) => {
+    const av = a.vram ?? (a.params ?? 999999), bv = b.vram ?? (b.params ?? 999999);
+    return av - bv;
+  });
+  if(!showFullCatalog) list = list.slice(0, 10);
+
+  const carrySelected = sel.value; // keep current pick if the list is just being re-sorted/filtered
+  sel.innerHTML = list.map(m => {
+    const sizeLabel = m.vram ? `~${Math.round(m.vram)}MB VRAM` : (m.params ? `~${m.params}M params` : "");
+    const tag = m.lowRes ? " · low-resource friendly" : "";
+    return `<option value="${m.id}">${m.id}${sizeLabel ? " — "+sizeLabel : ""}${tag}</option>`;
+  }).join("") || `<option value="">No models matched this filter — try "Show full catalog".</option>`;
+  if(carrySelected && list.some(m=>m.id===carrySelected)) sel.value = carrySelected;
+  sel.onchange = () => metaSet("selectedModelId", sel.value);
+  // Apply the saved pick once storage is ready — doesn't block the list from showing up.
+  // No saved pick yet → default to Qwen3-0.6B specifically (small, fast, and what was asked for),
+  // falling back to whatever sorted to the top if that exact model isn't in this list.
+  const DEFAULT_MODEL_ID = "Qwen3-0.6B-q4f16_1-MLC";
+  metaGet("selectedModelId").then(saved => {
+    if(saved && list.some(m=>m.id===saved)){ sel.value = saved; return; }
+    if(list.some(m=>m.id===DEFAULT_MODEL_ID)) sel.value = DEFAULT_MODEL_ID;
+  }).catch(()=>{});
+}
+window.renderModelOptions = renderModelOptions;
+function onModelSourceChange(){
+  const local = document.querySelector('input[name="model-source"]:checked').value === "local";
+  document.getElementById("local-model-fields").style.display = local ? "block" : "none";
+}
+// v2.9: model load/ready status previously only ever showed up in the Settings tab
+// (#model-status), so from Chat/Canvas or any other view there was no way to tell
+// "still loading" from "ready" apart from noticing replies were slow — which reads
+// exactly like "it's redownloading on every screen" even when it isn't. This mirrors
+// the same status into a small badge in the header, visible from every tab.
+function updateModelBadge(text, colorVar){
+  const el = document.getElementById("model-badge");
+  if(!el) return;
+  el.textContent = "🧠 " + text;
+  el.style.color = `var(${colorVar||"--dim"})`;
+}
+// v2.6.1: "model isn't registering for chat" was a real race — renderModelOptions()
+// applies the saved/default selection asynchronously (it waits on IndexedDB), so if
+// something tried to auto-load right after the dropdown was first drawn, it could grab
+// whatever the browser defaulted <select> to (the first/smallest option in the sorted
+// list) rather than the actual saved or intended-default model. This resolves the
+// correct id FIRST, sets it on the dropdown, and only then loads — deterministic, no
+// race — and is what runs automatically on startup so a model is ready for chat without
+// you having to tap Load Model every time.
+const DEFAULT_MODEL_ID = "Qwen3-0.6B-q4f16_1-MLC";
+async function autoLoadModelOnStartup(){
+  const statusEl = document.getElementById("model-status");
+  if(!window.webllm || !webllm.prebuiltAppConfig){
+    if(statusEl) statusEl.textContent = "Model catalog didn't load (no internet on first run?) — pick a model above once it's available, then tap Load Model.";
+    updateModelBadge("catalog unavailable", "--bad");
+    return;
+  }
+  const sel = document.getElementById("model-select");
+  const catalogIds = new Set(webllm.prebuiltAppConfig.model_list.map(m=>m.model_id));
+  const saved = await metaGet("selectedModelId");
+  const targetId = (saved && catalogIds.has(saved)) ? saved
+                  : (catalogIds.has(DEFAULT_MODEL_ID) ? DEFAULT_MODEL_ID : sel.value);
+  if(!targetId){ if(statusEl) statusEl.textContent = "No model available to auto-load yet."; updateModelBadge("none selected", "--bad"); return; }
+  if(sel && sel.value !== targetId && Array.from(sel.options).some(o=>o.value===targetId)) sel.value = targetId;
+  await metaSet("selectedModelId", targetId);
+  await loadModel();
+}
+async function loadModel(){
+  if(!window.webllm){
+    document.getElementById("model-status").textContent = "Model engine still loading — wait a second and try again.";
+    return;
+  }
+  const modelId = document.getElementById("model-select").value;
+  const statusEl = document.getElementById("model-status");
+  const useLocal = document.querySelector('input[name="model-source"]:checked').value === "local";
+  const downloadedMap = (await metaGet("downloadedModels")) || {};
+  const alreadyDownloaded = !!downloadedMap[modelId];
+  statusEl.textContent = alreadyDownloaded
+    ? `Loading ${modelId} — already downloaded on this device, reading from cache...`
+    : `Loading ${modelId} — downloading weights for the first time, this can take a while...`;
+  updateModelBadge(alreadyDownloaded ? "loading (cached)…" : "downloading…", "--warn");
+  try{
+    if(useLocal){
+      const baseUrl = document.getElementById("local-model-url").value.trim().replace(/\/$/,"");
+      if(!baseUrl){ statusEl.textContent = "Enter your local model server address first."; return; }
+      await metaSet("localModelUrl", baseUrl);
+      const appConfig = {
+        model_list: [{
+          model: `${baseUrl}/${modelId}`,
+          model_id: modelId,
+          model_lib: webllm.prebuiltAppConfig.model_list.find(m=>m.model_id===modelId)?.model_lib
+        }]
+      };
+      engine = await webllm.CreateMLCEngine(modelId, {
+        appConfig,
+        initProgressCallback: (p)=>{ statusEl.textContent = p.text || "Loading from your local server..."; }
+      });
+      statusEl.textContent = "Model loaded ✓ — served entirely from your own network, no internet used.";
+      downloadedMap[modelId] = true; await metaSet("downloadedModels", downloadedMap);
+      updateModelBadge(modelId.replace(/-q\d.*$/i,""), "--ok");
+      benchmarkModel();
+    } else {
+      engine = await webllm.CreateMLCEngine(modelId, {
+        initProgressCallback: (p)=>{ statusEl.textContent = p.text || "Loading..."; }
+      });
+      statusEl.textContent = "Model loaded ✓ — cached in this browser, runs offline from now on.";
+      downloadedMap[modelId] = true; await metaSet("downloadedModels", downloadedMap);
+      updateModelBadge(modelId.replace(/-q\d.*$/i,""), "--ok");
+      benchmarkModel();
+    }
+  }catch(err){
+    statusEl.textContent = location.protocol === "content:"
+      ? "Load failed: Cache Storage doesn't work on a content:// origin (\""+err.message+"\"), so the model can't download here regardless of which one you pick. Open Chrome directly with a file:// or http(s):// address instead — see the banner at the top for details."
+      : "Load failed: "+err.message+" (needs a WebGPU-capable browser, e.g. Chrome on Android; if using a local server, confirm the address and that the model folder matches the official MLC layout).";
+    updateModelBadge("load failed", "--bad");
+  }
+}
+/* ================= SOURCE TRUST WEIGHTS ================= */
+// A running trust weight per source (Wikipedia, arXiv, Open Library, your own scraper...),
+// updated every time a memory is verified or trashed. This is real, separate from the
+// model's own downloaded neural-net weights — it's Buddie's own developed sense of which
+// sources tend to hold up, and it nudges future verification scoring.
+function sourceNameFromItem(sourceField){
+  return (sourceField||"").split(":")[0].trim() || "unknown";
+}
+// v2.10 — made this genuinely "evolving" instead of a static lifetime ratio:
+// (1) Added an exponential moving average (`ema`) alongside the lifetime pass/fail
+//     counts. A flat lifetime ratio treats a source's very first result and its
+//     1000th identically — a scraper endpoint that used to be garbage but has cleaned
+//     up its act (or vice versa) would take forever to reflect that. The EMA weights
+//     RECENT outcomes more heavily (alpha=0.25), so trust actually moves with behavior.
+// (2) pass/fail counts are kept too, purely for the human-readable summary in
+//     updateWeights() and so old data isn't lost — but the bonus below is EMA-driven.
+const TRUST_EMA_ALPHA = 0.25;
+// PERF (v2.13): accepts an already-loaded weights object (see verifyAll) so a run that
+// checks many items doesn't re-read "sourceWeights" from IndexedDB once per item just to
+// mutate one key and write it straight back — one read for the whole run, still one
+// write per item (so a mid-run interruption doesn't lose already-recorded outcomes).
+// Returns the updated object so the caller's cache stays current for the next item.
+async function recordSourceOutcome(sourceName, passed, preloadedWeights){
+  const weights = preloadedWeights || (await metaGet("sourceWeights")) || {};
+  const w = weights[sourceName] || {pass:0, fail:0, ema:0.5};
+  if(passed) w.pass++; else w.fail++;
+  const prevEma = w.ema ?? 0.5;
+  w.ema = prevEma * (1-TRUST_EMA_ALPHA) + (passed ? 1 : 0) * TRUST_EMA_ALPHA;
+  weights[sourceName] = w;
+  await metaSet("sourceWeights", weights);
+  return weights;
+}
+// v2.10: bonus magnitude now SCALES with how much history exists (up to ±8, was a flat
+// ±5 the instant 3 samples existed) — a source with 40 checks behind it has earned more
+// benefit-of-the-doubt than one with exactly 3, so its trust score should be allowed to
+// move the needle further.
+function sourceTrustBonus(weights, sourceName){
+  const w = weights[sourceName];
+  if(!w) return 0;
+  const total = w.pass + w.fail;
+  if(total < 3) return 0; // not enough history yet to trust the trend
+  const ema = w.ema ?? (w.pass/total);
+  const sampleConfidence = Math.min(1, total/12); // ramps up to full weight by ~12 checks
+  return Math.round((ema - 0.5) * 16 * sampleConfidence); // up to -8..+8
+}
+
+async function updateWeights(){
+  if(!window.webllm){
+    document.getElementById("model-status").textContent = "Model engine still loading — wait a second and try again.";
+    return;
+  }
+  const modelId = document.getElementById("model-select").value;
+  const statusEl = document.getElementById("model-status");
+  statusEl.textContent = `Clearing cached weights for ${modelId}...`;
+  try{
+    await webllm.deleteModelAllInfoInCache(modelId);
+    const downloadedMap = (await metaGet("downloadedModels")) || {};
+    delete downloadedMap[modelId];
+    await metaSet("downloadedModels", downloadedMap);
+    statusEl.textContent = "Cache cleared — re-downloading fresh weights...";
+    await loadModel(); // re-runs with the now-empty cache, forcing a real re-download
+
+    // Also rebalance Buddie's own internal source-trust weights, separate from the
+    // model file refresh above — this is the "weights" that grow from usage over time.
+    // v2.10: now shows the recency-weighted EMA trust score (the actual number driving
+    // verification bonuses/pre-check auto-rejection) alongside the lifetime pass/fail
+    // counts, since those two can diverge — e.g. a source that started rough but has
+    // recently improved will show a higher EMA than its lifetime rate suggests.
+    const weights = (await metaGet("sourceWeights")) || {};
+    const summary = Object.entries(weights).map(([name,w]) => {
+      const total = w.pass+w.fail;
+      const lifetimeRate = total ? Math.round((w.pass/total)*100) : 0;
+      const emaRate = Math.round((w.ema ?? 0.5)*100);
+      return `${name}: ${emaRate}% trust (recent) / ${lifetimeRate}% lifetime (${w.pass} passed / ${w.fail} trashed, ${total} total)`;
+    }).join("  |  ") || "No verification history yet — trust weights will build up as items are verified.";
+    addCanvasStep("Source trust weights", summary);
+  }catch(err){
+    statusEl.textContent = "Update failed: "+err.message;
+  }
+}
+// v2.5: "everything feels slow" can mean several different things on a tablet — the
+// model itself being too big for the hardware, the browser not actually getting GPU
+// acceleration at all (falling back to a software WebGPU implementation, which is
+// dramatically slower and looks identical from the UI otherwise), or something else
+// entirely. This surfaces the two numbers that actually answer the question instead of
+// leaving it a guess.
+async function checkWebGPU(){
+  const el = document.getElementById("webgpu-status");
+  if(!el) return;
+  if(!("gpu" in navigator)){
+    el.textContent = "⚠️ WebGPU is not available in this browser at all — every model will run on CPU fallback if it runs at all, and will be very slow regardless of model size. On a tablet, Chrome for Android has the best WebGPU support; Safari/iOS generally does not support it.";
+    return;
+  }
+  try{
+    const adapter = await navigator.gpu.requestAdapter();
+    if(!adapter){
+      el.textContent = "⚠️ WebGPU is present but no GPU adapter was granted — likely running on software rendering. This alone can explain across-the-board slowness no matter which model you pick.";
+      return;
+    }
+    const info = adapter.info || (adapter.requestAdapterInfo ? await adapter.requestAdapterInfo() : null);
+    const isFallback = adapter.isFallbackAdapter === true;
+    el.textContent = isFallback
+      ? "⚠️ Only a software/fallback GPU adapter is available (no real hardware acceleration) — this is almost certainly why everything feels slow, and it won't improve by picking a smaller model. Try a different browser (Chrome for Android) or device."
+      : `✅ Hardware WebGPU adapter detected${info?.vendor ? ` (${info.vendor}${info.architecture?" "+info.architecture:""})` : ""} — real GPU acceleration should be active.`;
+  }catch(err){
+    el.textContent = "Couldn't check WebGPU adapter: " + err.message;
+  }
+}
+let lastBenchmark = null;
+async function benchmarkModel(){
+  const speedEl = document.getElementById("speed-status");
+  if(!engine || !speedEl) return;
+  speedEl.textContent = "Measuring generation speed...";
+  try{
+    const start = performance.now();
+    const res = await engine.chat.completions.create({
+      messages:[{role:"user", content:"Reply with just the word: ready"}],
+      max_tokens: 16
+    });
+    const elapsedSec = (performance.now() - start) / 1000;
+    const tokens = res.usage?.completion_tokens ?? null;
+    lastBenchmark = tokens ? tokens/elapsedSec : null;
+    speedEl.textContent = tokens
+      ? `Measured: ~${lastBenchmark.toFixed(1)} tokens/sec on this device. Under ~5 tok/s generally feels sluggish for chat — if you're there, the fix is a smaller model (checkboxes above) or checking the WebGPU line above for a hardware-acceleration problem.`
+      : `Reply took ${elapsedSec.toFixed(1)}s (token count unavailable from this build to compute tok/s).`;
+  }catch(err){
+    speedEl.textContent = "Benchmark failed: " + err.message;
+  }
+}
+checkWebGPU();
+
+/* ================= CLOUD DEV KEY ROTATION ================= */
+// v2.13: optional pool of your own dev-account API keys, round-robined across requests.
+// Nothing here replaces the local WebLLM model — it's an extra tier tried FIRST (when
+// healthy keys exist and "prefer cloud" is on), with the local `engine` from above as the
+// unconditional fallback, so the app behaves exactly as before if you never add a key.
+const CLOUD_PROVIDERS = {
+  openai: {
+    label: "OpenAI",
+    defaultModel: "gpt-4o-mini",
+    keyUrl: "https://platform.openai.com/api-keys",
+    endpoint: () => "https://api.openai.com/v1/chat/completions",
+    headers: (key) => ({ "Content-Type":"application/json", "Authorization": `Bearer ${key}` }),
+    body: (model, messages, maxTokens) => JSON.stringify({ model, messages, max_tokens: maxTokens }),
+    parse: (j) => j.choices?.[0]?.message?.content ?? ""
+  },
+  anthropic: {
+    label: "Anthropic",
+    defaultModel: "claude-haiku-4-5-20251001",
+    keyUrl: "https://console.anthropic.com/settings/keys",
+    // anthropic-dangerous-direct-browser-access is required for this API to accept a
+    // call made straight from browser JS at all (it's blocked by default otherwise).
+    headers: (key) => ({ "Content-Type":"application/json", "x-api-key": key, "anthropic-version":"2023-06-01", "anthropic-dangerous-direct-browser-access":"true" }),
+    body: (model, messages, maxTokens) => JSON.stringify({ model, max_tokens: maxTokens, messages }),
+    parse: (j) => (j.content||[]).map(c=>c.text||"").join("")
+  },
+  gemini: {
+    label: "Gemini",
+    defaultModel: "gemini-2.0-flash",
+    keyUrl: "https://aistudio.google.com/app/apikey",
+    endpoint: (key, model) => `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`,
+    headers: () => ({ "Content-Type":"application/json" }),
+    body: (model, messages, maxTokens) => JSON.stringify({
+      contents: messages.map(m=>({ role: m.role==="assistant"?"model":"user", parts:[{text:m.content}] })),
+      generationConfig: { maxOutputTokens: maxTokens }
+    }),
+    parse: (j) => j.candidates?.[0]?.content?.parts?.map(p=>p.text).join("") ?? ""
+  },
+  custom: {
+    label: "Custom",
+    defaultModel: "",
+    keyUrl: null,
+    endpoint: (key, model, baseUrl) => baseUrl,
+    headers: (key) => ({ "Content-Type":"application/json", "Authorization": `Bearer ${key}` }),
+    body: (model, messages, maxTokens) => JSON.stringify({ model, messages, max_tokens: maxTokens }),
+    parse: (j) => j.choices?.[0]?.message?.content ?? j.content ?? ""
+  }
+};
+function onCloudProviderChange(){
+  const p = document.getElementById("cloud-key-provider").value;
+  const cfg = CLOUD_PROVIDERS[p];
+  document.getElementById("cloud-key-model").placeholder = `model name, e.g. ${cfg.defaultModel || "your-model-id"}`;
+  document.getElementById("cloud-key-baseurl").style.display = p === "custom" ? "block" : "none";
+  const link = document.getElementById("cloud-key-get-link");
+  if(cfg.keyUrl){
+    link.style.display = "inline";
+    link.href = cfg.keyUrl;
+    link.textContent = `Get a${/^[aeiou]/i.test(cfg.label)?"n":""} ${cfg.label} key →`;
+  } else {
+    link.style.display = "none"; // custom endpoints don't have a universal signup page
+  }
+}
+function maskKey(k){ return k.length <= 8 ? "••••" : k.slice(0,4) + "…" + k.slice(-4); }
+async function getCloudKeys(){ return (await metaGet("cloudKeys")) || []; }
+async function saveCloudKeys(keys){ await metaSet("cloudKeys", keys); }
+async function addCloudKey(){
+  const provider = document.getElementById("cloud-key-provider").value;
+  const label = document.getElementById("cloud-key-label").value.trim();
+  const model = document.getElementById("cloud-key-model").value.trim() || CLOUD_PROVIDERS[provider].defaultModel;
+  const baseUrl = document.getElementById("cloud-key-baseurl").value.trim();
+  const key = document.getElementById("cloud-key-value").value.trim();
+  if(!key){ alert("Paste a key first."); return; }
+  if(provider === "custom" && !baseUrl){ alert("Custom provider needs an endpoint URL."); return; }
+  const keys = await getCloudKeys();
+  keys.push({ id: Date.now()+Math.random(), provider, label, model, baseUrl, key, enabled:true, cooldownUntil:0, fails:0, uses:0, lastUsed:0, lastStatus:"untested" });
+  await saveCloudKeys(keys);
+  document.getElementById("cloud-key-label").value = "";
+  document.getElementById("cloud-key-value").value = "";
+  renderCloudKeysList();
+}
+async function removeCloudKey(id){
+  const keys = (await getCloudKeys()).filter(k=>k.id!==id);
+  await saveCloudKeys(keys);
+  renderCloudKeysList();
+}
+async function toggleCloudKey(id, enabled){
+  const keys = await getCloudKeys();
+  const k = keys.find(k=>k.id===id); if(k) k.enabled = enabled;
+  await saveCloudKeys(keys);
+}
+async function renderCloudKeysList(){
+  const el = document.getElementById("cloud-keys-list");
+  if(!el) return;
+  const keys = await getCloudKeys();
+  const statusBadge = k => {
+    if(k.cooldownUntil > Date.now()) return `<span class="badge warn">cooling down ~${Math.ceil((k.cooldownUntil-Date.now())/1000)}s</span>`;
+    if(k.lastStatus === "healthy") return `<span class="badge ok">connected</span>`;
+    if(k.lastStatus === "error") return `<span class="badge bad">failed last try</span>`;
+    return `<span class="badge warn">untested</span>`;
+  };
+  el.innerHTML = keys.map(k => `
+    <div class="mem-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <div>
+        <b>${escapeHtml(k.label || CLOUD_PROVIDERS[k.provider]?.label || k.provider)}</b>
+        <span style="color:var(--dim);font-size:11px">(${escapeHtml(CLOUD_PROVIDERS[k.provider]?.label || k.provider)} — ${escapeHtml(k.model)})</span>
+        <div class="meta"><span>${escapeHtml(maskKey(k.key))} · used ${k.uses||0}×</span> ${statusBadge(k)}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <label style="flex-direction:row;gap:4px;display:flex;font-size:11px"><input type="checkbox" ${k.enabled?"checked":""} onchange="toggleCloudKey(${JSON.stringify(k.id)}, this.checked)">on</label>
+        <button class="ghost" onclick="removeCloudKey(${JSON.stringify(k.id)})">Remove</button>
+      </div>
+    </div>`).join("") || `<div class="status-line">No keys added — using local model only.</div>`;
+}
+// Round-robin by least-recently-used among enabled, non-cooling keys — spreads load
+// across the whole pool instead of hammering key #1 until it rate-limits.
+function pickNextHealthyKey(keys){
+  const now = Date.now();
+  const usable = keys.filter(k => k.enabled && k.cooldownUntil <= now);
+  if(!usable.length) return null;
+  usable.sort((a,b) => a.lastUsed - b.lastUsed);
+  return usable[0];
+}
+function backoffFor(fails){ return Math.min(60000, 2000 * Math.pow(2, Math.min(fails,5))); } // 2s,4s,8s...capped at 60s
+
+/* ---- token-budget optimizer: trims what gets SENT so each cloud call burns the least
+   possible tokens, instead of always shipping the full prompt/context every time. This
+   is a char-count heuristic (~4 chars/token) since real tokenizers differ per provider
+   and aren't worth shipping client-side just to estimate. ---- */
+const CLOUD_INPUT_TOKEN_BUDGET = 1400;
+const CLOUD_OUTPUT_TOKEN_BUDGET = 300;
+function estimateTokens(text){ return Math.ceil((text||"").length / 4); }
+// Keeps the most recent/most important tail of the prompt (system instructions +
+// question are usually near the end of Buddie's prompts) and trims older bulk context
+// from the front first, rather than blindly hard-cutting the whole thing.
+function trimToTokenBudget(text, maxTokens){
+  if(estimateTokens(text) <= maxTokens) return text;
+  const maxChars = maxTokens * 4;
+  return "[...older context trimmed to save tokens...]\n" + text.slice(-maxChars);
+}
+
+async function callCloudModel(entry, prompt){
+  const cfg = CLOUD_PROVIDERS[entry.provider];
+  const trimmedPrompt = trimToTokenBudget(prompt, CLOUD_INPUT_TOKEN_BUDGET);
+  const messages = [{ role:"user", content: trimmedPrompt }];
+  const url = cfg.endpoint(entry.key, entry.model, entry.baseUrl);
+  const res = await fetch(url, {
+    method: "POST",
+    headers: cfg.headers(entry.key),
+    body: cfg.body(entry.model, messages, CLOUD_OUTPUT_TOKEN_BUDGET)
+  });
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const j = await res.json();
+  const text = cfg.parse(j);
+  if(!text) throw new Error("empty response");
+  return text;
+}
+
+async function askAI(prompt){
+  const preferCloud = (await metaGet("preferCloud")) ?? true;
+  if(preferCloud){
+    let keys = await getCloudKeys();
+    // Try each currently-usable key once, in rotation order, before giving up on cloud
+    // entirely for this request — a single flaky key shouldn't force a local fallback
+    // when three other keys in the pool are fine.
+    for(let attempt = 0; attempt < keys.length; attempt++){
+      const entry = pickNextHealthyKey(keys);
+      if(!entry) break;
+      entry.lastUsed = Date.now();
+      try{
+        const text = await callCloudModel(entry, prompt);
+        entry.lastStatus = "healthy"; entry.fails = 0; entry.cooldownUntil = 0; entry.uses = (entry.uses||0) + 1;
+        await saveCloudKeys(keys);
+        renderCloudKeysList();
+        return text;
+      }catch(err){
+        entry.fails = (entry.fails||0) + 1;
+        entry.lastStatus = "error";
+        entry.cooldownUntil = Date.now() + backoffFor(entry.fails);
+        await saveCloudKeys(keys);
+        renderCloudKeysList();
+        keys = await getCloudKeys(); // re-read in case another call mutated it concurrently
+      }
+    }
+  }
+  // Local fallback — unchanged from before cloud rotation existed.
+  if(!engine){
+    return "[No local model loaded yet — go to Settings → Load Model. Until then I can still file things to memory and run searches, I just can't reason over them.]";
+  }
+  const res = await engine.chat.completions.create({
+    messages:[{role:"user", content: prompt}]
+  });
+  return res.choices[0].message.content;
+}
+
+/* ================= SCRAPER HELPER MODEL (tiny, local) ================= */
+// A second, deliberately-small local model used ONLY to condense raw scraped source
+// text down to its essentials before that text is stored in memory or handed to
+// askAI/cloud — keeps both IndexedDB and any cloud dev-key call above lean, since
+// nothing downstream ever sees the raw, noisy scrape.
+let scraperEngine = null;
+async function populateScraperModelSelect(){
+  const sel = document.getElementById("scraper-model-select");
+  if(!sel || !window.webllm?.prebuiltAppConfig?.model_list) return;
+  const list = webllm.prebuiltAppConfig.model_list
+    .map(m => ({ id: m.model_id, vram: typeof m.vram_required_MB === "number" ? m.vram_required_MB : 999999 }))
+    .sort((a,b) => a.vram - b.vram)
+    .slice(0, 6); // smallest handful only — this model's whole job is to be fast, not smart
+  sel.innerHTML = list.map(m => `<option value="${m.id}">${m.id}${m.vram<999999?` — ~${Math.round(m.vram)}MB`:""}</option>`).join("");
+  const saved = await metaGet("scraperModelId");
+  if(saved && list.some(m=>m.id===saved)) sel.value = saved;
+}
+async function loadScraperModel(){
+  const sel = document.getElementById("scraper-model-select");
+  const statusEl = document.getElementById("scraper-model-status");
+  if(!window.webllm || !sel.value){ statusEl.textContent = "Model catalog not ready yet — wait a second and try again."; return; }
+  statusEl.textContent = `Loading ${sel.value}...`;
+  try{
+    scraperEngine = await webllm.CreateMLCEngine(sel.value, { initProgressCallback: p => { statusEl.textContent = p.text || "Loading..."; } });
+    await metaSet("scraperModelId", sel.value);
+    statusEl.textContent = `Loaded ✓ — scraped source text will now be condensed by ${sel.value} before storage.`;
+  }catch(err){
+    statusEl.textContent = "Load failed: " + err.message;
+  }
+}
+async function condenseWithScraperModel(text){
+  if(!scraperEngine || !text || text.length < 400) return text; // short text isn't worth the extra call
+  try{
+    const res = await scraperEngine.chat.completions.create({
+      messages:[{role:"user", content:`Compress the following into its single most essential sentence, keeping concrete facts/numbers/names, dropping filler. Reply with ONLY that sentence.\n\n${text.slice(0,2000)}`}],
+      max_tokens: 100
+    });
+    return res.choices[0]?.message?.content?.trim() || text;
+  }catch(err){
+    return text; // fail open — never block the pipeline on the helper model
+  }
+}
+
+
+/* ================= RATE-LIMIT-AWARE SCHEDULER ================= */
+// v2.10: this was NEVER actually round-robin despite its own comment — processTopicQueue
+// looped source-major (ALL topics against Wikipedia, THEN all topics against Open
+// Library, THEN arXiv...), so a topic-heavy run hammered one site in a tight sequence
+// before moving on. True round robin (topic-major, source-minor — see processTopicQueue
+// below) now guarantees consecutive requests always hit a different site, spreading load
+// naturally instead of relying on the sleep-based throttle alone to keep any one source
+// from being hit repeatedly in a row.
+//
+// Per-source minimum gap between requests (ms), tuned to each site's own published
+// guidance. Anything not listed here (a newly added source, or your own scraper
+// endpoint) falls back to DEFAULT_SOURCE_INTERVAL via sourceInterval() below — a real
+// bug in the old version: an unlisted source name made SOURCE_INTERVAL[name] read as
+// undefined, which silently disabled throttling for it entirely (NaN timestamps always
+// compare false), and turned "back off after an error" into NaN-ing the interval instead
+// of actually slowing down.
+const SOURCE_INTERVAL = { "Wikipedia": 400, "Open Library": 600, "arXiv": 3200, "Semantic Scholar": 3500, "Crossref": 1200 };
+const DEFAULT_SOURCE_INTERVAL = 1500; // safe conservative default for any source without a tuned value (e.g. your own scraper endpoint)
+const MAX_SOURCE_INTERVAL = 20000;
+function sourceInterval(name){ return SOURCE_INTERVAL[name] ?? DEFAULT_SOURCE_INTERVAL; }
+const sourceNextAvailable = {}; // sourceName -> timestamp when it's safe to call again
+function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
+// Small randomized jitter (±15%) on top of the fixed interval — avoids every request to
+// a given source landing at a perfectly periodic, easily-throttled cadence.
+function withJitter(ms){ return Math.round(ms * (0.85 + Math.random()*0.3)); }
+
+async function throttledSourceFetch(src, topic){
+  const now = Date.now();
+  const readyAt = sourceNextAvailable[src.name] || 0;
+  if(now < readyAt) await sleep(readyAt - now);
+  try{
+    const items = await src.fetch(topic);
+    sourceNextAvailable[src.name] = Date.now() + withJitter(sourceInterval(src.name));
+    // BUG FIX (v2.13): the Settings-tab "scraper helper model" was fully loadable and
+    // its status line claims it "condenses raw search-source text before it's stored or
+    // sent anywhere" — but nothing on this, the ACTUAL live ingestion path, ever called
+    // condenseWithScraperModel(). It was only wired into fetchVerifiedSources(), a
+    // function nothing called (now removed — see the note above VERIFIED_SOURCES).
+    // Practical effect: loading a scraper model did nothing at all; raw, uncondensed
+    // scrape text was always what got pre-checked and stored. Wired in for real here.
+    return Promise.all(items.map(async it => ({...it, text: await condenseWithScraperModel(it.text), confidence: src.baseConfidence})));
+  }catch(err){
+    // Likely a rate limit or transient error — back off this source harder for the rest of the run.
+    SOURCE_INTERVAL[src.name] = Math.min(sourceInterval(src.name) * 2, MAX_SOURCE_INTERVAL);
+    sourceNextAvailable[src.name] = Date.now() + SOURCE_INTERVAL[src.name];
+    addCanvasStep("Source backed off", `${src.name} slowed down after an error (${err.message}). New spacing: ${SOURCE_INTERVAL[src.name]}ms.`);
+    return [];
+  }
+}
+
+// v2.11: cap changed from one flat 100,000-word ceiling across ALL memory to a
+// 25,000-word ceiling PER TOPIC. A flat global cap meant a handful of heavily-scraped
+// topics could quietly starve every other topic of room; per-topic caps mean each
+// topic gets its own budget regardless of how many others exist. WORDS_PER_TOPIC_CAP is
+// enforced in verifyAll() below (promotion to Post-Verified is skipped once a topic's
+// existing words + the new item would exceed it) and shown per-topic in the memory view.
+const WORDS_PER_TOPIC_CAP = 25000;
+let memoryWordTotal = 0;
+let topicWordTotals = {};
+function countWords(text){ return (text||"").trim().split(/\s+/).filter(Boolean).length; }
+async function refreshWordTotal(){
+  const post = await dbGetAll("post_verified");
+  memoryWordTotal = post.reduce((sum,i)=> sum + countWords(i.doc), 0);
+  topicWordTotals = {};
+  for(const i of post){ topicWordTotals[i.topic] = (topicWordTotals[i.topic]||0) + countWords(i.doc); }
+}
+
+// v2.9: pulled the ingestion pre-check into a shared helper. Previously ONLY items from
+// VERIFIED_SOURCES (Wikipedia/arXiv/Open Library) got this relevance/junk filter — your
+// own WiFi scraper endpoint dumped straight into Pre-Verified with zero filtering, which
+// is why raw scraped noise was piling up ("nothing's connecting", "not finding the right
+// answers"). Both paths now share this gate.
+// v2.10: also consults the evolving source-trust score (see recordSourceOutcome/
+// sourceTrustBonus below) BEFORE spending an AI call — a source that has earned a
+// track record of consistently failing verification gets auto-rejected here instead of
+// burning a model call every time to re-discover the same thing.
+async function preCheckAdmit(topic, text, sourceName){
+  const weights = (await metaGet("sourceWeights")) || {};
+  const w = weights[sourceName];
+  const total = w ? w.pass + w.fail : 0;
+  if(w && total >= 5){
+    const ema = w.ema ?? (w.pass/total);
+    if(ema <= 0.2){
+      addCanvasStep("Pre-check auto-rejected", `${sourceName} on "${topic}": this source's trust score has fallen to ${Math.round(ema*100)}% over its last ${total} checks — skipping the AI call and rejecting automatically. It'll recover on its own if it starts passing checks again (trust is recency-weighted, not a permanent ban).`);
+      return {admit:false, reason:"source trust too low"};
+    }
+  }
+  if(!engine) return {admit:true, reason:null}; // no model loaded yet — can't judge, let it through to Pre-Verified for later human/AI review
+  const check = await askAI(`Quick check only: is this snippet plausible, genuinely on-topic for "${topic}", and not spam/garbage/boilerplate/navigation-menu-HTML? Reply with ONLY "OK" or "REJECT" and a 3-5 word reason.\n\n${text.slice(0,600)}`);
+  const admit = /^OK/i.test(check.trim());
+  if(!admit) addCanvasStep("Pre-check rejected before ingestion", `${sourceName} on "${topic}": ${check.trim()}`);
+  return {admit, reason: check.trim()};
+}
+// Strips tags/scripts/styles from a raw scraper response so the AI checks and stored
+// memory see readable text instead of HTML soup (nav bars, script blobs, attribute
+// noise) — a page's markup was previously going straight into verification unfiltered.
+function extractReadableText(raw){
+  if(!raw) return "";
+  const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(raw);
+  if(!looksLikeHtml) return raw.trim();
+  try{
+    const doc = new DOMParser().parseFromString(raw, "text/html");
+    doc.querySelectorAll("script,style,nav,header,footer,noscript,svg").forEach(el=>el.remove());
+    return (doc.body?.textContent || "").replace(/\s+/g," ").trim();
+  }catch(err){
+    return raw.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+  }
+}
+// v2.10: unified scheduling. Previously your own WiFi scraper endpoint was a completely
+// separate code path used ONLY by the manual search bar — it had no throttling, no
+// round-robin placement alongside the other sources, and (biggest gap) ▶ Run Project
+// never used it at all, only the 3 built-in sources. Folding it into the same active-
+// source list means: one round-robin schedule, one rate-limit system, and Run Project
+// now actually benefits from whatever you've pointed the scraper at.
+async function buildActiveSources(){
+  const sources = [...VERIFIED_SOURCES];
+  const endpoint = (await metaGet("wifiEndpoint")) || "";
+  if(endpoint){
+    sources.push({
+      name: "Your Scraper",
+      baseConfidence: 0.3, // uncurated — see CURATED_SOURCE_NAMES; has to clear a higher, tiered bar in verifyAll()
+      fetch: async (q) => {
+        const sourceUrl = endpoint + "?q=" + encodeURIComponent(q);
+        const r = await fetch(sourceUrl);
+        const raw = await r.text();
+        const text = extractReadableText(raw).slice(0, 4000);
+        if(!text) return [];
+        return [{ source: "Your Scraper", url: sourceUrl, text }];
+      }
+    });
+  }
+  return sources;
+}
+async function processTopicQueue(topics){
+  const sources = await buildActiveSources();
+  const tasks = [];
+  // True round robin: topic-major, source-minor. For each topic, hit every active source
+  // once before moving to the next topic — so consecutive requests are ALWAYS different
+  // sites, and any single source is only revisited once every `sources.length` requests
+  // no matter how many topics are queued.
+  for(const topic of topics){
+    for(const src of sources){
+      tasks.push({src, topic});
+    }
+  }
+  let done = 0;
+  let preRejected = 0;
+  for(const task of tasks){
+    const items = await throttledSourceFetch(task.src, task.topic);
+    for(const item of items){
+      // Lightweight pre-check at the point of ingestion — separate from the full 89%
+      // verification pass later. This just filters obvious junk/off-topic noise before
+      // it ever lands in Pre-Verified, so that folder holds "plausible", not "everything".
+      const {admit} = await preCheckAdmit(task.topic, item.text, item.source);
+      if(!admit){ preRejected++; }
+      if(admit){
+        await dbAdd("pre_verified", { topic:task.topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
+      }
+    }
+    done++;
+    if(items.length) addCanvasStep("Progress", `[${done}/${tasks.length}] ${task.src.name} → "${task.topic}": ${items.length} result(s)`);
+    // PERF (v2.13): renderMemory() does 3 full-table reads plus a full HTML rebuild of
+    // every item in Pre/Post-Verified — calling it every 5 items made a large research
+    // run (many topics × many sources) pay for that repeatedly for no visible benefit,
+    // since most users are watching the Canvas progress log, not the Memory tab, while a
+    // run is in flight. Every 10 items (still refreshed live if you do have Memory open)
+    // plus always on completion.
+    if(done % 10 === 0 || done===tasks.length) renderMemory();
+  }
+  if(preRejected) addCanvasStep("Pre-check summary", `${preRejected} result(s) filtered out before reaching Pre-Verified.`);
+}
+
+/* ================= VERIFIED SOURCES ================= */
+// Reputable, CORS-open sources Buddie can query directly, no proxy needed.
+// Each returns {source, url, text} entries. Add more here as you vet them.
+// v2.10: added Semantic Scholar and Crossref — arXiv alone skews heavily toward
+// physics/CS/math, so anything in biology, medicine, social science, or humanities had
+// almost no curated coverage. Both are free, no-key, CORS-open, and broad across fields.
+const VERIFIED_SOURCES = [
+  {
+    name: "Wikipedia",
+    baseConfidence: 0.65,
+    fetch: async (q) => {
+      const url = `https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srlimit=3&srsearch=${encodeURIComponent(q)}`;
+      const r = await fetch(url); const j = await r.json();
+      return (j.query?.search||[]).map(s => ({
+        source: "Wikipedia", url: `https://en.wikipedia.org/wiki/${encodeURIComponent(s.title.replace(/ /g,"_"))}`,
+        text: `${s.title}: ${s.snippet.replace(/<[^>]+>/g,"")}`
+      }));
+    }
+  },
+  {
+    name: "Open Library",
+    baseConfidence: 0.55,
+    fetch: async (q) => {
+      const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=2`;
+      const r = await fetch(url); const j = await r.json();
+      return (j.docs||[]).map(d => ({
+        source: "Open Library", url: `https://openlibrary.org${d.key||""}`,
+        text: `${d.title||""} — ${(d.author_name||[]).join(", ")} (${d.first_publish_year||"n.d."})`
+      }));
+    }
+  },
+  {
+    name: "arXiv",
+    baseConfidence: 0.7,
+    fetch: async (q) => {
+      const url = `https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(q)}&max_results=2`;
+      const r = await fetch(url); const xml = await r.text();
+      const doc = new DOMParser().parseFromString(xml, "text/xml");
+      return Array.from(doc.getElementsByTagName("entry")).map(e => ({
+        source: "arXiv",
+        url: e.getElementsByTagName("id")[0]?.textContent || "",
+        text: (e.getElementsByTagName("title")[0]?.textContent||"").trim() + " — " + (e.getElementsByTagName("summary")[0]?.textContent||"").trim().slice(0,300)
+      }));
+    }
+  },
+  {
+    name: "Semantic Scholar",
+    baseConfidence: 0.62,
+    fetch: async (q) => {
+      const url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(q)}&limit=2&fields=title,abstract,year`;
+      const r = await fetch(url); const j = await r.json();
+      return (j.data||[]).map(p => ({
+        source: "Semantic Scholar",
+        url: p.paperId ? `https://www.semanticscholar.org/paper/${p.paperId}` : "",
+        text: `${p.title||"(untitled)"} (${p.year||"n.d."}) — ${(p.abstract||"no abstract available").slice(0,300)}`
+      }));
+    }
+  },
+  {
+    name: "Crossref",
+    baseConfidence: 0.6,
+    fetch: async (q) => {
+      const url = `https://api.crossref.org/works?query=${encodeURIComponent(q)}&rows=2`;
+      const r = await fetch(url); const j = await r.json();
+      return (j.message?.items||[]).map(it => {
+        const title = (it.title||[])[0] || "(untitled)";
+        const year = it["published-print"]?.["date-parts"]?.[0]?.[0] || it["published"]?.["date-parts"]?.[0]?.[0] || "n.d.";
+        const authors = (it.author||[]).slice(0,3).map(a=>a.family||a.name).filter(Boolean).join(", ");
+        const link = it.URL || (it.DOI ? `https://doi.org/${it.DOI}` : "");
+        return { source: "Crossref", url: link, text: `${title} — ${authors||"unknown author"} (${year})` };
+      });
+    }
+  }
+];
+
+// v2.5: names Buddie already vetted the fetch logic for. Anything with a different
+// source name (your wifi-endpoint proxy, a Tor result, or any future addition) is NOT
+// on this list — that's the whole point. It's used below to require extra corroboration
+// before an unvetted source's content gets trusted, instead of treating every source
+// the same regardless of how it was actually obtained.
+const CURATED_SOURCE_NAMES = new Set(VERIFIED_SOURCES.map(s => s.name));
+// CLEANUP (v2.13): removed unused fetchVerifiedSources() — dead code left over from
+// before buildActiveSources()/processTopicQueue() unified all sources onto one
+// round-robin, throttled, pre-checked path. It was never called from anywhere, but kept
+// its own separate (unthrottled, un-pre-checked) way of hitting the same 5 verified
+// sources — a landmine if anything had ever called it again by mistake.
+
+/* ================= SEARCH / SCRAPE BAR ================= */
+let torModeOn = false;
+function toggleTorMode(){
+  torModeOn = !torModeOn;
+  const btn = document.getElementById("tor-toggle-btn");
+  if(btn){
+    btn.textContent = torModeOn ? "🧅 Tor: On" : "🧅 Tor: Off";
+    btn.style.borderColor = torModeOn ? "var(--accent)" : "var(--border)";
+    btn.style.color = torModeOn ? "var(--accent)" : "var(--text)";
+  }
+  if(torModeOn) addCanvasStep("Tor mode ON", "Next search routes through your Tor bridge endpoint instead of the normal scraper/verified-source path. Results are text-only, filtered, and go to the Tor Review Queue — nothing is saved until you tap Keep.");
+}
+// General-purpose explicit-content filter, checked before ANYTHING coming back from a
+// Tor search is even shown, let alone stored. Deliberately generic (categories, not a
+// curated slang list) — the point is to block adult content broadly, not to build a
+// glossary. A hit means the text is discarded outright: it's never written to any
+// store, logged, or displayed — only the fact that something got blocked is recorded.
+const EXPLICIT_CONTENT_PATTERN = /\b(porn(?:ography)?|xxx|nsfw|explicit sexual content|sex (?:tape|cam|chat)|erotic(?:a)?|nude(?:s)?\b|onlyfans|hardcore sex|escort service)\b/i;
+function containsExplicitContent(text){
+  return EXPLICIT_CONTENT_PATTERN.test(text || "");
+}
+async function runSearch(){
+  const raw = document.getElementById("search-input").value.trim();
+  if(!raw) return;
+  const topics = raw.split(",").map(s=>s.trim()).filter(Boolean);
+  addCanvasStep("Search requested", `${topics.length} topic(s): ${topics.join(" | ")}`);
+
+  if(torModeOn){
+    const torEndpoint = (await metaGet("torEndpoint")) || document.getElementById("tor-endpoint")?.value.trim() || "";
+    if(!torEndpoint){
+      addCanvasStep("Tor search blocked", "No Tor bridge endpoint set in Settings — nothing was sent anywhere. Set one first.");
+      return;
+    }
+    let blockedCount = 0, queuedCount = 0;
+    for(const topic of topics){ // exact terms only — no expansion, one request per typed topic, nothing else
+      try{
+        const sourceUrl = torEndpoint.replace(/\/$/,"") + "?q=" + encodeURIComponent(topic);
+        const r = await fetch(sourceUrl);
+        const contentType = r.headers.get("content-type") || "";
+        if(!/^text\/|application\/json/i.test(contentType)){
+          addCanvasStep("Tor result skipped", `"${topic}": response wasn't plain text (content-type: ${contentType || "unknown"}) — Buddie never fetches non-text content from Tor, so this was dropped without downloading it.`);
+          continue;
+        }
+        const text = extractReadableText((await r.text()).slice(0, 4000));
+        if(!text){
+          addCanvasStep("Tor result empty", `"${topic}": endpoint returned no readable text after stripping markup.`);
+          continue;
+        }
+        if(containsExplicitContent(text)){
+          blockedCount++;
+          addCanvasStep("Blocked by content filter", `"${topic}": result flagged and discarded — not stored, not shown.`);
+          continue;
+        }
+        await dbAdd("tor_review", { topic, source:`tor: ${sourceUrl}`, raw:text, timestamp:new Date().toISOString() });
+        queuedCount++;
+      }catch(err){
+        addCanvasStep("Tor endpoint failed", `"${topic}": ${err.message}`);
+      }
+    }
+    addCanvasStep("Tor search done", `${queuedCount} item(s) waiting for your review in the Tor Review Queue (Memory tab)${blockedCount ? `, ${blockedCount} blocked by the content filter` : ""}. Nothing was saved automatically.`);
+    renderMemory();
+    return;
+  }
+
+  // v2.10: this used to be a separate, ad hoc scraper branch with no throttling, no
+  // round-robin placement, and its own duplicate pre-check/HTML-stripping logic. Your
+  // WiFi scraper endpoint (if set in Settings) is now just another entry in the same
+  // round-robin active-source list that processTopicQueue builds via buildActiveSources()
+  // — same throttling, same pre-check, same tiered verification bar as everything else.
+  await processTopicQueue(topics);
+  renderMemory();
+}
+async function keepTorReviewItem(id){
+  const all = await dbGetAll("tor_review");
+  const item = all.find(x=>x.id===id);
+  if(!item) return;
+  await dbAdd("pre_verified", { topic:item.topic, source:item.source, raw:item.raw, timestamp:new Date().toISOString(), confidence:0.25 }); // starts low-confidence like any uncurated source — still has to earn its way through AI Verify
+  await dbDelete("tor_review", id);
+  addCanvasStep("Kept", `"${item.topic}" moved to Pre-Verified — still needs to pass AI Verify like anything else before it becomes real memory.`);
+  renderMemory();
+}
+async function discardTorReviewItem(id){
+  await dbDelete("tor_review", id);
+  renderMemory();
+}
+
+/* ================= STRICT PLAN ENGINE ================= */
+// A plan is generated once per target, then LOCKED — Buddie will not silently
+// regenerate or deviate from it. It's persisted to IndexedDB after every step,
+// so even if the app is closed/reloaded mid-task, re-reading the plan resumes
+// exactly where it left off instead of forgetting progress.
+async function getOrCreatePlan(target){
+  const all = await dbGetAll("plans");
+  let plan = all.find(p => p.target === target && p.locked);
+  if(plan) return plan;
+
+  let stepTexts;
+  if(engine){
+    const raw = await askAI(`Create a strict, ordered execution plan to fully complete this goal. 3-6 short, concrete, sequential steps — each an actionable research or production task. Favor steps that approach the goal from genuinely different angles (different sub-topics, methods, or perspectives) rather than repeating a similar query worded differently — the point is to learn something new at each step, not confirm the same thing repeatedly. Reply with ONLY the steps, one per line, no numbering, no extra text.\n\nGoal: ${target}`);
+    stepTexts = raw.split("\n").map(s=>s.trim()).filter(Boolean);
+  } else {
+    stepTexts = target.split(/,| and /i).map(s=>s.trim()).filter(Boolean);
+    if(stepTexts.length < 2) stepTexts = [target];
+  }
+  const steps = stepTexts.map(t => ({text:t, status:"pending"}));
+  plan = {target, steps, locked:true, created:new Date().toISOString()};
+  const id = await dbAdd("plans", plan);
+  plan.id = id;
+  addCanvasStep("Plan locked — will not deviate", steps.map((s,i)=>`${i+1}. ${s.text}`).join("  |  "));
+  return plan;
+}
+
+function renderPlanPanel(plan){
+  const el = document.getElementById("plan-panel");
+  if(!plan){ el.style.display="none"; return; }
+  el.style.display = "block";
+  const icon = s => s==="done" ? "✅" : s==="in-progress" ? "▶️" : "⬜";
+  el.innerHTML = `<b>Locked plan for:</b> ${escapeHtml(plan.target)}
+    <button class="ghost" style="float:right" onclick="resetPlan('${plan.target.replace(/'/g,"\\'").replace(/"/g,"&quot;")}')">Reset Plan</button><br>` +
+    plan.steps.map((s,i)=>`${icon(s.status)} ${i+1}. ${escapeHtml(s.text)}`).join("<br>");
+}
+async function getActivePlanFor(target){
+  if(!target) return null;
+  const all = await dbGetAll("plans");
+  return all.find(p => p.target === target && p.locked) || null;
+}
+async function resetPlan(target){
+  if(!confirm(`Discard the locked plan for "${target}" and let Buddie generate a new one next run?`)) return;
+  const all = await dbGetAll("plans");
+  const old = all.find(p=>p.target===target && p.locked);
+  if(old) await dbDelete("plans", old.id);
+  renderPlanPanel(null);
+  addCanvasStep("Plan reset", target);
+}
+
+/* ================= AUTONOMOUS PROJECT RUNNER ================= */
+async function runProject(){
+  await loadTarget();
+  if(!currentTarget){ alert("Set a project target first (tap the target bar at top)."); return; }
+
+  const plan = await getOrCreatePlan(currentTarget);
+  renderPlanPanel(plan);
+
+  for(let i=0; i<plan.steps.length; i++){
+    if(plan.steps[i].status === "done") continue;
+
+    // Re-read target before EVERY step, per the plan discipline — catches drift immediately.
+    await loadTarget();
+    if(currentTarget !== plan.target){
+      addCanvasStep("Target changed mid-plan", `Screen target is now "${currentTarget}" but this locked plan is for "${plan.target}". Stopping rather than deviating — start a new project or reset the plan.`);
+      return;
+    }
+
+    plan.steps[i].status = "in-progress";
+    await dbPut("plans", plan);
+    renderPlanPanel(plan);
+    addCanvasStep(`Step ${i+1}/${plan.steps.length}`, plan.steps[i].text);
+
+    await processTopicQueue([plan.steps[i].text]);
+    await verifyAll(new Set([plan.steps[i].text])); // scoped to this step's topic only — see v2.9 note in verifyAll
+
+    plan.steps[i].status = "done";
+    await dbPut("plans", plan);
+    renderPlanPanel(plan);
+  }
+
+  addCanvasStep("Plan complete", `All ${plan.steps.length} steps finished and double-verified for "${currentTarget}".`);
+  if(engine){
+    // v2.9: this used to ask the model to summarize "what's in memory" without ever
+    // showing it the memory — pure hallucination. Now actually retrieves and passes it.
+    const {context: memoryContext} = await retrieveRelevantMemory(currentTarget, 8, 2200);
+    const summary = await askAI(`The plan for goal "${currentTarget}" is fully complete and every finding was double-checked.\n\nVERIFIED MEMORY now on file for this goal:\n${memoryContext || "(none passed verification — everything found was below the confidence bar or uncorroborated)"}\n\nUsing ONLY the verified memory above, summarize what's actually known and confirm the goal is met, or flag what's still missing. Don't invent findings that aren't in the list above.`);
+    addCanvasStep("Summary", summary);
+  } else {
+    addCanvasStep("Summary", `Plan complete for "${currentTarget}". Load a model in Settings for an automatic summary of what was learned.`);
+  }
+  renderMemory();
+}
+
+/* ================= REAL MEMORY FOLDER (File System Access API) ================= */
+let memoryDirHandle = null;
+async function chooseMemoryFolder(){
+  if(!window.showDirectoryPicker){
+    document.getElementById("memory-folder-status").textContent = "This browser doesn't support direct folder access — use Export instead; files go to your Downloads folder.";
+    return;
+  }
+  try{
+    memoryDirHandle = await window.showDirectoryPicker({mode:"readwrite"});
+    await metaSet("memoryDirHandle", memoryDirHandle);
+    document.getElementById("memory-folder-status").textContent = `Saving verified memory directly to: "${memoryDirHandle.name}/" on this device — updates automatically as items are verified.`;
+  }catch(err){
+    document.getElementById("memory-folder-status").textContent = "Folder selection cancelled or denied.";
+  }
+}
+async function reconnectMemoryFolder(){
+  const handle = await metaGet("memoryDirHandle");
+  if(!handle){ document.getElementById("memory-folder-status").textContent = "No folder saved yet — use 'Choose a folder' first."; return; }
+  try{
+    const perm = await handle.requestPermission({mode:"readwrite"});
+    if(perm === "granted"){
+      memoryDirHandle = handle;
+      document.getElementById("memory-folder-status").textContent = `Reconnected — saving to: "${handle.name}/".`;
+    } else {
+      document.getElementById("memory-folder-status").textContent = "Permission not granted — folder access needs to be re-approved after each app reload.";
+    }
+  }catch(err){
+    document.getElementById("memory-folder-status").textContent = "Couldn't reconnect: "+err.message;
+  }
+}
+async function writeMemoryFileToFolder(item){
+  if(!memoryDirHandle) return;
+  try{
+    const filename = `memory-${item.topic.replace(/\W+/g,"_").slice(0,60)}-${item.id||Date.now()}.md`;
+    const fileHandle = await memoryDirHandle.getFileHandle(filename, {create:true});
+    const writable = await fileHandle.createWritable();
+    await writable.write(item.doc);
+    await writable.close();
+  }catch(err){
+    addCanvasStep("Folder write failed", err.message);
+  }
+}
+// Pass 1: plausibility/consistency check on the item alone.
+// Pass 2: cross-check against EXISTING verified memory on the same topic for contradictions.
+// Only promoted to Post-Verified if BOTH pass. A contradiction doesn't get silently
+// dropped or silently accepted — it's flagged "needs-review" and left visible in Pre-Verified.
+const CONFIDENCE_THRESHOLD = 0.89; // 89% — items below this are trashed, not kept "for review"
+
+// A second, independent language cross-check: querying the same topic in another
+// language's Wikipedia is a genuinely different verification path than re-asking the
+// same model in English again — corroboration across languages is harder to fake than
+// corroboration across sources in the same language.
+async function multilingualCrossCheck(topic){
+  const langs = [{code:"es", name:"Spanish"}, {code:"fr", name:"French"}];
+  // PERF (v2.13): these two lookups are completely independent of each other, but were
+  // being awaited one after another — every single Pass 3 check (one per item in every
+  // Verify All / Run Project run) paid for two sequential round-trips instead of one
+  // parallel round-trip, roughly doubling this step's wall-clock time for no reason.
+  const results = await Promise.all(langs.map(async lang => {
+    try{
+      const url = `https://${lang.code}.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srlimit=1&srsearch=${encodeURIComponent(topic)}`;
+      const r = await fetch(url); const j = await r.json();
+      return j.query?.search?.length ? lang.name : null;
+    }catch(err){ return null; /* silently skip a language that fails, non-critical */ }
+  }));
+  return results.filter(Boolean); // languages that independently found something on this topic
+}
+
+// BUG FIX (v2.4): this used to report everything via addCanvasStep(), which only
+// writes into the Chat/Canvas view. If you clicked "Verify All" while sitting on the
+// Memory tab (the only place this button appears), every message — including "no
+// model loaded" and "nothing to verify" — was written into a hidden view you weren't
+// looking at, so the button appeared to silently do nothing. It now also writes to
+// #verify-status, which lives in the Memory tab itself and is always visible when you
+// click it, plus a run-guard so double-clicks can't overlap two verify passes.
+let verifyRunning = false;
+async function verifyAll(topicFilter=null){
+  if(verifyRunning) return;
+  const btn = document.getElementById("verify-btn");
+  const statusEl = document.getElementById("verify-status");
+  const setStatus = (msg)=>{ if(statusEl) statusEl.textContent = msg; };
+
+  // v2.9: when called from runProject() with a topicFilter, only verify THIS project's
+  // items — previously every "Verify All" pass (including the automatic one after each
+  // plan step) processed the ENTIRE shared Pre-Verified folder, so one project's run
+  // would also silently trash/promote leftover items from unrelated searches or other
+  // projects. That cross-contamination is part of why results felt inconsistent
+  // ("none of the past seem correct"). The manual Memory-tab button still verifies
+  // everything (topicFilter stays null there).
+  const allItems = await dbGetAll("pre_verified");
+  const items = topicFilter ? allItems.filter(i => topicFilter.has(i.topic)) : allItems;
+  const post = await dbGetAll("post_verified");
+  // running per-topic word tally, seeded from existing Post-Verified content and updated
+  // as items get promoted below — enforces WORDS_PER_TOPIC_CAP (25,000 words/topic)
+  const runningTopicWords = {};
+  for(const p of post){ runningTopicWords[p.topic] = (runningTopicWords[p.topic]||0) + countWords(p.doc); }
+  // PERF: load source-trust weights once for the whole run instead of once per item —
+  // see recordSourceOutcome's v2.13 note. Kept in sync locally as outcomes are recorded.
+  let sourceWeightsCache = (await metaGet("sourceWeights")) || {};
+
+  if(items.length === 0){
+    setStatus(topicFilter ? "Nothing to verify for this project's topics yet." : "Nothing to verify — Pre-Verified is empty. Use the search bar or ▶ Run Project on the Chat/Canvas tab to add candidates first.");
+    return;
+  }
+
+  if(!engine){
+    const msg = `No local model loaded — real AI verification against the ${CONFIDENCE_THRESHOLD*100}% bar needs a model to judge plausibility and consistency. Go to Settings → Load Model, then run Verify again. Nothing in Pre-Verified has been touched or deleted.`;
+    setStatus(msg);
+    addCanvasStep("Verification skipped", msg);
+    return;
+  }
+
+  verifyRunning = true;
+  if(btn){ btn.disabled = true; btn.textContent = "🔎 Verifying…"; }
+  let verifiedCount = 0, trashedCount = 0, capSkippedCount = 0;
+  try{
+  let idx = 0;
+  for(const item of items){
+    idx++;
+    setStatus(`Verifying ${idx}/${items.length}: "${item.topic}"…`);
+    const sourceName = sourceNameFromItem(item.source);
+    const trustBonus = sourceTrustBonus(sourceWeightsCache, sourceName);
+
+    const check1 = await askAI(`Rate how plausible, internally consistent, and non-spam this content is, from 0 to 100. Reply with ONLY the number, then a dash, then one short reason. Example: "82 - well-sourced and consistent".\n\nSOURCE: ${item.source}\nCONTENT:\n${item.raw.slice(0,1500)}`);
+    const match = check1.match(/\d{1,3}/);
+    let confidencePct = match ? Math.min(100, parseInt(match[0],10)) : 0;
+    if(trustBonus) confidencePct = Math.max(0, Math.min(100, confidencePct + trustBonus));
+    addCanvasStep("Pass 1 — plausibility score", `${item.topic}: ${check1.trim()}${trustBonus ? ` (source trust adjustment: ${trustBonus>0?'+':''}${trustBonus})` : ""}`);
+
+    if(confidencePct < 60){ // clearly bad — no point running further checks
+      await dbDelete("pre_verified", item.id);
+      sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
+      trashedCount++;
+      addCanvasStep("Trashed", `"${item.topic}" scored ${confidencePct}/100 on plausibility — discarded.`);
+      continue;
+    }
+
+    const related = post.filter(p => p.topic.toLowerCase() === item.topic.toLowerCase()).slice(0,3);
+    if(related.length){
+      const check2 = await askAI(`Rate 0-100 how consistent the NEW content is with the EXISTING verified memory (100 = fully consistent, 0 = flatly contradicts it). Reply with ONLY the number, then a dash, then one short reason.\n\nEXISTING:\n${related.map(r=>r.doc).join("\n---\n").slice(0,1200)}\n\nNEW:\n${item.raw.slice(0,800)}`);
+      const match2 = check2.match(/\d{1,3}/);
+      const crossScore = match2 ? Math.min(100, parseInt(match2[0],10)) : 50;
+      addCanvasStep("Pass 2 — cross-check vs memory", `${item.topic}: ${check2.trim()}`);
+      confidencePct = Math.round((confidencePct + crossScore) / 2);
+    }
+
+    const langHits = await multilingualCrossCheck(item.topic);
+    if(langHits.length){
+      confidencePct = Math.min(100, confidencePct + langHits.length * 3);
+      addCanvasStep("Pass 3 — multilingual corroboration", `${item.topic}: independently found in ${langHits.join(", ")} (+${langHits.length*3})`);
+    }
+
+    // v2.9: this used to be a hard AND-gate — an uncurated source with zero corroboration
+    // (no existing memory on the topic yet, no multilingual echo) could NEVER be promoted,
+    // no matter how high it scored. For a brand-new research topic that's every single
+    // first result from your own scraper, permanently — which is why nothing from it ever
+    // seemed to "stick." Corroboration now raises the bar further instead of being an
+    // absolute block, so genuinely strong, on-topic content can still get in.
+    const isCurated = CURATED_SOURCE_NAMES.has(sourceName);
+    const corroborated = isCurated || langHits.length > 0 || related.length > 0;
+    const effectiveThreshold = isCurated ? CONFIDENCE_THRESHOLD
+                              : corroborated ? Math.min(0.97, CONFIDENCE_THRESHOLD + 0.06)
+                              : 0.97; // uncorroborated + uncurated: very high bar, but not impossible
+    const finalConfidence = confidencePct / 100;
+    if(finalConfidence >= effectiveThreshold){
+      const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[item.raw.slice(0,300).replace(/\n/g," ")]});
+      const docWords = countWords(doc);
+      const topicWordsSoFar = runningTopicWords[item.topic] || 0;
+      if(topicWordsSoFar + docWords > WORDS_PER_TOPIC_CAP){
+        // Passed verification but this topic is already at/near its 25,000-word budget —
+        // skip promoting it (leave it in Pre-Verified rather than delete, so nothing
+        // already-scraped and AI-approved is silently lost) and free the scraper to
+        // spend its effort on topics with room left instead.
+        capSkippedCount++;
+        addCanvasStep("Cap reached — kept in Pre-Verified", `"${item.topic}" passed verification (${confidencePct}%) but this topic already has ${topicWordsSoFar.toLocaleString()}/${WORDS_PER_TOPIC_CAP.toLocaleString()} words in Post-Verified — not promoted so other topics can still grow. Compact this topic or wait for it to free up room, then re-run Verify.`);
+        continue;
+      }
+      const newId = await dbAdd("post_verified", {topic:item.topic, source:item.source, confidence:finalConfidence, doc, timestamp:new Date().toISOString()});
+      await writeMemoryFileToFolder({id:newId, topic:item.topic, doc});
+      await dbDelete("pre_verified", item.id);
+      sourceWeightsCache = await recordSourceOutcome(sourceName, true, sourceWeightsCache);
+      runningTopicWords[item.topic] = topicWordsSoFar + docWords;
+      verifiedCount++;
+      // ACCURACY FIX (v2.13): `post` was a one-time snapshot taken before this loop
+      // started, so the Pass 2 cross-check a few lines up ("related = post.filter(...)")
+      // could never see anything promoted earlier in the SAME verify run — a batch of 5
+      // fresh items on a brand-new topic would each get cross-checked against nothing,
+      // even though items 2-5 could have cross-checked against item 1 by the time they
+      // ran. Keeping this snapshot updated as items are promoted fixes that.
+      post.push({topic:item.topic, source:item.source, confidence:finalConfidence, doc, id:newId});
+      addCanvasStep("Verified ✓", `"${item.topic}" — ${confidencePct}% confidence, promoted to Post-Verified (${runningTopicWords[item.topic].toLocaleString()}/${WORDS_PER_TOPIC_CAP.toLocaleString()} words for this topic). Source trust weight for "${sourceName}" updated.`);
+    } else {
+      await dbDelete("pre_verified", item.id);
+      sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
+      trashedCount++;
+      const why = !corroborated ? `below the ${Math.round(effectiveThreshold*100)}% bar required without corroboration` : `below the ${Math.round(effectiveThreshold*100)}% bar${isCurated?"":" (raised — uncurated source)"}`;
+      addCanvasStep("Trashed", `"${item.topic}" — ${confidencePct}% confidence, ${why}. Discarded, not kept.`);
+    }
+  }
+  setStatus(`Done — ${verifiedCount} promoted to Post-Verified, ${trashedCount} trashed${capSkippedCount ? `, ${capSkippedCount} held back (topic at its ${WORDS_PER_TOPIC_CAP.toLocaleString()}-word cap)` : ""}, out of ${items.length} checked.`);
+  }catch(err){
+    setStatus(`Verification stopped early due to an error: ${err.message}. Anything already processed above has been saved.`);
+  }finally{
+    verifyRunning = false;
+    if(btn){ btn.disabled = false; btn.textContent = "🔎 AI Verify All (≥89% → Post-Verified)"; }
+    renderMemory();
+  }
+}
+/* ================= COMPACTION with exploring different compression strategies ================= */
+// Instead of always summarizing the same way, Buddie tries a few different compression
+// styles over time and tracks (in meta) which style tends to produce the most useful
+// merged result for each topic — then leans toward whichever has scored best so far,
+// while still occasionally trying a different one rather than settling permanently.
+const COMPRESSION_STRATEGIES = [
+  {name:"bullet-extraction", instruction:"Extract the key facts as short, independent bullet points — no narrative, just discrete facts."},
+  {name:"narrative-summary", instruction:"Write a short flowing paragraph that captures the same information as connected prose rather than a list."},
+  {name:"keyword-tagged", instruction:"Summarize as short fact lines, each tagged at the start with a bracketed category keyword, e.g. '[definition] ...', '[example] ...'."}
+];
+async function pickCompressionStrategy(topic){
+  const scores = (await metaGet("compressionScores")) || {};
+  const topicScores = scores[topic] || {};
+  const explore = Math.random() < 0.25; // ~1 in 4 runs, deliberately try something different
+  if(explore || Object.keys(topicScores).length === 0){
+    return COMPRESSION_STRATEGIES[Math.floor(Math.random()*COMPRESSION_STRATEGIES.length)];
+  }
+  const bestName = Object.entries(topicScores).sort((a,b)=>b[1]-a[1])[0][0];
+  return COMPRESSION_STRATEGIES.find(s=>s.name===bestName) || COMPRESSION_STRATEGIES[0];
+}
+async function recordCompressionScore(topic, strategyName, score){
+  const scores = (await metaGet("compressionScores")) || {};
+  scores[topic] = scores[topic] || {};
+  const prev = scores[topic][strategyName] || score;
+  scores[topic][strategyName] = Math.round(((prev + score) / 2) * 10) / 10; // running average
+  await metaSet("compressionScores", scores);
+}
+
+let compactRunning = false;
+async function compactMemory(){
+  if(compactRunning) return;
+  const btn = document.getElementById("compact-btn");
+  const statusEl = document.getElementById("compact-status");
+  const setStatus = (msg)=>{ if(statusEl) statusEl.textContent = msg; };
+
+  const items = await dbGetAll("post_verified");
+  if(items.length < 2){
+    setStatus("Not enough entries yet to merge — Compact needs at least 2 Post-Verified items on the same topic.");
+    return;
+  }
+  const groups = {};
+  items.forEach(it=>{ (groups[it.topic] ||= []).push(it); });
+  const mergeableTopics = Object.values(groups).filter(g=>g.length>=2).length;
+  if(mergeableTopics === 0){
+    setStatus("Nothing to merge — no topic currently has more than one entry.");
+    return;
+  }
+
+  compactRunning = true;
+  if(btn){ btn.disabled = true; btn.textContent = "Compacting…"; }
+  let mergedTopics = 0;
+  try{
+  for(const topic in groups){
+    const group = groups[topic];
+    if(group.length<2) continue;
+    const best = group.reduce((a,b)=> a.confidence>=b.confidence ? a : b);
+    const rawCombined = group.map(g=>g.doc.split("\n").filter(l=>l.startsWith("- ")).join("\n")).join("\n");
+
+    let mergedFacts, strategy;
+    if(engine){
+      strategy = await pickCompressionStrategy(topic);
+      const compressed = await askAI(`${strategy.instruction}\n\nCondense this into the most useful, non-redundant version:\n\n${rawCombined.slice(0,1500)}`);
+      mergedFacts = compressed.trim();
+      const qualityCheck = await askAI(`Rate 0-100 how clear and useful this summary is as a piece of long-term memory. Reply with ONLY the number.\n\n${mergedFacts.slice(0,800)}`);
+      const scoreMatch = qualityCheck.match(/\d{1,3}/);
+      const score = scoreMatch ? Math.min(100,parseInt(scoreMatch[0],10)) : 50;
+      await recordCompressionScore(topic, strategy.name, score);
+      addCanvasStep("Compression strategy tried", `"${topic}" via ${strategy.name} — quality score ${score}/100`);
+    } else {
+      mergedFacts = [...new Set(rawCombined.split("\n"))].join("\n").replace(/^- /,"");
+    }
+
+    const newConfidence = Math.min(0.95, best.confidence + 0.1*group.length);
+    const merged = toMemoryDoc({topic, source:best.source, confidence:newConfidence, facts:[mergedFacts.replace(/^- /,"")]});
+    for(const g of group) await dbDelete("post_verified", g.id);
+    const newId = await dbAdd("post_verified", {topic, source:best.source, confidence:newConfidence, doc:merged, timestamp:new Date().toISOString()});
+    await writeMemoryFileToFolder({id:newId, topic, doc:merged});
+    mergedTopics++;
+    addCanvasStep("Compacted", `Merged ${group.length} entries for "${topic}"${strategy ? ` using ${strategy.name}` : ""}`);
+  }
+  setStatus(`Done — merged entries for ${mergedTopics} topic(s).`);
+  }catch(err){
+    setStatus(`Compact stopped early due to an error: ${err.message}. Anything already merged above has been saved.`);
+  }finally{
+    compactRunning = false;
+    if(btn){ btn.disabled = false; btn.textContent = "Compact"; }
+    renderMemory();
+  }
+}
+
+/* ================= RENDER MEMORY ================= */
+async function renderMemory(){
+  const pre = await dbGetAll("pre_verified");
+  const post = await dbGetAll("post_verified");
+  const torReview = await dbGetAll("tor_review");
+  const torListEl = document.getElementById("tor-review-list");
+  if(torListEl){
+    torListEl.innerHTML = torReview.map(i=>`
+      <div class="mem-item">
+        <b>${escapeHtml(i.topic)}</b>
+        <pre>${escapeHtml((i.raw||"").slice(0,200))}...</pre>
+        <div class="meta"><span>${escapeHtml(i.source||"")}</span><span class="badge warn">unsaved — awaiting review</span></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="ghost" onclick="keepTorReviewItem(${i.id})">Keep → Pre-Verified</button>
+          <button class="ghost" onclick="discardTorReviewItem(${i.id})">Discard</button>
+        </div>
+      </div>`).join("") || `<div class="status-line">Empty — nothing waiting. Turn on 🧅 Tor next to the search bar to add candidates here.</div>`;
+  }
+  await refreshWordTotal();
+  const el = document.getElementById("word-total");
+  const topicCount = Object.keys(topicWordTotals).length;
+  if(el) el.textContent = `(${memoryWordTotal.toLocaleString()} words total · ${topicCount} topic${topicCount===1?"":"s"} · ${WORDS_PER_TOPIC_CAP.toLocaleString()}/topic cap)`;
+  document.getElementById("pre-list").innerHTML = pre.map(i=>`
+    <div class="mem-item">
+      <b>${escapeHtml(i.topic)}</b>
+      <pre>${escapeHtml((i.raw||"").slice(0,200))}...</pre>
+      <div class="meta"><span>${escapeHtml(i.source||"")}</span><span class="badge warn">${i.needsReview ? 'needs review' : 'unverified'}</span></div>
+      ${i.needsReview ? `<div class="status-line">${escapeHtml(i.reviewReason||"")}</div>` : ""}
+    </div>`).join("") || `<div class="status-line">Empty — use the search bar to add candidates.</div>`;
+  document.getElementById("post-list").innerHTML = post.map(i=>{
+    const topicWords = topicWordTotals[i.topic] || 0;
+    const atCap = topicWords >= WORDS_PER_TOPIC_CAP;
+    return `
+    <div class="mem-item">
+      <b>${escapeHtml(i.topic)}</b>
+      <pre>${escapeHtml(i.doc)}</pre>
+      <div class="meta"><span>conf ${i.confidence}</span><span style="display:flex;gap:4px"><span class="badge ${atCap?'warn':'ok'}">${topicWords.toLocaleString()} / ${WORDS_PER_TOPIC_CAP.toLocaleString()} words</span><span class="badge ok">verified</span></span></div>
+    </div>`;
+  }).join("") || `<div class="status-line">Empty — verify items from the left to populate memory.</div>`;
+}
+
+/* ================= EXPORT / WIPE ================= */
+async function exportMemory(){
+  const post = await dbGetAll("post_verified");
+  if(!post.length){ alert("No verified memory yet."); return; }
+  if(memoryDirHandle){
+    for(const item of post) await writeMemoryFileToFolder(item);
+    document.getElementById("memory-folder-status").textContent = `Exported ${post.length} file(s) to "${memoryDirHandle.name}/".`;
+    return;
+  }
+  // BUG FIX (v2.13): the object URL from createObjectURL() was never revoked, leaking
+  // one blob's worth of memory per exported file for as long as the page stays open —
+  // unnoticeable for a handful of files, but a real leak on a large export. The link was
+  // also never attached to the document before .click(), which Chrome tolerates but
+  // Firefox does not (the download silently fails there). Both fixed below.
+  post.forEach((item,idx)=>{
+    const blob = new Blob([item.doc], {type:"text/markdown"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `memory-${item.topic.replace(/\W+/g,"_")}-${idx}.md`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  });
+}
+async function wipeMemory(){
+  if(!confirm("This deletes all local memory permanently. Continue?")) return;
+  const pre = await dbGetAll("pre_verified"); for(const i of pre) await dbDelete("pre_verified", i.id);
+  const post = await dbGetAll("post_verified"); for(const i of post) await dbDelete("post_verified", i.id);
+  const tor = await dbGetAll("tor_review"); for(const i of tor) await dbDelete("tor_review", i.id);
+  renderMemory();
+}
+async function clearChatHistory(){
+  if(!confirm("This deletes the saved chat transcript and canvas/project-work log permanently (verified memory is untouched). Continue?")) return;
+  const chat = await dbGetAll("chat_log"); for(const i of chat) await dbDelete("chat_log", i.id);
+  const canvas = await dbGetAll("canvas_log"); for(const i of canvas) await dbDelete("canvas_log", i.id);
+  document.getElementById("messages").innerHTML = "";
+  document.getElementById("canvas-body").innerHTML = "";
+  addMsg("ai", "Chat and canvas history cleared. Verified memory is untouched.");
+}
+
+/* ================= PROJECTS ================= */
+async function newProject(){
+  const name = prompt("Project name:");
+  if(!name) return;
+  const goal = prompt("Project target / goal (this becomes the on-screen target while you work):");
+  await dbAdd("projects", {name, goal, created:new Date().toISOString(), status:"active"});
+  renderProjects();
+}
+async function deleteProject(id, event){
+  event.stopPropagation();
+  if(!confirm("Delete this project? This does not delete its memory or locked plan — use Reset Plan for that separately.")) return;
+  await dbDelete("projects", id);
+  renderProjects();
+}
+async function renderProjects(){
+  const projects = await dbGetAll("projects");
+  document.getElementById("project-list").innerHTML = projects.map(p=>`
+    <div class="project-card" tabindex="0" onclick="activateProject(${p.id}, '${(p.goal||"").replace(/'/g,"\\'").replace(/"/g,"&quot;")}')">
+      <button class="ghost" style="float:right" onclick="deleteProject(${p.id}, event)">Delete</button>
+      <h3>${escapeHtml(p.name)}</h3>
+      <p>${escapeHtml(p.goal||"")}</p>
+    </div>`).join("") || `<div class="status-line">No projects yet. Tap + New Project above.</div>`;
+}
+function activateProject(id, goal){
+  currentTarget = goal;
+  metaSet("currentTarget", goal);
+  loadTarget();
+  document.querySelector('nav button[data-view="chat-view"]').click();
+  addCanvasStep("Project activated", goal);
+  getActivePlanFor(goal).then(renderPlanPanel).catch(err=>addCanvasStep("Couldn't load plan", err.message));
+}
+
+/* ================= SETTINGS PERSISTENCE ================= */
+document.getElementById("wifi-endpoint").addEventListener("change", (e)=>metaSet("wifiEndpoint", e.target.value.trim()));
+document.getElementById("tor-endpoint").addEventListener("change", (e)=>metaSet("torEndpoint", e.target.value.trim()));
+async function loadSettings(){
+  const ep = await metaGet("wifiEndpoint");
+  if(ep) document.getElementById("wifi-endpoint").value = ep;
+  const torEp = await metaGet("torEndpoint");
+  if(torEp) document.getElementById("tor-endpoint").value = torEp;
+  document.getElementById("autoscore-toggle").checked = await loadAutoScoreSetting();
+  // BUG FIX (v2.13): this checkbox defaults to checked in the HTML and was never
+  // restored from storage on load — turning "Prefer cloud" off, then reloading, showed
+  // it checked again even though askAI() was correctly still reading the saved `false`
+  // from metaGet. The setting worked; the checkbox was lying about its own state.
+  const preferCloud = await metaGet("preferCloud");
+  document.getElementById("prefer-cloud-toggle").checked = preferCloud === null ? true : !!preferCloud;
+}
+
+function toggleCanvas(){
+  document.getElementById("canvas-col").classList.toggle("hidden");
+}
+
+/* ================= SEED MEMORY (starting knowledge) ================= */
+// Pre-verified, high-confidence baseline so Buddie doesn't start empty.
+// Written by design, not scraped — tagged source "buddie-seed" so you can tell it apart from learned memory.
+const SEED_MEMORY = [
+  { topic:"communication-clarity", confidence:0.9, facts:[
+    "Lead with the main point before supporting detail — put the answer first, then the reasoning.",
+    "Match vocabulary and detail level to the listener's familiarity with the topic.",
+    "Cut filler and hedging when precision matters more than politeness.",
+    "State assumptions explicitly rather than leaving them implied.",
+    "Prefer short sentences and concrete words over abstract or jargon-heavy phrasing when the goal is being understood quickly."
+  ]},
+  { topic:"active-listening", confidence:0.9, facts:[
+    "Paraphrase back what was said before responding, to confirm understanding.",
+    "Ask one clarifying question rather than guessing at ambiguous intent.",
+    "Separate the speaker's stated goal from unstated assumptions before acting.",
+    "Track disagreements precisely — restate both positions before proposing a resolution.",
+    "Silence or a pause from the other party is a signal to check in, not to keep talking."
+  ]},
+  { topic:"planning-frameworks", confidence:0.9, facts:[
+    "Break any goal into: target, plan, steps, execute, review — and keep the target visible throughout.",
+    "A plan with unordered steps is riskier than one with explicit dependencies between steps.",
+    "Re-check the stated target before each new action; goals drift silently otherwise.",
+    "Small verifiable steps beat one large unverified leap — checkpoint after each step.",
+    "When a plan stalls, the fix is usually to shrink the next step, not to abandon the goal."
+  ]},
+  { topic:"comprehension-strategies", confidence:0.9, facts:[
+    "Summarize new information in your own words before storing it — literal copies are harder to reuse.",
+    "Flag confidence level on anything not independently confirmed by a second source.",
+    "Contradictions between sources should be recorded, not silently resolved by picking one.",
+    "Compact related facts together periodically; scattered single facts are harder to reason over than merged summaries.",
+    "Older unconfirmed information should lose confidence over time unless it's re-verified."
+  ]}
+];
+async function seedMemoryIfEmpty(){
+  const alreadySeeded = await metaGet("seededMemory");
+  if(alreadySeeded) return;
+  const existing = await dbGetAll("post_verified");
+  if(existing.length===0){
+    for(const s of SEED_MEMORY){
+      const doc = toMemoryDoc({topic:s.topic, source:"buddie-seed", confidence:s.confidence, facts:s.facts});
+      await dbAdd("post_verified", {topic:s.topic, source:"buddie-seed", confidence:s.confidence, doc, timestamp:new Date().toISOString()});
+    }
+  }
+  await metaSet("seededMemory", true);
+}
+
+/* ================= VERSION / UPDATE INDICATOR ================= */
+// Honest note on how this actually works: this is a single static file, not an app
+// talking to a server, so there's no way for it to push updates to your tablet on its
+// own. What this DOES guarantee: whatever version is in the file you replace + reload
+// is exactly what runs — nothing changes silently mid-session. This banner just makes
+// that visible so you can confirm an update actually landed after you swap the file.
+const BUILD_VERSION = "v2.13"; // v2.2 added the virtual pet + shop; v2.3 added the second-AI critic;
+// v2.13 — speed + accuracy pass (bugs found reviewing the whole file, no feature changes):
+// (1) BIGGEST ACCURACY FIX: the Settings "scraper helper model" was fully functional to
+//     load, but nothing on the real ingestion path (throttledSourceFetch, used by every
+//     search and by ▶ Run Project) ever called condenseWithScraperModel() — it was only
+//     wired into fetchVerifiedSources(), a function nothing called. Loading a scraper
+//     model silently did nothing; raw uncondensed scrape text was always what got stored.
+//     Now actually condenses on the live path. The dead fetchVerifiedSources() is removed.
+// (2) ACCURACY FIX: verifyAll()'s Pass 2 cross-check compared each item against a
+//     snapshot of Post-Verified taken once before the loop started, so items promoted
+//     earlier in the SAME verify run were invisible to items processed later in that same
+//     run — a fresh topic's first 5 results could never cross-check each other. The
+//     snapshot now updates as each item is promoted.
+// (3) BUG FIX: the 👍/👎 buttons on a reply were never disabled, so repeated taps on the
+//     same reply kept re-incrementing confidence-calibration counters and pet
+//     tokens/hatch-progress every time — effectively unlimited votes per reply. Both
+//     buttons now disable after the first tap.
+// (4) BUG FIX: "Prefer cloud rotation" (Settings) defaults to checked in the HTML and was
+//     never restored from saved settings on load — turning it off, then reloading, showed
+//     it checked again even though askAI() correctly still used the saved value
+//     underneath. The checkbox now reflects what's actually saved.
+// (5) BUG FIX: exportMemory() never revoked the object URLs it created (a real memory
+//     leak on large exports) and didn't attach the temporary download link to the
+//     document before clicking it, which Firefox silently ignores. Both fixed.
+// (6) PERFORMANCE: dbGetAll() (used constantly — 3x on every renderMemory() call alone)
+//     walked every store one record at a time via an IndexedDB cursor. It now uses the
+//     native bulk getAll() where available, falling back to the old cursor walk only if
+//     it isn't.
+// (7) PERFORMANCE: multilingualCrossCheck() (Pass 3 of every single verification) awaited
+//     its Spanish and French Wikipedia lookups one after another despite them being
+//     completely independent — now runs both in parallel, roughly halving that step's time.
+// (8) PERFORMANCE: verifyAll() re-read the entire "sourceWeights" record from IndexedDB
+//     once per item being verified just to look up one source's trust score. It's now
+//     loaded once per run and kept in sync in memory as outcomes are recorded.
+// (9) PERFORMANCE: processTopicQueue()'s in-progress Memory-tab refresh (3 full table
+//     scans + a full HTML rebuild) fired every 5 processed results during a research run;
+//     now every 10, plus always once at the end.
+// v2.4: fixed the Memory-tab Verify/Compact buttons (they were reporting status into a
+// hidden view — see verify-status/compact-status); replaced the second-AI critic with a
+// free rule-based auto-scorer (no extra model call); removed manual pet shop buttons —
+// Buddie now decides all of its own token spending (food/water/eggs) with a visible
+// purchase log instead of you clicking "buy".
+// v2.5: model dropdown now reads live from webllm.prebuiltAppConfig.model_list instead
+// of 5 hand-typed IDs — every small/rare/old model the library ships shows up, sorted
+// smallest-first for load/inference speed. Fixed a real bug where dbAdd/dbDelete/dbPut
+// rejected with the raw IndexedDB event instead of an Error, so failed saves showed
+// "undefined" instead of the real reason (storage test, AI Verify, and folder-write
+// failures were all affected). wipeMemory now also clears the new Tor queue. Scraper
+// trust logic: uncurated sources (your own endpoints) now need a higher confidence bar
+// AND independent corroboration before promotion, instead of being scored identically
+// to vetted sources. Added an optional Tor/.onion relay toggle (off by default) that
+// only talks to a bridge you run yourself, sends your exact query terms only, is
+// text-only (never fetches images/video/binaries), runs an explicit-content filter that
+// discards flagged results before they ever touch storage, and holds everything in a
+// new unsaved Tor Review Queue until you personally tap Keep on each item. Added a real
+// WebGPU capability check and a tokens/sec speed benchmark (Settings, auto-runs after
+// load model, or tap Re-test speed) — "everything is slow" usually means either a
+// too-large model for the device or no real GPU acceleration at all, and this shows
+// which one it actually is instead of guessing. Clarified in the UI that the WiFi
+// scraper field is a CORS workaround, not a WiFi login — the tablet already has network
+// access just from loading the page; a webpage cannot manage WiFi connections itself.
+// v2.6: chat messages and the canvas/project-work log were never actually saved — they
+// lived only in the DOM and a reload silently erased the whole conversation. Both now
+// persist to IndexedDB (new chat_log/canvas_log stores) and restore on load, capped at
+// 400/500 entries with older ones rolling off automatically. Added a "Clear chat +
+// canvas history" button, kept deliberately separate from "Wipe all local memory" since
+// the transcript and verified knowledge are different things.
+// v2.7: model wasn't reliably "registering" for chat — a real race where auto-selecting
+// a default/saved model and calling loadModel() could fire before the async default-
+// selection had resolved, sometimes grabbing whatever the <select> defaulted to instead.
+// Fixed with a deterministic startup path (autoLoadModelOnStartup) that resolves the
+// target model id first, then loads. The model now also auto-loads in the background on
+// every app start — no more manual "Load Model" tap required — and defaults to
+// Qwen3-0.6B specifically when there's no saved pick. Whether a model's weights were
+// already downloaded on this device is now tracked and persisted, and the status line
+// says so before it starts loading instead of always saying generic "Loading model...".
+// v2.8: model dropdown was showing the ENTIRE WebLLM catalog — including embeddings,
+// vision, and 7B+ models that were never going to be a good tablet default — which made
+// "the right model" hard to actually find. Narrowed to the 10 best text-chat models in
+// the ~500MB-3B range, deduped by base model (keeping the smallest quant of each) so
+// near-duplicate builds don't eat multiple slots. A "Show full catalog" checkbox is
+// still there for anyone who wants to pick outside that curated list.
+// v2.9 — full verification + learning-loop audit:
+// (1) BIGGEST FIX: chat and the project-completion summary NEVER read Post-Verified
+//     memory. The entire scraper -> pre-check -> dual-pass AI verify -> multilingual
+//     corroboration -> Post-Verified pipeline fed a store that sendChat() and runProject()
+//     simply never queried — answers came from the raw model's own weights only, fully
+//     disconnected from everything Buddie had actually researched and verified. Added
+//     retrieveRelevantMemory() (keyword-overlap retrieval — no embedding model is on
+//     device) and wired it into both sendChat() and the project-completion summary, with
+//     the canvas logging which memory items got pulled in for a given reply.
+// (2) Your own WiFi scraper endpoint bypassed the ingestion pre-check entirely (verified
+//     sources got a relevance/junk filter before landing in Pre-Verified; scraper results
+//     did not) and stored/verified raw HTML markup instead of readable text. Both the
+//     scraper and Tor paths now run through extractReadableText() and the same
+//     preCheckAdmit() gate as everything else.
+// (3) Scraper results were tagged with the bare URL as their "source" — since
+//     sourceNameFromItem() splits on ":", every scraper hit got bucketed under the
+//     meaningless trust-weight name "http" instead of something identifiable. Now tagged
+//     "scraper: <url>", matching the existing "tor: <url>" convention.
+// (4) Verification's corroboration rule was an absolute AND-gate: an uncurated source
+//     with zero existing memory on a brand-new topic and no multilingual echo could NEVER
+//     be promoted, at any confidence score — meaning a first-time research topic run
+//     through your own scraper was mathematically guaranteed to fail forever. Replaced
+//     with a tiered threshold (still strict — up to 97% required uncorroborated — but not
+//     impossible).
+// (5) verifyAll() processed the ENTIRE shared Pre-Verified folder on every call, including
+//     the automatic pass runProject() runs after each plan step — so one project's run
+//     could trash or promote leftover items from a totally unrelated search or a different
+//     project. runProject() now scopes each verify pass to that step's own topic only; the
+//     manual Memory-tab "AI Verify All" button is unchanged and still checks everything.
+// (6) Added a real diagnostic for "the model redownloads every time I open a new screen":
+//     WebLLM caches model weights via the Cache Storage API, which is separate from
+//     IndexedDB and had no persistence check at all. checkModelCachePersistence() now
+//     writes and reads back a real test entry on startup and raises a clear banner if
+//     Cache Storage isn't actually durable (the classic cause: running inside a sandboxed
+//     preview/embed rather than a normal Chrome tab, where storage resets on every open).
+//     Also requests navigator.storage.persist() so neither IndexedDB nor the model cache
+//     gets evicted under storage pressure. Added a small always-visible model-status badge
+//     in the header (previously status only ever showed in the Settings tab, so from any
+//     other view there was no way to tell "still loading" from "ready").
+// (7) Header version label was frozen at "v2.4" since that release while BUILD_VERSION
+//     had already moved to v2.8 — cosmetic, but confusing when checking "did my update
+//     actually take." Both now read v2.9.
+//
+// v2.12 — diagnosed "🧠 load failed" + the Cache Storage banner as the SAME root cause,
+// not two bugs: opening via a file manager/share-sheet "Open with Chrome" action loads
+// the page on a content:// origin, and Cache Storage (which both the probe and WebLLM's
+// model downloader depend on) rejects writes on that scheme. checkModelCachePersistence()
+// now detects content:// specifically, gives the actual fix (open Chrome and type a
+// file:// or http(s):// address rather than "Open with"), and the startup flow skips the
+// doomed auto-download in that case instead of retrying and landing on a generic
+// "load failed" with no link back to the cause. The manual Load Model button in Settings
+// gets the same accurate message if tapped directly. Chat/memory (IndexedDB) were never
+// affected by this — only model weight caching was.
+//
+// v2.11 — electric/LED UI restyle (colors, glow, pulsing primary buttons — cosmetic
+// only, no logic changes) and the Post-Verified memory cap switched from one flat
+// 100,000-word ceiling across all memory to a 25,000-word ceiling PER TOPIC (see
+// WORDS_PER_TOPIC_CAP, refreshWordTotal(), and the cap check in verifyAll()'s
+// promotion step). A single global cap let a few heavily-scraped topics crowd out
+// everything else; per-topic caps give each topic its own room independent of others.
+//
+// v2.10 — scraper round-robin, source coverage, and an actually-evolving weight system:
+// (1) The round-robin was never real: processTopicQueue looped source-major (every topic
+//     against Wikipedia, THEN every topic against Open Library, THEN arXiv...) despite
+//     its own comment claiming otherwise. A topic-heavy run hammered one site in a tight
+//     back-to-back sequence before rotating. Reordered to topic-major/source-minor so
+//     consecutive requests always hit a different site, and any one source is only
+//     revisited once every N requests (N = number of active sources) no matter how many
+//     topics are queued — genuine round robin, not just per-source sleep throttling.
+// (2) Your own WiFi scraper endpoint was a separate, disconnected code path used ONLY by
+//     the manual search bar — no throttling, no round-robin placement, and ▶ Run Project
+//     never touched it at all (only the 3 built-in sources). buildActiveSources() now
+//     folds it into the SAME round-robin schedule as everything else, so it gets proper
+//     rate-limit pacing and Run Project actually uses it too.
+// (3) Fixed a real scheduling bug: SOURCE_INTERVAL had no entry for any source outside
+//     the original 3 (a new source, or the dynamic scraper entry), so reading it came
+//     back undefined — comparisons against undefined/NaN silently skipped throttling
+//     entirely for that source, and the "back off after an error" logic multiplied
+//     undefined into NaN instead of actually slowing down. sourceInterval() now always
+//     returns a real number via a safe default, and per-request timing gets a small
+//     ±15% jitter so requests to one source don't land on a perfectly predictable beat.
+// (4) Added two more curated, free, no-key, CORS-open sources: Semantic Scholar (broad
+//     academic search across all fields) and Crossref (broad scholarly metadata). arXiv
+//     alone skews hard toward physics/CS/math — anything in biology, medicine, social
+//     science, or humanities had almost no curated coverage before this.
+// (5) Evolving weight system: source trust used to be a flat lifetime pass/fail ratio,
+//     capped at a fixed ±5 nudge the instant 3 samples existed — a source's very first
+//     result and its 1000th counted identically, so genuine improvement or decline over
+//     time barely moved anything. Replaced with a recency-weighted exponential moving
+//     average (alpha=0.25) whose influence scales up to ±8 as more history accrues (full
+//     weight by ~12 checks) — trust now actually tracks recent behavior instead of being
+//     anchored to everything that ever happened. A source whose EMA trust has fallen
+//     below 20% (with enough history to mean something) is now auto-rejected at the
+//     pre-check stage without spending an AI call on it — and recovers on its own the
+//     moment it starts passing again, since it's an average, not a permanent flag.
+async function checkVersionBanner(){
+  const lastSeen = await metaGet("lastSeenVersion");
+  if(lastSeen && lastSeen !== BUILD_VERSION){
+    addCanvasStep("Updated", `Buddie is now running ${BUILD_VERSION} (was ${lastSeen}) — this took effect because you replaced the file and reloaded, not automatically.`);
+  }
+  await metaSet("lastSeenVersion", BUILD_VERSION);
+}
+
+/* ================= INIT ================= */
+// v2.9: root-cause check for "I have to redownload the model every time I open a new
+// screen." The IndexedDB check above already catches one storage failure mode, but
+// WebLLM caches model weights via the browser's separate Cache Storage API (`caches`),
+// not IndexedDB — a page could have working IndexedDB (chat/memory persist fine) while
+// Cache Storage is ephemeral or blocked (common in sandboxed/embedded preview panels
+// that reset storage on every open, or with a browser storage setting that only exempts
+// some APIs). That combination looks exactly like "everything else saves, but the model
+// never stays downloaded" and previously had no diagnostic at all — it just silently
+// re-downloaded. This writes a real, disposable test entry and reads it back to confirm
+// Cache Storage actually persists, and also requests persistent storage from the browser
+// so neither IndexedDB nor the model cache gets silently evicted under storage pressure
+// (routine on a tablet that's otherwise low on free space).
+// v2.11: added a specific diagnosis for `location.protocol === "content:"`. That scheme
+// shows up when Chrome is launched via a file manager / Downloads app's "Open with
+// Chrome" share action instead of typing an address — Chrome then treats the page's
+// origin as content://, under which the Cache Storage API rejects writes outright
+// ("Request scheme 'content' is unsupported"). WebLLM's model downloader also relies on
+// Cache Storage internally, so on a content:// origin BOTH the probe here AND the actual
+// model load fail for the identical reason — that's why "🧠 load failed" showed up right
+// alongside this banner, not as a second, unrelated bug. Previously this hit the generic
+// catch block below and gave a "try opening directly in Chrome" tip that doesn't actually
+// fix a content:// origin (the page IS already open in Chrome — it's *how* it was opened
+// that's wrong), and the app kept retrying the model download anyway, guaranteed to fail.
+// Now this case is detected up front, given the real actionable fix, and returns a reason
+// code so callers (see the init block below) can skip the doomed auto-download instead of
+// silently failing every time.
+async function checkModelCachePersistence(){
+  if(location.protocol === "content:"){
+    showErrorBanner("Opened via a content:// link (typically a file manager or share-sheet \"Open with Chrome\" action) — Cache Storage rejects writes on this origin, so neither the model cache nor its downloads can work here, no matter what's picked in Settings. Fix: open Chrome itself, then either type a file:// path to this file directly in the address bar, or serve the folder with a tiny local server (e.g. `python3 -m http.server` in the folder) and open http://localhost:PORT/" + location.pathname.split("/").pop() + " instead. Chat and memory (IndexedDB) are unaffected and will still save normally.");
+    return {ok:false, reason:"content-scheme"};
+  }
+  if(!("caches" in window)){
+    showErrorBanner("This browser has no Cache Storage API — WebLLM cannot cache model weights at all, so the model will fully re-download every single time, with no fix possible from inside the page. Use a current Chrome (Android or desktop).");
+    return {ok:false, reason:"no-cache-api"};
+  }
+  try{
+    const testCache = await caches.open("buddie-storage-probe");
+    await testCache.put("/buddie-probe", new Response("ok"));
+    const readBack = await testCache.match("/buddie-probe");
+    await caches.delete("buddie-storage-probe");
+    if(!readBack){
+      showErrorBanner("Cache Storage looked available but didn't actually persist a test write — this is almost certainly why the model re-downloads every time you open the app. This usually means the page is running inside an embedded/sandboxed preview rather than a normal Chrome tab. Try opening this file's address directly in Chrome instead.");
+      return {ok:false, reason:"silent-fail"};
+    }
+    return {ok:true, reason:null};
+  }catch(err){
+    showErrorBanner("Cache Storage check failed (\"" + err.message + "\") — model weight caching may not work, causing a full re-download on every open. Try opening this page directly in Chrome rather than inside another app's preview/embed.");
+    return {ok:false, reason:"error:"+err.message};
+  }
+}
+async function requestPersistentStorage(){
+  if(!(navigator.storage && navigator.storage.persist)) return;
+  try{
+    const already = await navigator.storage.persisted();
+    if(!already) await navigator.storage.persist();
+  }catch(err){ /* non-critical — best effort only */ }
+}
+// BUG FIX (v2.4): req.onblocked (above, in openDB) only ever logged a console warning —
+// it never resolved or rejected the openDB() promise. If the browser reports the open as
+// "blocked" (e.g. a stale IndexedDB connection from a previous load of this same page
+// wasn't cleanly closed — common when a preview panel reloads the page repeatedly),
+// `await openDB()` below would hang forever and NOTHING after it would ever run: no
+// target, no settings, no greeting message, just a permanently empty chat view that
+// looks exactly like "the app isn't loading." A timeout race now guarantees this step
+// always finishes one way or another within 4 seconds.
+function withTimeout(promise, ms, timeoutError){
+  return Promise.race([
+    promise,
+    new Promise((_,rej)=>setTimeout(()=>rej(timeoutError || new Error("Timed out")), ms))
+  ]);
+}
+window.addEventListener("load", async ()=>{
+  try{
+    await withTimeout(openDB(), 4000, new Error("IndexedDB did not open within 4s (likely blocked by a stale connection from a previous load)"));
+  }catch(err){
+    enableFallbackStore();
+    showErrorBanner("Persistent storage unavailable (\"" + err.message + "\") — running in temporary memory for this session only; nothing will be saved after you close this tab. This usually means the page is open in an embedded preview inside your server app rather than the real Chrome app, or a browser storage setting is blocking it. Try opening the address directly in Chrome, or check Chrome's Site Settings for this address.");
+  }
+  await requestPersistentStorage();
+  const cacheCheck = await checkModelCachePersistence();
+  await loadTarget();
+  await loadSettings();
+  await seedMemoryIfEmpty();
+  await checkVersionBanner();
+  renderMemory();
+  renderCloudKeysList();
+  onCloudProviderChange();
+  await populateScraperModelSelect();
+  await petTick();               // catch up pet state (drain/death/AI spending) for time since last open
+  setInterval(petTick, 30000);   // re-check every 30s while the app is open
+  await loadCanvasLog();
+  const restoredCount = await loadChatLog();
+  if(restoredCount === 0){
+    addMsg("ai", "Hey — I'm Buddie. I've started with baseline communication, listening, planning, and comprehension knowledge in memory. Set a project target above — I'm loading a local model in the background now (see Settings for progress), then use ▶ Run Project to have me research it against verified sources automatically. Rate my replies 👍/👎 to earn me tokens — check the Pet tab to watch me spend them myself (eggs, food, water) and see my purchase log.");
+  }
+  // v2.11: model weight downloads go through the same Cache Storage API just probed
+  // above, so on a content:// origin the download is guaranteed to fail every time —
+  // auto-loading anyway just burns bandwidth/battery re-attempting a doomed download
+  // and then shows a generic "load failed" with no link back to the real cause. Skip
+  // the attempt in that one case and point the badge straight at the banner instead;
+  // every other failure mode still gets a normal attempt (and its own real error).
+  if(cacheCheck.reason === "content-scheme"){
+    updateModelBadge("blocked — see banner ⚠", "--bad");
+    document.getElementById("model-badge").title = "Model download needs Cache Storage, which doesn't work on a content:// origin. See the red banner at the top for the fix, or check Settings.";
+  } else {
+    autoLoadModelOnStartup(); // fire-and-forget: model download/load runs in the background, doesn't block the rest of the app from being usable
+  }
+});
+</script>
+</body>
+</html>
