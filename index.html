@@ -798,9 +798,18 @@ document.addEventListener("keydown", (e)=>{
 document.querySelectorAll("nav button").forEach(b=>{
   b.onclick=()=>{
     document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
-    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v=>{
+      v.classList.remove("active");
+      // Belt-and-suspenders: some Android Chrome builds fail to repaint an
+      // absolutely-positioned view purely from a CSS class change, leaving
+      // the old tab's content ghosted on screen underneath the new one.
+      // Setting the inline style directly forces a real repaint regardless.
+      v.style.display = "none";
+    });
     b.classList.add("active");
-    document.getElementById(b.dataset.view).classList.add("active");
+    const activeView = document.getElementById(b.dataset.view);
+    activeView.classList.add("active");
+    activeView.style.display = "flex";
     if(b.dataset.view==="memory-view") renderMemory();
     if(b.dataset.view==="projects-view") renderProjects();
     if(b.dataset.view==="pet-view") renderPetView();
