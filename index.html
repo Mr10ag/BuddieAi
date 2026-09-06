@@ -302,8 +302,9 @@
     <div class="status-line">
       <b>Setup (2 minutes, all in the browser):</b> go to <a href="https://kvdb.io/start" target="_blank" rel="noopener" style="color:var(--accent)">kvdb.io/start</a>, enter any email, and tap "Create Bucket". It shows you a random ID like <code>Fd55uogXyxYdnXJvnyN8Xo</code> — paste just that ID below. That's the whole setup; nothing to write, paste-into-an-editor, or deploy.
     </div>
-    <input id="connection3-address" placeholder="paste your kvdb bucket ID here" onchange="onConnection3AddressChange(event)">
-    <input id="connection3-secret" type="password" placeholder="secret key (optional — only if you set one when creating the bucket)" style="margin-top:6px" onchange="onConnection3SecretChange(event)">
+    <input id="connection3-address" placeholder="paste your kvdb bucket ID here">
+    <input id="connection3-secret" type="password" placeholder="secret key (optional — only if you set one when creating the bucket)" style="margin-top:6px">
+    <button class="primary" style="margin-top:6px;width:fit-content" onclick="saveConnection3Settings()">💾 Save Connection 3 settings</button>
     <div class="status-line" id="connection3-status">Connection 3: not connected — paste a bucket ID below to enable.</div>
     <div class="status-line">
       A separate slot from Connections 1 and 2 above. This is where the ~80% of total memory that quick memory doesn't hold gets offloaded, in addition to this device's IndexedDB — not instead of it. New verified memory pushes here automatically in the background (fail-open: if unreachable, nothing local is affected, and it's just retried later). The scraper writes a pending entry here the moment it finds something, and your existing hotspot verification network (above) still does the actual checking exactly as before — Connection 3 is pure storage, it never runs verification itself, it just durably holds the item and gets told the verdict afterward.
@@ -1129,13 +1130,14 @@ async function syncFullMemoryNow(){
   if(!cfg.configured){ if(statusEl) statusEl.textContent = "Connection 3 not configured — nothing to sync."; return; }
   if(statusEl) statusEl.textContent = "Syncing full memory to Connection 3...";
   const all = await dbGetAll("post_verified");
-  let pushed = 0, failed = 0;
+  let pushed = 0, failed = 0, lastError = "";
   for(const item of all){
     const res = await pushToConnection3(item);
-    if(res && res.ok === false) failed++; else pushed++;
+    if(res && res.ok === false){ failed++; lastError = res.error || res.reason || lastError; }
+    else pushed++;
   }
-  if(statusEl) statusEl.textContent = `Sync done: ${pushed} item(s) pushed${failed?`, ${failed} failed (fail-open, local unaffected)`:""}.`;
-  addCanvasStep("Connection 3 full sync", `${pushed} pushed, ${failed} failed.`);
+  if(statusEl) statusEl.textContent = `Sync done: ${pushed} item(s) pushed${failed?`, ${failed} failed — last error: ${lastError||"unknown"} (fail-open, local unaffected)`:""}.`;
+  addCanvasStep("Connection 3 full sync", `${pushed} pushed, ${failed} failed.${lastError?` Last error: ${lastError}`:""}`);
 }
 
 // ---- Scraper handoff queue ----
@@ -1158,13 +1160,19 @@ async function releaseConnection3Handoff(handoffId, verified, finalItem){
 }
 
 /* ================= CONNECTION 3 SETTINGS UI ================= */
-async function onConnection3AddressChange(e){
-  await metaSet("connection3Endpoint", e.target.value.trim());
-  renderConnection3Status();
-}
-async function onConnection3SecretChange(e){
-  await metaSet("connection3Secret", e.target.value.trim());
-  renderConnection3Status();
+// v2.20: was onchange/onblur-based, which some mobile keyboards don't reliably fire
+// (autofill, or tapping straight to another field without the input ever "blurring"
+// the way a desktop click does) — so a pasted bucket ID could sit in the box, look
+// right, and never actually get written to storage. Explicit Save button instead:
+// no ambiguity about whether it took.
+async function saveConnection3Settings(){
+  const bucket = document.getElementById("connection3-address").value.trim();
+  const secret = document.getElementById("connection3-secret").value.trim();
+  await metaSet("connection3Endpoint", bucket);
+  await metaSet("connection3Secret", secret);
+  await renderConnection3Status();
+  const el = document.getElementById("connection3-status");
+  if(el) el.textContent += " ✅ Saved.";
 }
 async function renderConnection3Status(){
   const cfg = await getConnection3Config();
