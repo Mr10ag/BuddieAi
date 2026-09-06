@@ -790,6 +790,19 @@ function toMemoryDoc({topic, source, confidence, facts}){
   const fm = `---\ntopic: ${topic}\nsource: ${source||"unknown"}\nconfidence: ${confidence}\nverified: ${new Date().toISOString().slice(0,10)}\n---\n`;
   return fm + facts.map(f=>`- ${f}`).join("\n");
 }
+// v2.14.2: promoted facts were previously a hard character-slice of raw scraped text
+// (item.raw.slice(0,300)), which regularly cut off mid-word or mid-sentence — a real
+// contributor to memory that "reads weird". This backs off to the last sentence-ending
+// punctuation (or word boundary, if no sentence end exists) within the limit instead.
+function truncateAtBoundary(text, maxLen){
+  const t = (text||"").replace(/\s+/g, " ").trim();
+  if(t.length <= maxLen) return t;
+  const slice = t.slice(0, maxLen);
+  const lastSentenceEnd = Math.max(slice.lastIndexOf(". "), slice.lastIndexOf("! "), slice.lastIndexOf("? "));
+  if(lastSentenceEnd > maxLen * 0.4) return slice.slice(0, lastSentenceEnd + 1).trim();
+  const lastSpace = slice.lastIndexOf(" ");
+  return (lastSpace > maxLen * 0.4 ? slice.slice(0, lastSpace) : slice).trim() + "…";
+}
 
 /* ================= MEMORY RETRIEVAL (RAG) ================= */
 // BUG FIX (v2.9): the entire scraper -> verify -> Post-Verified pipeline existed, but
@@ -1277,7 +1290,18 @@ async function sendChat(){
   // v2.9: pull in verified memory relevant to this message + the project target so the
   // reply is grounded in what Buddie actually researched, instead of only its own raw
   // model weights. See retrieveRelevantMemory() above.
-  const {context: memoryContext, used: memoryUsed, usedSources} = await retrieveRelevantMemory(`${currentTarget||""} ${text}`);
+  // BUG FIX (v2.14.2): this always prepended the FULL project target to every single
+  // message's retrieval query, every time — so once a target was set, an off-topic chat
+  // message (e.g. "what's a good pasta recipe?" while the target is "climate policy")
+  // still scored target-topic memory via keyword overlap and got told to treat it as
+  // "ground truth", which read as random unrelated memory bleeding into the answer. This
+  // is a likely real contributor to "memories have been weird". Now it scores the
+  // message text ALONE first; the target is only pulled in as a fallback if the message
+  // itself doesn't match anything — preserving the "keep replies grounded in research"
+  // behavior for on-topic questions without forcing it onto unrelated ones.
+  let memRes = await retrieveRelevantMemory(text);
+  if(!memRes.context && currentTarget) memRes = await retrieveRelevantMemory(`${currentTarget} ${text}`);
+  const {context: memoryContext, used: memoryUsed, usedSources} = memRes;
   const memoryBlock = memoryContext
     ? `\nVERIFIED MEMORY (treat as ground truth; prefer this over your own guesses when it's relevant):\n${memoryContext}`
     : `\nVERIFIED MEMORY: none found relevant to this message yet. Say so plainly if the question needs research rather than guessing — the user can run a search or ▶ Run Project to build it.`;
@@ -1873,6 +1897,15 @@ async function callCloudModel(entry, prompt){
   return text;
 }
 
+// v2.14.2: tracks which judge (which cloud provider/key, or the local model) actually
+// answered the MOST RECENT askAI() call. Needed because cloud key rotation means two
+// consecutive askAI() calls in the same verify pass (e.g. Pass 1 then Pass 2 on the same
+// item) can silently be answered by two DIFFERENT providers if a key fails and rotation
+// moves to the next one mid-run — a real, previously invisible source of inconsistent
+// verification judgments ("memories have been weird"). Read via lastAskAISource()
+// immediately after each askAI() call that needs to attribute its result.
+let _lastAskAISource = "local model";
+function lastAskAISource(){ return _lastAskAISource; }
 async function askAI(prompt){
   const preferCloud = (await metaGet("preferCloud")) ?? true;
   if(preferCloud){
@@ -1889,6 +1922,7 @@ async function askAI(prompt){
         entry.lastStatus = "healthy"; entry.fails = 0; entry.cooldownUntil = 0; entry.uses = (entry.uses||0) + 1;
         await saveCloudKeys(keys);
         renderCloudKeysList();
+        _lastAskAISource = `cloud · ${CLOUD_PROVIDERS[entry.provider]?.label || entry.provider}${entry.label ? " (\""+entry.label+"\")" : ""}`;
         return text;
       }catch(err){
         entry.fails = (entry.fails||0) + 1;
@@ -1902,11 +1936,13 @@ async function askAI(prompt){
   }
   // Local fallback — unchanged from before cloud rotation existed.
   if(!engine){
+    _lastAskAISource = "none (no model available)";
     return "[No local model loaded yet — go to Settings → Load Model. Until then I can still file things to memory and run searches, I just can't reason over them.]";
   }
   const res = await engine.chat.completions.create({
     messages:[{role:"user", content: prompt}]
   });
+  _lastAskAISource = "local model";
   return res.choices[0].message.content;
 }
 
@@ -2519,10 +2555,11 @@ async function verifyAll(topicFilter=null){
     const trustBonus = sourceTrustBonus(sourceWeightsCache, sourceName);
 
     const check1 = await askAI(`Rate how plausible, internally consistent, and non-spam this content is, from 0 to 100. Reply with ONLY the number, then a dash, then one short reason. Example: "82 - well-sourced and consistent".\n\nSOURCE: ${item.source}\nCONTENT:\n${item.raw.slice(0,1500)}`);
+    const judge1 = lastAskAISource();
     const match = check1.match(/\d{1,3}/);
     let confidencePct = match ? Math.min(100, parseInt(match[0],10)) : 0;
     if(trustBonus) confidencePct = Math.max(0, Math.min(100, confidencePct + trustBonus));
-    addCanvasStep("Pass 1 — plausibility score", `${item.topic}: ${check1.trim()}${trustBonus ? ` (source trust adjustment: ${trustBonus>0?'+':''}${trustBonus})` : ""}`);
+    addCanvasStep("Pass 1 — plausibility score", `${item.topic}: ${check1.trim()}${trustBonus ? ` (source trust adjustment: ${trustBonus>0?'+':''}${trustBonus})` : ""} [judged by: ${judge1}]`);
 
     if(confidencePct < 60){ // clearly bad — no point running further checks
       await dbDelete("pre_verified", item.id);
@@ -2537,9 +2574,10 @@ async function verifyAll(topicFilter=null){
     const related = post.filter(p => p.topic.toLowerCase() === item.topic.toLowerCase()).slice(0,3);
     if(related.length){
       const check2 = await askAI(`Rate 0-100 how consistent the NEW content is with the EXISTING verified memory (100 = fully consistent, 0 = flatly contradicts it). Reply with ONLY the number, then a dash, then one short reason.\n\nEXISTING:\n${related.map(r=>r.doc).join("\n---\n").slice(0,1200)}\n\nNEW:\n${item.raw.slice(0,800)}`);
+      const judge2 = lastAskAISource();
       const match2 = check2.match(/\d{1,3}/);
       const crossScore = match2 ? Math.min(100, parseInt(match2[0],10)) : 50;
-      addCanvasStep("Pass 2 — cross-check vs memory", `${item.topic}: ${check2.trim()}`);
+      addCanvasStep("Pass 2 — cross-check vs memory", `${item.topic}: ${check2.trim()} [judged by: ${judge2}]${judge2!==judge1 ? " ⚠️ different judge than Pass 1 — see System Status" : ""}`);
       confidencePct = Math.round((confidencePct + crossScore) / 2);
     }
 
@@ -2562,7 +2600,7 @@ async function verifyAll(topicFilter=null){
                               : 0.97; // uncorroborated + uncurated: very high bar, but not impossible
     const finalConfidence = confidencePct / 100;
     if(finalConfidence >= effectiveThreshold){
-      const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[item.raw.slice(0,300).replace(/\n/g," ")]});
+      const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[truncateAtBoundary(item.raw, 300)]});
       const docWords = countWords(doc);
       const topicWordsSoFar = runningTopicWords[item.topic] || 0;
       if(topicWordsSoFar + docWords > WORDS_PER_TOPIC_CAP){
@@ -2680,7 +2718,16 @@ async function compactMemory(){
     }
 
     const newConfidence = Math.min(0.95, best.confidence + 0.1*group.length);
-    const merged = toMemoryDoc({topic, source:best.source, confidence:newConfidence, facts:[mergedFacts.replace(/^- /,"")]});
+    // BUG FIX (v2.14.2): this used to pass the WHOLE merged block as a single "fact"
+    // string with one blanket .replace(/^- /,"") on the front — fine for the
+    // bullet-extraction strategy (each line already starts "- ", so it happened to look
+    // right), but for keyword-tagged output (lines starting "[category] ...", no "- ")
+    // only the first line ever got a bullet marker from toMemoryDoc, leaving every other
+    // line unbulleted in the same note. Splitting into real per-line facts first means
+    // toMemoryDoc's own "- " prefix is applied consistently to every line, whichever
+    // compression strategy produced it.
+    const factLines = mergedFacts.split("\n").map(l=>l.replace(/^[-•]\s*/,"").trim()).filter(Boolean);
+    const merged = toMemoryDoc({topic, source:best.source, confidence:newConfidence, facts: factLines.length ? factLines : [mergedFacts]});
     for(const g of group) await dbDelete("post_verified", g.id);
     const newId = await dbAdd("post_verified", {topic, source:best.source, confidence:newConfidence, doc:merged, timestamp:new Date().toISOString()});
     await writeMemoryFileToFolder({id:newId, topic, doc:merged});
@@ -2882,7 +2929,10 @@ async function renderSystemStatus(){
   }
   row("　↳ preference", preferCloud ? "Prefer cloud when a key is healthy" : "Local model only (cloud rotation off)", preferCloud && keys.length ? "warn" : "ok");
   const actuallyUsingCloud = preferCloud && keys.some(k=>k.enabled);
-  row("🎯 Chat replies currently come from", actuallyUsingCloud ? "Cloud (falls back to local if all keys fail)" : "Local on-device model only", actuallyUsingCloud ? "warn" : "ok");
+  row("🎯 Chat / Verify / Compact judge", actuallyUsingCloud ? "Cloud rotation (falls back to local if all keys fail)" : "Local on-device model only", actuallyUsingCloud ? "warn" : "ok");
+  if(actuallyUsingCloud && enabledKeys.length > 1){
+    row("　↳ note", `${enabledKeys.length} cloud keys enabled — rotation means two calls in the SAME verify pass can be judged by different providers`, "warn");
+  }
 
   // --- NETWORK: endpoints you point Buddie at ---
   const wifiEp = await metaGet("wifiEndpoint");
