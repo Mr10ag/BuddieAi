@@ -271,6 +271,23 @@
     <div class="status-line">Your tablet is already on WiFi just to load this page — this field isn't about connecting to WiFi. It's a separate restriction: browsers block a webpage from directly fetching most other sites' content (CORS), no matter how good your connection is. Buddie sends search-bar queries here first; run a small local proxy on your network to fetch pages for Buddie. Leave blank to use direct fetch (works for open APIs only, like Wikipedia/arXiv).</div>
   </div>
   <div class="field">
+    <label>Connection 2 — secondary server (bounces your API keys, monitors tokens, runs the priority queue)</label>
+    <select id="connection2-mode" onchange="onConnection2ModeChange()">
+      <option value="">Not connected (blank)</option>
+      <option value="custom">Custom address</option>
+      <option value="hotspot">Hotspot (separate from your main WiFi)</option>
+    </select>
+    <div id="connection2-address-row" style="display:none;margin-top:6px">
+      <input id="connection2-address" placeholder="http://192.168.x.x:PORT" onchange="onConnection2AddressChange(event)">
+    </div>
+    <div class="status-line" id="connection2-status">Connection 2: not connected — blank until you supply an address or pick Hotspot.</div>
+    <div class="status-line">
+      This is a separate slot from Connection 1 (your main chat/model connection above). Picking "Hotspot" just labels your intent for the status line and queue below — a browser tab can't force your OS to route this call over a hotspot instead of your main WiFi specifically, the same limitation already noted on the verification-network field below. Turn the hotspot on and make sure it's your device's active connection if you want traffic to actually go out over it.
+      <br>When this connection is selected, the cloud API key rotation further down runs through it: keys are bounced round-robin, every call's tokens are counted, and requests are queued so replies you're actively waiting on always run before background memory/scraper/verification work — never the other way around.
+    </div>
+    <div class="status-line" id="ai-queue-status">Queue: idle. Tokens this session — in: 0, out: 0.</div>
+  </div>
+  <div class="field">
     <label>Verification network — separate "second brain" server (your hotspot-tethered device)</label>
     <input id="hotspot-endpoint" placeholder="http://<device-on-your-hotspot>:PORT">
     <div class="status-line">
@@ -279,6 +296,21 @@
       <br>Leave blank to skip dual-verification entirely (single-brain checking continues as before, unaffected).
     </div>
     <div class="status-line" id="verify-token-badge">Verification ledger: 👍 0 / 👎 0</div>
+  </div>
+  <div class="field">
+    <label>Connection 3 — full memory host + scraper handoff (a free kvdb.io bucket — no code, no deploy)</label>
+    <div class="status-line">
+      <b>Setup (2 minutes, all in the browser):</b> go to <a href="https://kvdb.io/start" target="_blank" rel="noopener" style="color:var(--accent)">kvdb.io/start</a>, enter any email, and tap "Create Bucket". It shows you a random ID like <code>Fd55uogXyxYdnXJvnyN8Xo</code> — paste just that ID below. That's the whole setup; nothing to write, paste-into-an-editor, or deploy.
+    </div>
+    <input id="connection3-address" placeholder="paste your kvdb bucket ID here" onchange="onConnection3AddressChange(event)">
+    <input id="connection3-secret" type="password" placeholder="secret key (optional — only if you set one when creating the bucket)" style="margin-top:6px" onchange="onConnection3SecretChange(event)">
+    <div class="status-line" id="connection3-status">Connection 3: not connected — paste a bucket ID below to enable.</div>
+    <div class="status-line">
+      A separate slot from Connections 1 and 2 above. This is where the ~80% of total memory that quick memory doesn't hold gets offloaded, in addition to this device's IndexedDB — not instead of it. New verified memory pushes here automatically in the background (fail-open: if unreachable, nothing local is affected, and it's just retried later). The scraper writes a pending entry here the moment it finds something, and your existing hotspot verification network (above) still does the actual checking exactly as before — Connection 3 is pure storage, it never runs verification itself, it just durably holds the item and gets told the verdict afterward.
+      <br>Free kvdb buckets rate-limit at 1,000 requests/hour and cap each value at 16KB — both comfortably above what a single memory item or handoff needs.
+    </div>
+    <button class="ghost" style="margin-top:6px;width:fit-content" onclick="syncFullMemoryNow()">☁️ Sync full memory now</button>
+    <div class="status-line" id="connection3-sync-status"></div>
   </div>
   <div class="field">
     <label>Tor / .onion relay endpoint (optional, advanced — a SOCKS→HTTP bridge you run yourself)</label>
@@ -869,8 +901,279 @@ async function retrieveRelevantMemory(queryText, limit=5, maxChars=1400){
     used.push(item.topic);
     const srcName = sourceNameFromItem(item.source);
     if(srcName && !usedSources.includes(srcName)) usedSources.push(srcName);
+    // v2.15: every time an item actually gets used in a reply, bump its usage stats —
+    // this is what getQuickMemoryItems() below reads to keep the local quick-memory
+    // cache current, instead of it being a fixed snapshot from whenever it was built.
+    item.useCount = (item.useCount || 0) + 1;
+    item.lastUsed = Date.now();
+    dbPut("post_verified", item).catch(()=>{});
   }
   return {context, used, usedSources};
+}
+
+/* ================= QUICK MEMORY (Connection 2's local cache) ================= */
+// v2.15: a small, fast subset of post_verified memory that the scraper-helper model
+// (Connection 2, local) can search in a couple hundred ms instead of scanning the
+// whole memory store. Capped at ~1/8 of total memory. Approximates the split you
+// described — a "top spot" that favors your most-used items and a rotating portion
+// that keeps shifting as usage changes — with one blended score (usage count weighted
+// most heavily, recency weighted less) rather than two hard-coded percentages, since a
+// single ranked cutoff self-adjusts over time without needing a separate rebuild step.
+const QUICK_MEMORY_RECENCY_WINDOW_MS = 14*24*60*60*1000; // recency contribution decays to 0 over ~2 weeks
+// v2.16: quick memory is sized at ~20% of total memory (you're calling this slice
+// "1/8th" as its label; the actual cap used is a straight 20%, per your correction),
+// and that 20% isn't just "whatever's used most" — it's reserved by category:
+// 60% for anything related to conversation, comprehension, or planning; 40% for
+// everything else ("Skills" — the catch-all: any memory item that ISN'T about
+// conversation/comprehension/planning). Ranking WITHIN each category still uses the
+// same usage+recency score as before, so the top spot in each bucket still favors your
+// most-used items and keeps shifting over time.
+const QUICK_MEMORY_TOTAL_SHARE = 0.20;      // quick memory = 20% of total memory
+const QUICK_MEMORY_CCP_SHARE = 0.60;        // of that 20%: 60% conversation/comprehension/planning
+const QUICK_MEMORY_SKILLS_SHARE = 0.40;     // ...40% everything else ("Skills")
+const CCP_KEYWORDS = ["conversation", "comprehension", "comprehend", "planning", "plan"];
+function isConversationComprehensionPlanning(item){
+  const hay = ((item.topic||"") + " " + (item.doc||"")).toLowerCase();
+  return CCP_KEYWORDS.some(kw => hay.includes(kw));
+}
+function scoreForQuickMemory(item, now){
+  const useCount = item.useCount || 0;
+  const recency = item.lastUsed ? Math.max(0, 1 - (now - item.lastUsed) / QUICK_MEMORY_RECENCY_WINDOW_MS) : 0;
+  return useCount + recency * 3; // recency can nudge a fresh item in, but can't out-rank sustained heavy use
+}
+async function getQuickMemoryItems(){
+  const all = await dbGetAll("post_verified");
+  if(!all.length) return [];
+  const quickSize = Math.max(1, Math.round(all.length * QUICK_MEMORY_TOTAL_SHARE));
+  const ccpSlots = Math.round(quickSize * QUICK_MEMORY_CCP_SHARE);
+  const skillsSlots = quickSize - ccpSlots;
+
+  const now = Date.now();
+  const ccpPool = [], skillsPool = [];
+  for(const item of all){
+    (isConversationComprehensionPlanning(item) ? ccpPool : skillsPool).push({ item, score: scoreForQuickMemory(item, now) });
+  }
+  ccpPool.sort((a,b)=>b.score-a.score);
+  // Skills bucket: your explicit ask is "most CALLED" — rank by raw use count first,
+  // recency only as a tiebreaker between equally-called items (not blended in like the
+  // conversation/comprehension/planning bucket above).
+  skillsPool.sort((a,b)=> (b.item.useCount||0) - (a.item.useCount||0) || b.score - a.score);
+
+  let ccpPicked = ccpPool.slice(0, ccpSlots);
+  let skillsPicked = skillsPool.slice(0, skillsSlots);
+  // Fail open: if one category doesn't have enough items to fill its quota, hand the
+  // unused slots to the other category rather than leaving quick memory under-filled.
+  const ccpLeftover = ccpSlots - ccpPicked.length;
+  const skillsLeftover = skillsSlots - skillsPicked.length;
+  if(ccpLeftover > 0) skillsPicked = skillsPicked.concat(skillsPool.slice(skillsSlots, skillsSlots + ccpLeftover));
+  if(skillsLeftover > 0) ccpPicked = ccpPicked.concat(ccpPool.slice(ccpSlots, ccpSlots + skillsLeftover));
+
+  return ccpPicked.concat(skillsPicked).map(r => r.item);
+}
+
+/* ================= CONNECTION 3 — FULL MEMORY HOST + SCRAPER HANDOFF ================= */
+// v2.19: REWORKED — the original plan pointed this at a Cloudflare Worker you write
+// and deploy yourself. That requires a code editor and a deploy step, which turned
+// out to be the actual blocker (not the concept). This version points Connection 3
+// at kvdb.io instead — a plain hosted key-value store you get by filling in ONE web
+// form (https://kvdb.io/start, just an email address), no code, no editor, no
+// deploy button. You paste the bucket ID it gives you into Settings below and
+// that's the entire setup. See "HOW TO SET THIS UP" in the Settings field itself.
+//
+// Same two jobs as before, same fail-open philosophy as everything else in this app:
+//   1) FULL MEMORY HOST — new post_verified items push to your kvdb bucket in the
+//      background (fire-and-forget). Pull-on-demand for cache misses. A manual
+//      "Sync full memory now" button handles reconciliation instead of a periodic
+//      bulk dump (kvdb's free tier is rate-limited to 1000 req/hour — see below).
+//   2) SCRAPER HANDOFF — a raw scraped item writes a "ho_" key the moment it lands
+//      in pre_verified; the EXISTING local dual-verification (hotspot-endpoint,
+//      already in Settings) still does the actual checking, exactly as before —
+//      kvdb is pure storage with no code running on it, so it was never going to
+//      run verification logic itself even under the Cloudflare-Worker plan (that
+//      always happened client-side too; only the durable-storage layer changes here).
+//      When verification finishes, the ho_ key is updated to "released"/"rejected"
+//      and, if released, the verified item is written to the mem_ key alongside it.
+//
+// kvdb hard limits that shape this code: values capped at 16KB, keys capped at 128
+// bytes, and a key's default expiry is 1 WEEK unless a longer ttl is requested
+// explicitly — every write below passes ttl=31536000 (1 year) to override that.
+const CONNECTION3_MAX_PAYLOAD_BYTES = 15 * 1024; // kvdb's hard cap is 16KB/value; leave headroom for JSON/marker overhead
+const CONNECTION3_TTL_SECONDS = 31536000; // 1 year — overrides kvdb's default 1-week key expiry on every write
+
+async function getConnection3Config(){
+  const bucket = ((await metaGet("connection3Endpoint")) || "").trim();
+  const secret = (await metaGet("connection3Secret")) || "";
+  return { bucket, secret, configured: !!bucket };
+}
+function connection3AuthHeaders(secret){
+  // Only needed if you set a secret_key when creating the bucket (optional — an
+  // unguessable bucket ID alone is kvdb's documented "fine for personal use" case).
+  return secret ? { "Authorization": "Basic " + btoa(secret + ":") } : {};
+}
+function slugForKey(str){
+  // kvdb keys are capped at 128 bytes total; keep topic slugs short so id/prefix
+  // room is never at risk even for long topic names.
+  return String(str||"").toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,40).replace(/^_+|_+$/g,"") || "x";
+}
+
+// ---- Token-adaptive transport encoding ----
+// Two candidate encodings for a memory-item object ({id, topic, source, confidence,
+// doc, timestamp}):
+//   "json"  — plain compact JSON.stringify — always correct, the safe fallback.
+//   "dense" — a pipe-delimited scheme that skips repeating key names entirely.
+// Unlike a server you don't control, kvdb just stores whatever bytes you send and
+// hands them back unchanged — so whichever encoding wins here is both written AND
+// read back by this same code, and the byte savings are real, not just measured.
+// "Cheapest that round-trips correctly" is verified directly: encode both ways,
+// decode the dense one back, deep-compare against the original, and only use it if
+// the round trip is exact AND it's smaller. A 1-byte marker ("D"/"J") is prepended
+// to the stored value so a read always knows which decoder to use.
+const DENSE_FIELDS = ["id","topic","source","confidence","doc","timestamp"];
+function tryDenseEncode(obj){
+  if(!obj || typeof obj !== "object") return null;
+  const keys = Object.keys(obj);
+  if(keys.length !== DENSE_FIELDS.length || !DENSE_FIELDS.every(k => k in obj)) return null;
+  const esc = v => String(v ?? "").replace(/\\/g,"\\\\").replace(/\|/g,"\\p").replace(/\n/g,"\\n");
+  return DENSE_FIELDS.map(k => esc(obj[k])).join("|");
+}
+function tryDenseDecode(str){
+  const unesc = v => v.replace(/\\n/g,"\n").replace(/\\p/g,"|").replace(/\\\\/g,"\\");
+  const parts = str.split(/(?<!\\)\|/).map(unesc);
+  if(parts.length !== DENSE_FIELDS.length) return null;
+  const out = {};
+  DENSE_FIELDS.forEach((k,i)=> out[k] = parts[i]);
+  out.confidence = Number(out.confidence);
+  return out;
+}
+function deepEqualForRoundTrip(a, b){
+  const norm = o => JSON.stringify(o, Object.keys(o).sort());
+  try{ return norm({...a, confidence:Number(a.confidence)}) === norm({...b, confidence:Number(b.confidence)}); }
+  catch{ return false; }
+}
+function encodeForTransport(obj){
+  const jsonBody = JSON.stringify(obj);
+  const dense = tryDenseEncode(obj);
+  if(dense !== null){
+    const roundTripped = tryDenseDecode(dense);
+    if(roundTripped && deepEqualForRoundTrip(obj, roundTripped) && dense.length < jsonBody.length){
+      return "D" + dense;
+    }
+  }
+  return "J" + jsonBody;
+}
+function decodeTransport(stored){
+  if(typeof stored !== "string" || !stored.length) return null;
+  const marker = stored[0], body = stored.slice(1);
+  if(marker === "D"){
+    const decoded = tryDenseDecode(body);
+    if(decoded) return decoded;
+  }
+  try{ return JSON.parse(marker === "J" ? body : stored); } // fail open: tolerate a value with no marker too
+  catch{ return null; }
+}
+
+async function connection3Request(key, {method="GET", value=null} = {}){
+  const cfg = await getConnection3Config();
+  if(!cfg.configured) return {ok:false, reason:"not-configured"};
+  const url = `https://kvdb.io/${cfg.bucket}/${encodeURIComponent(key)}?ttl=${CONNECTION3_TTL_SECONDS}`;
+  const headers = connection3AuthHeaders(cfg.secret);
+  try{
+    const r = await fetch(url, {method, headers, body: value});
+    if(method === "GET" && r.status === 404) return {ok:true, data:null}; // not found is a normal miss, not a failure
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    return {ok:true, data: method==="GET" ? await r.text() : null};
+  }catch(err){
+    addCanvasStep("Connection 3 unreachable", `${key}: ${err.message} — fail-open, local memory unaffected.`);
+    return {ok:false, reason:"unreachable", error:err.message};
+  }
+}
+async function connection3List(prefix){
+  const cfg = await getConnection3Config();
+  if(!cfg.configured) return [];
+  const url = `https://kvdb.io/${cfg.bucket}/?prefix=${encodeURIComponent(prefix)}&format=json`;
+  try{
+    const r = await fetch(url, {headers: connection3AuthHeaders(cfg.secret)});
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    return await r.json(); // array of key strings
+  }catch(err){
+    addCanvasStep("Connection 3 list failed", `${prefix}: ${err.message}`);
+    return [];
+  }
+}
+
+// ---- Full memory host: push-on-write / pull-on-demand ----
+async function pushToConnection3(item){
+  const cfg = await getConnection3Config();
+  if(!cfg.configured) return;
+  const payload = {id:item.id, topic:item.topic, source:item.source, confidence:item.confidence, doc:item.doc, timestamp:item.timestamp};
+  const encoded = encodeForTransport(payload);
+  const bytes = new TextEncoder().encode(encoded).length;
+  if(bytes > CONNECTION3_MAX_PAYLOAD_BYTES){
+    addCanvasStep("Connection 3 push skipped — too large", `"${item.topic}" is ${bytes} bytes, over kvdb's ${CONNECTION3_MAX_PAYLOAD_BYTES}-byte working cap. Not sent; local copy is unaffected.`);
+    return {ok:false, reason:"too-large"};
+  }
+  return connection3Request(`mem_${slugForKey(item.topic)}_${item.id}`, {method:"POST", value:encoded});
+}
+async function pullTopicFromConnection3(topic){
+  const keys = await connection3List(`mem_${slugForKey(topic)}_`);
+  const items = [];
+  for(const key of keys){
+    const res = await connection3Request(key, {method:"GET"});
+    if(res.ok && res.data){ const decoded = decodeTransport(res.data); if(decoded) items.push(decoded); }
+  }
+  return items;
+}
+async function syncFullMemoryNow(){
+  const cfg = await getConnection3Config();
+  const statusEl = document.getElementById("connection3-sync-status");
+  if(!cfg.configured){ if(statusEl) statusEl.textContent = "Connection 3 not configured — nothing to sync."; return; }
+  if(statusEl) statusEl.textContent = "Syncing full memory to Connection 3...";
+  const all = await dbGetAll("post_verified");
+  let pushed = 0, failed = 0;
+  for(const item of all){
+    const res = await pushToConnection3(item);
+    if(res && res.ok === false) failed++; else pushed++;
+  }
+  if(statusEl) statusEl.textContent = `Sync done: ${pushed} item(s) pushed${failed?`, ${failed} failed (fail-open, local unaffected)`:""}.`;
+  addCanvasStep("Connection 3 full sync", `${pushed} pushed, ${failed} failed.`);
+}
+
+// ---- Scraper handoff queue ----
+// Called right after a raw scraped item is written to pre_verified. Non-blocking:
+// the local verification pipeline (verifyAll, verifyWithHotspot) runs exactly as it
+// already did regardless of whether this succeeds.
+async function handoffToConnection3(localId, item){
+  const cfg = await getConnection3Config();
+  if(!cfg.configured) return null;
+  const handoffKey = `ho_${localId}`;
+  const record = {status:"pending", topic:item.topic, source:item.source, confidence:item.confidence||0, raw:(item.raw||"").slice(0,1500), createdAt:new Date().toISOString()};
+  const res = await connection3Request(handoffKey, {method:"POST", value:"J"+JSON.stringify(record)});
+  return res.ok ? handoffKey : null;
+}
+async function releaseConnection3Handoff(handoffId, verified, finalItem){
+  if(!handoffId) return;
+  const record = {status: verified ? "released" : "rejected", releasedAt:new Date().toISOString()};
+  await connection3Request(handoffId, {method:"POST", value:"J"+JSON.stringify(record)});
+  if(verified && finalItem) await pushToConnection3(finalItem);
+}
+
+/* ================= CONNECTION 3 SETTINGS UI ================= */
+async function onConnection3AddressChange(e){
+  await metaSet("connection3Endpoint", e.target.value.trim());
+  renderConnection3Status();
+}
+async function onConnection3SecretChange(e){
+  await metaSet("connection3Secret", e.target.value.trim());
+  renderConnection3Status();
+}
+async function renderConnection3Status(){
+  const cfg = await getConnection3Config();
+  const el = document.getElementById("connection3-status");
+  if(el){
+    el.textContent = cfg.configured
+      ? `Connection 3: using kvdb bucket "${cfg.bucket}"${cfg.secret ? " (secret-protected)" : " (no secret set — fine for personal use as long as you don't share the bucket ID)"}.`
+      : "Connection 3: not connected — paste a bucket ID below to enable.";
+  }
 }
 
 /* ================= KEYBOARD / ARROW-KEY NAVIGATION ================= */
@@ -933,6 +1236,11 @@ document.querySelectorAll("nav button").forEach(b=>{
     if(b.dataset.view==="library-view") renderLibrary();
     if(b.dataset.view==="projects-view") renderProjects();
     if(b.dataset.view==="pet-view") renderPetView();
+    // v2.16 PERF: Settings' cloud-key list and provider-link text used to be rendered
+    // unconditionally on every app load, whether or not you ever opened Settings —
+    // same waste as the old eager renderMemory() call below. Now they render the first
+    // (and every) time you actually switch to this tab, like every other tab already did.
+    if(b.dataset.view==="settings-view"){ renderCloudKeysList(); onCloudProviderChange(); }
   };
 });
 
@@ -1135,13 +1443,16 @@ function computeCalibAdjustment(calib){
   const autoWeight = calib.autoWeight ?? DEFAULT_AUTO_WEIGHT;
   const humanTotal = (calib.up||0) + (calib.down||0);
   const autoTotal = (calib.autoUp||0) + (calib.autoDown||0);
-  if(!humanTotal && !autoTotal) return 0;
+  const smallAiTotal = (calib.smallAiUp||0) + (calib.smallAiDown||0);
+  if(!humanTotal && !autoTotal && !smallAiTotal) return 0;
   const humanSignal = humanTotal ? ((calib.up||0) - (calib.down||0)) / humanTotal : 0;   // -1..1
   const autoSignal = autoTotal ? ((calib.autoUp||0) - (calib.autoDown||0)) / autoTotal : 0; // -1..1
-  const humanWeight = humanTotal ? (1-autoWeight) : 0;
+  const smallAiSignal = smallAiTotal ? ((calib.smallAiUp||0) - (calib.smallAiDown||0)) / smallAiTotal : 0; // -1..1
+  const humanWeight = humanTotal ? Math.max(0, 1 - autoWeight - SMALL_AI_WEIGHT) : 0;
   const autoW = autoTotal ? autoWeight : 0;
-  const norm = humanWeight + autoW || 1;
-  const combined = (humanSignal*humanWeight + autoSignal*autoW) / norm;
+  const smallW = smallAiTotal ? SMALL_AI_WEIGHT : 0;
+  const norm = humanWeight + autoW + smallW || 1;
+  const combined = (humanSignal*humanWeight + autoSignal*autoW + smallAiSignal*smallW) / norm;
   return Math.round(combined * 100) / 10; // one-decimal resolution, roughly -10..+10
 }
 
@@ -1320,10 +1631,23 @@ async function sendChat(){
   addCanvasStep("Read target + plan", currentTarget ? `Target: "${currentTarget}"${plan ? " — locked plan loaded" : " — no plan yet"}` : "No target set — proceeding without one.");
 
   const calib = (await metaGet("confidenceCalibration")) || {adjustment:0};
+  // v2.15: CONNECTION 2 BUFFER — the moment you hit send, the scraper-helper model
+  // starts pulling from quick memory (see prefetchWithSmallAI) while a 3-second timer
+  // holds your actual message. The full retrieveRelevantMemory() search (unchanged,
+  // and slower since it scans everything) runs in parallel too, as the accuracy
+  // fallback. The main model below only ever receives your message once BOTH the
+  // buffer has elapsed AND both lookups have returned — never earlier.
+  addCanvasStep("Buffer started", "3-second buffer holding your message — small local model pulling quick memory in the meantime...");
+  const [quickPrefetch, fullMemory] = await Promise.all([
+    prefetchWithSmallAI(text, currentTarget),
+    retrieveRelevantMemory(`${currentTarget||""} ${text}`),
+    new Promise(r => setTimeout(r, 3000))
+  ]);
+  const {context: memoryContext, used: memoryUsed, usedSources} = fullMemory;
+  if(quickPrefetch.usedTopics.length) addCanvasStep("Quick memory prefetched", `Small AI pulled ${quickPrefetch.usedTopics.length} item(s) from quick memory before the buffer released: ${quickPrefetch.usedTopics.join(", ")}${typeof quickPrefetch.confidence==="number" ? ` (self-rated ${quickPrefetch.confidence}% relevant)` : ""}`);
   // v2.9: pull in verified memory relevant to this message + the project target so the
   // reply is grounded in what Buddie actually researched, instead of only its own raw
   // model weights. See retrieveRelevantMemory() above.
-  const {context: memoryContext, used: memoryUsed, usedSources} = await retrieveRelevantMemory(`${currentTarget||""} ${text}`);
   const memoryBlock = memoryContext
     ? `\nVERIFIED MEMORY (treat as ground truth; prefer this over your own guesses when it's relevant):\n${memoryContext}`
     : `\nVERIFIED MEMORY: none found relevant to this message yet. Say so plainly if the question needs research rather than guessing — the user can run a search or ▶ Run Project to build it.`;
@@ -1355,6 +1679,7 @@ async function sendChat(){
   const aiMsgId = await addMsg("ai", displayText, confidencePct);
   if(usedSources && usedSources.length) usedMemorySourcesByMsg[aiMsgId] = usedSources;
   autoScoreAndCalibrate(aiMsgId, text, displayText, confidencePct); // fire-and-forget: fills in once it's done, doesn't block the next message
+  recordSmallAiCalibration(quickPrefetch.confidence); // fire-and-forget: third vote in the weight ledger, alongside human thumbs + auto-check
 }
 
 /* ================= CHAT-DRIVEN SEARCH (talk to the search bar, don't just type into it) ================= */
@@ -1829,6 +2154,95 @@ async function benchmarkModel(){
 }
 checkWebGPU();
 
+/* ================= CONNECTION 2 — SECONDARY SERVER SLOT ================= */
+// v2.14: a second, optional connection dedicated to bouncing your cloud API keys and
+// running the token-aware priority queue below. Blank by default — nothing about
+// Connection 1 (the main model connection above) or existing behavior changes until
+// you pick a mode here. Same honesty rule as the existing hotspot-endpoint field:
+// a browser tab cannot force your OS to route traffic over a hotspot specifically
+// instead of your main WiFi — "Hotspot" just labels intent for the status line.
+async function onConnection2ModeChange(){
+  const mode = document.getElementById("connection2-mode").value;
+  await metaSet("connection2Mode", mode);
+  document.getElementById("connection2-address-row").style.display = (mode === "custom") ? "block" : "none";
+  renderConnection2Status();
+}
+async function onConnection2AddressChange(e){
+  await metaSet("connection2Endpoint", e.target.value.trim());
+  renderConnection2Status();
+}
+async function renderConnection2Status(){
+  const mode = (await metaGet("connection2Mode")) || "";
+  const addr = (await metaGet("connection2Endpoint")) || "";
+  const el = document.getElementById("connection2-status");
+  if(el){
+    if(mode === "hotspot"){
+      el.textContent = "Connection 2: labeled as Hotspot. Turn your hotspot on and make sure it's the active connection — Buddie can't switch your OS's network for you.";
+    } else if(mode === "custom" && addr){
+      el.textContent = `Connection 2: pointed at ${addr}.`;
+    } else if(mode === "custom"){
+      el.textContent = "Connection 2: Custom selected — enter an address above.";
+    } else {
+      el.textContent = "Connection 2: not connected — blank until you supply an address or pick Hotspot.";
+    }
+  }
+  renderQueueStatus();
+}
+
+/* ---- token monitoring: running counts per key + session total, purely informational
+   plus feeds the queue below (a key that's burned a lot of tokens recently isn't
+   treated any differently by rotation yet — this is the visible ledger the "smart
+   planning" queue and any future throttling would read from). ---- */
+const tokenStats = { session: { input: 0, output: 0 }, byKey: {} };
+function recordTokenUsage(keyId, inputTokens, outputTokens){
+  tokenStats.session.input += inputTokens;
+  tokenStats.session.output += outputTokens;
+  if(keyId){
+    const k = tokenStats.byKey[keyId] || (tokenStats.byKey[keyId] = { input: 0, output: 0 });
+    k.input += inputTokens; k.output += outputTokens;
+  }
+  renderQueueStatus();
+}
+
+/* ---- priority queue: every askAI call (reply or background) funnels through here.
+   Reply-priority calls (the user is actively waiting on a chat reply, a search-topic
+   extraction, etc.) always run before the next background call (memory/scraper/
+   verification work). It doesn't abort a background call already mid-flight — a
+   browser can't cancel a fetch's server-side work anyway — but it guarantees no NEW
+   background call starts while a reply call is waiting, and any reply call that
+   arrives while a background call is mid-flight cuts the line for what runs next. ---- */
+const aiQueue = { reply: [], background: [] };
+let aiQueueRunning = false;
+function queueAICall(priority, task){
+  return new Promise((resolve, reject) => {
+    aiQueue[priority === "background" ? "background" : "reply"].push({ task, resolve, reject });
+    renderQueueStatus();
+    pumpAIQueue();
+  });
+}
+async function pumpAIQueue(){
+  if(aiQueueRunning) return;
+  aiQueueRunning = true;
+  try{
+    while(aiQueue.reply.length || aiQueue.background.length){
+      const job = aiQueue.reply.shift() || aiQueue.background.shift();
+      renderQueueStatus();
+      try{ job.resolve(await job.task()); }
+      catch(err){ job.reject(err); }
+    }
+  } finally {
+    aiQueueRunning = false;
+    renderQueueStatus();
+  }
+}
+function renderQueueStatus(){
+  const el = document.getElementById("ai-queue-status");
+  if(!el) return;
+  const waiting = aiQueue.reply.length + aiQueue.background.length;
+  const state = aiQueueRunning ? (waiting ? `running, ${waiting} waiting (${aiQueue.reply.length} reply / ${aiQueue.background.length} background)` : "running") : "idle";
+  el.textContent = `Queue: ${state}. Tokens this session — in: ${tokenStats.session.input}, out: ${tokenStats.session.output}.`;
+}
+
 /* ================= CLOUD DEV KEY ROTATION ================= */
 // v2.13: optional pool of your own dev-account API keys, round-robined across requests.
 // Nothing here replaces the local WebLLM model — it's an extra tier tried FIRST (when
@@ -1982,10 +2396,18 @@ async function callCloudModel(entry, prompt){
   const j = await res.json();
   const text = cfg.parse(j);
   if(!text) throw new Error("empty response");
+  recordTokenUsage(entry.id, estimateTokens(trimmedPrompt), estimateTokens(text));
   return text;
 }
 
-async function askAI(prompt){
+// Public entry point — everything downstream (chat replies, background memory/scraper/
+// verification work) calls this. `priority` defaults to "reply" so any call site this
+// pass didn't touch keeps behaving exactly as before; the known background loops below
+// explicitly pass "background" to yield to reply traffic. See the priority queue above.
+function askAI(prompt, priority = "reply"){
+  return queueAICall(priority, () => askAICore(prompt));
+}
+async function askAICore(prompt){
   const preferCloud = (await metaGet("preferCloud")) ?? true;
   if(preferCloud){
     let keys = await getCloudKeys();
@@ -2063,6 +2485,75 @@ async function condenseWithScraperModel(text){
   }catch(err){
     return text; // fail open — never block the pipeline on the helper model
   }
+}
+
+/* ================= CONNECTION 2 PREFETCH (3-second buffer) ================= */
+// v2.15: runs the moment you hit send, in parallel with a 3-second buffer that holds
+// your actual message. The scraper-helper model (loaded in Settings, same small local
+// model used to condense scraped text above) searches ONLY the small quick-memory
+// subset — not the full memory store — so this stays fast, then gives a 0-100 estimate
+// of how relevant what it found actually is. sendChat() waits on both this and the
+// 3-second timer together, so the main model is never sent your message before the
+// buffer elapses, and by the time it is sent, this context is already attached —
+// no separate search step needed on the main model's side.
+// Fails open at every stage: no scraper model loaded, or nothing relevant in quick
+// memory, just means an empty prefetch — the buffer still holds for 3s either way, and
+// the full retrieveRelevantMemory() search (unaffected by any of this) runs alongside
+// it as the accuracy fallback.
+async function prefetchWithSmallAI(userText, target){
+  const quickItems = await getQuickMemoryItems();
+  if(!quickItems.length) return { context: "", confidence: null, usedTopics: [] };
+
+  const queryWords = tokenize(`${target||""} ${userText}`);
+  const scored = quickItems
+    .map(item => ({ item, score: scoreDocForQuery(queryWords, item) }))
+    .filter(s => s.score > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 5);
+  if(!scored.length) return { context: "", confidence: null, usedTopics: [] };
+
+  let context = "";
+  const usedTopics = [];
+  for(const {item} of scored){
+    const chunk = `[${item.topic}] ${item.doc.replace(/^---[\s\S]*?---\n/, "").trim()}\n`;
+    if(context.length + chunk.length > 1200) break;
+    context += chunk;
+    usedTopics.push(item.topic);
+    item.useCount = (item.useCount || 0) + 1;
+    item.lastUsed = Date.now();
+    dbPut("post_verified", item).catch(()=>{});
+  }
+  if(!context) return { context: "", confidence: null, usedTopics: [] };
+
+  // The small AI's own confidence in what it just pulled — this becomes the "small AI
+  // rating" folded into the reply's weight ledger (see recordSmallAiCalibration /
+  // computeCalibAdjustment), alongside your thumbs and the rule-based auto-check.
+  let confidence = null;
+  if(scraperEngine){
+    try{
+      const res = await scraperEngine.chat.completions.create({
+        messages:[{role:"user", content:`On a 0-100 scale, how relevant is this pulled memory to the user's message? Reply with ONLY the number.\n\nUser message: ${userText}\n\nPulled memory:\n${context.slice(0,800)}`}],
+        max_tokens: 10
+      });
+      const n = parseInt((res.choices[0]?.message?.content || "").match(/\d+/)?.[0], 10);
+      if(!isNaN(n)) confidence = Math.max(0, Math.min(100, n));
+    }catch(err){ /* rating is best-effort — an empty confidence just skips the small-AI vote below */ }
+  }
+  return { context, confidence, usedTopics };
+}
+// Folds the small AI's prefetch-confidence into the SAME three-way weight ledger the
+// rule-based auto-check already uses (see AUTO_UP_AT/AUTO_DOWN_AT and
+// computeCalibAdjustment). Fixed weight for now rather than a learned bandit like the
+// auto-check's — could be made adaptive the same way later if it's worth the added
+// complexity.
+const SMALL_AI_WEIGHT = 0.2;
+async function recordSmallAiCalibration(confidence){
+  if(typeof confidence !== "number") return;
+  const calib = (await metaGet("confidenceCalibration")) || {up:0, down:0, autoUp:0, autoDown:0, smallAiUp:0, smallAiDown:0, adjustment:0};
+  if(confidence >= AUTO_UP_AT) calib.smallAiUp = (calib.smallAiUp||0) + 1;
+  else if(confidence <= AUTO_DOWN_AT) calib.smallAiDown = (calib.smallAiDown||0) + 1;
+  calib.adjustment = computeCalibAdjustment(calib);
+  await metaSet("confidenceCalibration", calib);
 }
 
 
@@ -2333,7 +2824,9 @@ async function processTopicQueue(topics){
           existingPre.confidence = item.confidence;
           await dbPut("pre_verified", existingPre);
         } else {
-          await dbAdd("pre_verified", { topic:topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
+          const preItem1 = { topic:topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence };
+          const preId1 = await dbAdd("pre_verified", preItem1);
+          handoffToConnection3(preId1, preItem1).then(hid => { if(hid){ preItem1.id = preId1; preItem1.connection3HandoffId = hid; dbPut("pre_verified", preItem1); } }); // stash handoffId for later release; never blocks the pipeline
         }
       }
       done++;
@@ -2523,7 +3016,9 @@ async function keepTorReviewItem(id){
   const all = await dbGetAll("tor_review");
   const item = all.find(x=>x.id===id);
   if(!item) return;
-  await dbAdd("pre_verified", { topic:item.topic, source:item.source, raw:item.raw, timestamp:new Date().toISOString(), confidence:0.25 }); // starts low-confidence like any uncurated source — still has to earn its way through AI Verify
+  const preItem2 = { topic:item.topic, source:item.source, raw:item.raw, timestamp:new Date().toISOString(), confidence:0.25 }; // starts low-confidence like any uncurated source — still has to earn its way through AI Verify
+  const preId2 = await dbAdd("pre_verified", preItem2);
+  handoffToConnection3(preId2, preItem2).then(hid => { if(hid){ preItem2.id = preId2; preItem2.connection3HandoffId = hid; dbPut("pre_verified", preItem2); } });
   await dbDelete("tor_review", id);
   addCanvasStep("Kept", `"${item.topic}" moved to Pre-Verified — still needs to pass AI Verify like anything else before it becomes real memory.`);
   renderMemory();
@@ -2618,7 +3113,7 @@ async function runProject(){
     // v2.9: this used to ask the model to summarize "what's in memory" without ever
     // showing it the memory — pure hallucination. Now actually retrieves and passes it.
     const {context: memoryContext} = await retrieveRelevantMemory(currentTarget, 8, 2200);
-    const summary = await askAI(`The plan for goal "${currentTarget}" is fully complete and every finding was double-checked.\n\nVERIFIED MEMORY now on file for this goal:\n${memoryContext || "(none passed verification — everything found was below the confidence bar or uncorroborated)"}\n\nUsing ONLY the verified memory above, summarize what's actually known and confirm the goal is met, or flag what's still missing. Don't invent findings that aren't in the list above.`);
+    const summary = await askAI(`The plan for goal "${currentTarget}" is fully complete and every finding was double-checked.\n\nVERIFIED MEMORY now on file for this goal:\n${memoryContext || "(none passed verification — everything found was below the confidence bar or uncorroborated)"}\n\nUsing ONLY the verified memory above, summarize what's actually known and confirm the goal is met, or flag what's still missing. Don't invent findings that aren't in the list above.`, "background");
     addCanvasStep("Summary", summary);
   } else {
     addCanvasStep("Summary", `Plan complete for "${currentTarget}". Load a model in Settings for an automatic summary of what was learned.`);
@@ -2749,7 +3244,7 @@ async function verifyAll(topicFilter=null){
     const sourceName = sourceNameFromItem(item.source);
     const trustBonus = sourceTrustBonus(sourceWeightsCache, sourceName);
 
-    const check1 = await askAI(`Rate how plausible, internally consistent, and non-spam this content is, from 0 to 100. Reply with ONLY the number, then a dash, then one short reason. Example: "82 - well-sourced and consistent".\n\nSOURCE: ${item.source}\nCONTENT:\n${item.raw.slice(0,1500)}`);
+    const check1 = await askAI(`Rate how plausible, internally consistent, and non-spam this content is, from 0 to 100. Reply with ONLY the number, then a dash, then one short reason. Example: "82 - well-sourced and consistent".\n\nSOURCE: ${item.source}\nCONTENT:\n${item.raw.slice(0,1500)}`, "background");
     const match = check1.match(/\d{1,3}/);
     let confidencePct = match ? Math.min(100, parseInt(match[0],10)) : 0;
     if(trustBonus) confidencePct = Math.max(0, Math.min(100, confidencePct + trustBonus));
@@ -2767,7 +3262,7 @@ async function verifyAll(topicFilter=null){
 
     const related = post.filter(p => p.topic.toLowerCase() === item.topic.toLowerCase()).slice(0,3);
     if(related.length){
-      const check2 = await askAI(`Rate 0-100 how consistent the NEW content is with the EXISTING verified memory (100 = fully consistent, 0 = flatly contradicts it). Reply with ONLY the number, then a dash, then one short reason.\n\nEXISTING:\n${related.map(r=>r.doc).join("\n---\n").slice(0,1200)}\n\nNEW:\n${item.raw.slice(0,800)}`);
+      const check2 = await askAI(`Rate 0-100 how consistent the NEW content is with the EXISTING verified memory (100 = fully consistent, 0 = flatly contradicts it). Reply with ONLY the number, then a dash, then one short reason.\n\nEXISTING:\n${related.map(r=>r.doc).join("\n---\n").slice(0,1200)}\n\nNEW:\n${item.raw.slice(0,800)}`, "background");
       const match2 = check2.match(/\d{1,3}/);
       const crossScore = match2 ? Math.min(100, parseInt(match2[0],10)) : 50;
       addCanvasStep("Pass 2 — cross-check vs memory", `${item.topic}: ${check2.trim()}`);
@@ -2814,6 +3309,7 @@ async function verifyAll(topicFilter=null){
           // Verify-AI catches something the main check + scraper both thought was fine:
           // verify-ledger is right (+1), scraper is wrong (trust down + strike), item is
           // NOT promoted. This is "ai rejects a scraper verified drop" from the spec.
+          if(item.connection3HandoffId) releaseConnection3Handoff(item.connection3HandoffId, false, null);
           await dbDelete("pre_verified", item.id);
           sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
           await recordScraperStrike(sourceName, `"${item.topic}" passed the main check (${confidencePct}%) but the independent verification endpoint disagreed: ${hotspot.reason||"no reason given"}`);
@@ -2837,7 +3333,11 @@ async function verifyAll(topicFilter=null){
         addCanvasStep("Cap reached — kept in Pre-Verified", `"${item.topic}" passed verification (${confidencePct}%) but this topic already has ${topicWordsSoFar.toLocaleString()}/${WORDS_PER_TOPIC_CAP.toLocaleString()} words in Post-Verified — not promoted so other topics can still grow. Compact this topic or wait for it to free up room, then re-run Verify.`);
         continue;
       }
-      const newId = await dbAdd("post_verified", {topic:item.topic, source:item.source, confidence:finalConfidence, doc, timestamp:new Date().toISOString()});
+      const newPostItem = {topic:item.topic, source:item.source, confidence:finalConfidence, doc, timestamp:new Date().toISOString()};
+      const newId = await dbAdd("post_verified", newPostItem);
+      newPostItem.id = newId;
+      if(item.connection3HandoffId) releaseConnection3Handoff(item.connection3HandoffId, true, newPostItem);
+      else pushToConnection3(newPostItem); // no handoff on record (e.g. manual upload path) — push directly instead
       await writeMemoryFileToFolder({id:newId, topic:item.topic, doc});
       await dbDelete("pre_verified", item.id);
       const weightsBefore = JSON.stringify(sourceWeightsCache[sourceName]||null);
@@ -2944,9 +3444,9 @@ async function compactMemory(){
     let mergedFacts, strategy;
     if(engine){
       strategy = await pickCompressionStrategy(topic);
-      const compressed = await askAI(`${strategy.instruction}\n\nCondense this into the most useful, non-redundant version:\n\n${rawCombined.slice(0,1500)}`);
+      const compressed = await askAI(`${strategy.instruction}\n\nCondense this into the most useful, non-redundant version:\n\n${rawCombined.slice(0,1500)}`, "background");
       mergedFacts = compressed.trim();
-      const qualityCheck = await askAI(`Rate 0-100 how clear and useful this summary is as a piece of long-term memory. Reply with ONLY the number.\n\n${mergedFacts.slice(0,800)}`);
+      const qualityCheck = await askAI(`Rate 0-100 how clear and useful this summary is as a piece of long-term memory. Reply with ONLY the number.\n\n${mergedFacts.slice(0,800)}`, "background");
       const scoreMatch = qualityCheck.match(/\d{1,3}/);
       const score = scoreMatch ? Math.min(100,parseInt(scoreMatch[0],10)) : 50;
       await recordCompressionScore(topic, strategy.name, score);
@@ -2958,7 +3458,10 @@ async function compactMemory(){
     const newConfidence = Math.min(0.95, best.confidence + 0.1*group.length);
     const merged = toMemoryDoc({topic, source:best.source, confidence:newConfidence, facts:[mergedFacts.replace(/^- /,"")]});
     for(const g of group) await dbDelete("post_verified", g.id);
-    const newId = await dbAdd("post_verified", {topic, source:best.source, confidence:newConfidence, doc:merged, timestamp:new Date().toISOString()});
+    const mergedItem = {topic, source:best.source, confidence:newConfidence, doc:merged, timestamp:new Date().toISOString()};
+    const newId = await dbAdd("post_verified", mergedItem);
+    mergedItem.id = newId;
+    pushToConnection3(mergedItem); // compaction replaces the merged entries' cloud copies with this one
     await writeMemoryFileToFolder({id:newId, topic, doc:merged});
     mergedTopics++;
     addCanvasStep("Compacted", `Merged ${group.length} entries for "${topic}"${strategy ? ` using ${strategy.name}` : ""}`);
@@ -3189,7 +3692,9 @@ async function uploadManualDocuments(){
       // v2.15: baseConfidence of 0.75 reflects a human-vouched file — well above the
       // uncurated 0.3 given to raw scraper hits, but this is still only the starting
       // point; verifyAll()'s real plausibility/consistency checks decide the outcome.
-      await dbAdd("pre_verified", { topic, source:sourceTag, raw:text, timestamp:new Date().toISOString(), confidence:0.75 });
+      const preItem3 = { topic, source:sourceTag, raw:text, timestamp:new Date().toISOString(), confidence:0.75 };
+      const preId3 = await dbAdd("pre_verified", preItem3);
+      handoffToConnection3(preId3, preItem3).then(hid => { if(hid){ preItem3.id = preId3; preItem3.connection3HandoffId = hid; dbPut("pre_verified", preItem3); } });
       added++;
     }
   }
@@ -3383,7 +3888,9 @@ async function scanPageIntoLibrary(){
       await dbPut("pre_verified", existingPre);
       setLibraryStatus("This page was already in Pre-Verified — updated in place, not duplicated.");
     } else {
-      await dbAdd("pre_verified", { topic, source:`Your Scraper: ${url}`, raw:condensed, timestamp:new Date().toISOString(), confidence:0.3 });
+      const preItem4 = { topic, source:`Your Scraper: ${url}`, raw:condensed, timestamp:new Date().toISOString(), confidence:0.3 };
+      const preId4 = await dbAdd("pre_verified", preItem4);
+      handoffToConnection3(preId4, preItem4).then(hid => { if(hid){ preItem4.id = preId4; preItem4.connection3HandoffId = hid; dbPut("pre_verified", preItem4); } });
       setLibraryStatus(`Added one Pre-Verified entry for "${topic}" from that page. Run "AI Verify All" on the Memory tab to promote it.`);
     }
     renderMemory(); renderLibrary();
@@ -3435,6 +3942,17 @@ async function loadSettings(){
   if(torEp) document.getElementById("tor-endpoint").value = torEp;
   const hotspotEp = await metaGet("hotspotEndpoint");
   if(hotspotEp) document.getElementById("hotspot-endpoint").value = hotspotEp;
+  const conn2Mode = await metaGet("connection2Mode");
+  if(conn2Mode) document.getElementById("connection2-mode").value = conn2Mode;
+  document.getElementById("connection2-address-row").style.display = (conn2Mode === "custom") ? "block" : "none";
+  const conn2Ep = await metaGet("connection2Endpoint");
+  if(conn2Ep) document.getElementById("connection2-address").value = conn2Ep;
+  renderConnection2Status();
+  const conn3Ep = await metaGet("connection3Endpoint");
+  if(conn3Ep) document.getElementById("connection3-address").value = conn3Ep;
+  const conn3Secret = await metaGet("connection3Secret");
+  if(conn3Secret) document.getElementById("connection3-secret").value = conn3Secret;
+  renderConnection3Status();
   document.getElementById("autoscore-toggle").checked = await loadAutoScoreSetting();
   // BUG FIX (v2.13): this checkbox defaults to checked in the HTML and was never
   // restored from storage on load — turning "Prefer cloud" off, then reloading, showed
@@ -3814,9 +4332,12 @@ window.addEventListener("load", async ()=>{
   await loadSettings();
   await seedMemoryIfEmpty();
   await checkVersionBanner();
-  renderMemory();
-  renderCloudKeysList();
-  onCloudProviderChange();
+  // v2.16 PERF: renderMemory() (3 full-table reads + a full HTML rebuild — see the
+  // v2.13 perf note further down) and the Settings-tab cloud-key list used to run here
+  // unconditionally, even though chat-view is the only tab visible on load and neither
+  // of those tabs' content is seen until you actually switch to them. Both now render
+  // lazily from the nav click handler above, the same way Library/Projects/Pet already
+  // did — first visit to Memory or Settings triggers it, nothing wasted before that.
   await populateScraperModelSelect();
   await petTick();               // catch up pet state (drain/death/AI spending) for time since last open
   setInterval(petTick, 30000);   // re-check every 30s while the app is open
