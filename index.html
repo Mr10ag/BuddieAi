@@ -181,7 +181,7 @@
 <!-- CHAT + CANVAS -->
 <div class="view active" id="chat-view">
   <div id="search-bar">
-    <input id="search-input" placeholder="Comma-separated topics: e.g. active listening, negotiation, public speaking...">
+    <input id="search-input" placeholder="One topic at a time: e.g. active listening...">
     <button class="ghost" id="tor-toggle-btn" onclick="toggleTorMode()" title="Route this search through your Tor bridge (set its address in Settings first). Off by default. Results go to a review queue, never auto-saved.">🧅 Tor: Off</button>
     <button class="primary" onclick="runSearch()">Find</button>
     <button class="ghost" onclick="runProject()" title="Auto-research the current project target using verified sources">▶ Run Project</button>
@@ -2271,12 +2271,30 @@ const EXPLICIT_CONTENT_PATTERN = /\b(porn(?:ography)?|xxx|nsfw|explicit sexual c
 function containsExplicitContent(text){
   return EXPLICIT_CONTENT_PATTERN.test(text || "");
 }
+// v: search bar now takes exactly one topic per Find click (no more comma-separated
+// batch) and can't be re-triggered while a search is still running — searchRunning
+// guards against a double-click or Enter-spam launching a second overlapping search
+// on top of the first.
+let searchRunning = false;
 async function runSearch(){
-  const raw = document.getElementById("search-input").value.trim();
+  if(searchRunning) return;
+  const input = document.getElementById("search-input");
+  const raw = input.value.trim();
   if(!raw) return;
-  const topics = raw.split(",").map(s=>s.trim()).filter(Boolean);
-  addCanvasStep("Search requested", `${topics.length} topic(s): ${topics.join(" | ")}`);
+  const topics = [raw]; // exactly one topic at a time
+  addCanvasStep("Search requested", `Topic: ${raw}`);
 
+  searchRunning = true;
+  const findBtn = document.querySelector('#search-bar button.primary');
+  if(findBtn){ findBtn.disabled = true; findBtn.textContent = "Searching…"; }
+  try{
+    await runSearchInner(topics);
+  } finally {
+    searchRunning = false;
+    if(findBtn){ findBtn.disabled = false; findBtn.textContent = "Find"; }
+  }
+}
+async function runSearchInner(topics){
   if(torModeOn){
     const torEndpoint = (await metaGet("torEndpoint")) || document.getElementById("tor-endpoint")?.value.trim() || "";
     if(!torEndpoint){
@@ -2479,26 +2497,6 @@ async function writeMemoryFileToFolder(item){
 // dropped or silently accepted — it's flagged "needs-review" and left visible in Pre-Verified.
 const CONFIDENCE_THRESHOLD = 0.89; // 89% — items below this are trashed, not kept "for review"
 
-// A second, independent language cross-check: querying the same topic in another
-// language's Wikipedia is a genuinely different verification path than re-asking the
-// same model in English again — corroboration across languages is harder to fake than
-// corroboration across sources in the same language.
-async function multilingualCrossCheck(topic){
-  const langs = [{code:"es", name:"Spanish"}, {code:"fr", name:"French"}];
-  // PERF (v2.13): these two lookups are completely independent of each other, but were
-  // being awaited one after another — every single Pass 3 check (one per item in every
-  // Verify All / Run Project run) paid for two sequential round-trips instead of one
-  // parallel round-trip, roughly doubling this step's wall-clock time for no reason.
-  const results = await Promise.all(langs.map(async lang => {
-    try{
-      const url = `https://${lang.code}.wikipedia.org/w/api.php?action=query&list=search&format=json&origin=*&srlimit=1&srsearch=${encodeURIComponent(topic)}`;
-      const r = await fetch(url); const j = await r.json();
-      return j.query?.search?.length ? lang.name : null;
-    }catch(err){ return null; /* silently skip a language that fails, non-critical */ }
-  }));
-  return results.filter(Boolean); // languages that independently found something on this topic
-}
-
 // BUG FIX (v2.4): this used to report everything via addCanvasStep(), which only
 // writes into the Chat/Canvas view. If you clicked "Verify All" while sitting on the
 // Memory tab (the only place this button appears), every message — including "no
@@ -2581,20 +2579,14 @@ async function verifyAll(topicFilter=null){
       confidencePct = Math.round((confidencePct + crossScore) / 2);
     }
 
-    const langHits = await multilingualCrossCheck(item.topic);
-    if(langHits.length){
-      confidencePct = Math.min(100, confidencePct + langHits.length * 3);
-      addCanvasStep("Pass 3 — multilingual corroboration", `${item.topic}: independently found in ${langHits.join(", ")} (+${langHits.length*3})`);
-    }
-
     // v2.9: this used to be a hard AND-gate — an uncurated source with zero corroboration
-    // (no existing memory on the topic yet, no multilingual echo) could NEVER be promoted,
-    // no matter how high it scored. For a brand-new research topic that's every single
-    // first result from your own scraper, permanently — which is why nothing from it ever
-    // seemed to "stick." Corroboration now raises the bar further instead of being an
-    // absolute block, so genuinely strong, on-topic content can still get in.
+    // (no existing memory on the topic yet) could NEVER be promoted, no matter how high
+    // it scored. For a brand-new research topic that's every single first result from
+    // your own scraper, permanently — which is why nothing from it ever seemed to
+    // "stick." Corroboration now raises the bar further instead of being an absolute
+    // block, so genuinely strong, on-topic content can still get in.
     const isCurated = CURATED_SOURCE_NAMES.has(sourceName);
-    const corroborated = isCurated || langHits.length > 0 || related.length > 0;
+    const corroborated = isCurated || related.length > 0;
     const effectiveThreshold = isCurated ? CONFIDENCE_THRESHOLD
                               : corroborated ? Math.min(0.97, CONFIDENCE_THRESHOLD + 0.06)
                               : 0.97; // uncorroborated + uncurated: very high bar, but not impossible
