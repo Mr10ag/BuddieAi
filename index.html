@@ -786,8 +786,8 @@ function forceUpdateCheck(){
 
 /* ================= MEMORY FORMAT ================= */
 // Compact, AI-friendly: YAML frontmatter + short plain-language facts (mirrors Claude-style memory files)
-function toMemoryDoc({topic, source, confidence, facts}){
-  const fm = `---\ntopic: ${topic}\nsource: ${source||"unknown"}\nconfidence: ${confidence}\nverified: ${new Date().toISOString().slice(0,10)}\n---\n`;
+function toMemoryDoc({topic, source, confidence, facts, sourceTrust}){
+  const fm = `---\ntopic: ${topic}\nsource: ${source||"unknown"}\nconfidence: ${confidence}\n${sourceTrust!=null ? `source_trust: ${sourceTrust}\n` : ""}verified: ${new Date().toISOString().slice(0,10)}\n---\n`;
   return fm + facts.map(f=>`- ${f}`).join("\n");
 }
 // v2.14.2: promoted facts were previously a hard character-slice of raw scraped text
@@ -2122,6 +2122,19 @@ async function buildActiveSources(){
       }
     });
   }
+  // v: sources used to always fire in the same fixed array order every round. Now that
+  // each source has an evolving trust EMA (see sourceTrustBonus), the round-robin uses
+  // it to put the best-performing sources first each cycle — a source with no history
+  // yet keeps its original relative position (falls back to baseConfidence) rather than
+  // being penalized for simply being untested. Ties (e.g. everything still untested)
+  // preserve original order since Array.sort is stable.
+  const weights = (await metaGet("sourceWeights")) || {};
+  const trustOf = (src) => {
+    const w = weights[src.name];
+    if(w && (w.pass + w.fail) >= 3) return w.ema ?? 0.5;
+    return src.baseConfidence ?? 0.5; // no real track record yet — use the source's own stated baseline
+  };
+  sources.sort((a, b) => trustOf(b) - trustOf(a));
   return sources;
 }
 async function processTopicQueue(topics){
@@ -2463,19 +2476,27 @@ async function chooseMemoryFolder(){
   }
   renderSystemStatus();
 }
-async function reconnectMemoryFolder(){
+async function reconnectMemoryFolder(silent=false){
   const handle = await metaGet("memoryDirHandle");
-  if(!handle){ document.getElementById("memory-folder-status").textContent = "No folder saved yet — use 'Choose a folder' first."; return; }
+  if(!handle){ if(!silent) document.getElementById("memory-folder-status").textContent = "No folder saved yet — use 'Choose a folder' first."; return; }
   try{
-    const perm = await handle.requestPermission({mode:"readwrite"});
+    // v: queryPermission (no prompt, just checks current state) first — some browsers
+    // will silently report "granted" here even without a fresh user gesture, letting the
+    // auto-reconnect on startup succeed invisibly instead of only ever working from a
+    // manual button click. requestPermission is the fallback for everything else.
+    let perm = await handle.queryPermission({mode:"readwrite"});
+    if(perm !== "granted") perm = await handle.requestPermission({mode:"readwrite"});
     if(perm === "granted"){
       memoryDirHandle = handle;
       document.getElementById("memory-folder-status").textContent = `Reconnected — saving to: "${handle.name}/".`;
-    } else {
+    } else if(!silent){
       document.getElementById("memory-folder-status").textContent = "Permission not granted — folder access needs to be re-approved after each app reload.";
     }
   }catch(err){
-    document.getElementById("memory-folder-status").textContent = "Couldn't reconnect: "+err.message;
+    // A silent startup attempt commonly fails here (browsers block requestPermission
+    // without a user gesture on first ask after reload) — that's expected, not an error
+    // worth surfacing; the manual "Reconnect folder" button still works normally.
+    if(!silent) document.getElementById("memory-folder-status").textContent = "Couldn't reconnect: "+err.message;
   }
   renderSystemStatus();
 }
@@ -2592,7 +2613,9 @@ async function verifyAll(topicFilter=null){
                               : 0.97; // uncorroborated + uncurated: very high bar, but not impossible
     const finalConfidence = confidencePct / 100;
     if(finalConfidence >= effectiveThreshold){
-      const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[truncateAtBoundary(item.raw, 300)]});
+      const srcW = sourceWeightsCache[sourceName];
+      const sourceTrust = srcW && (srcW.pass + srcW.fail) >= 3 ? Math.round((srcW.ema ?? 0.5) * 100) : null;
+      const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[truncateAtBoundary(item.raw, 300)], sourceTrust});
       const docWords = countWords(doc);
       const topicWordsSoFar = runningTopicWords[item.topic] || 0;
       if(topicWordsSoFar + docWords > WORDS_PER_TOPIC_CAP){
@@ -3257,12 +3280,21 @@ window.addEventListener("load", async ()=>{
     await withTimeout(openDB(), 4000, new Error("IndexedDB did not open within 4s (likely blocked by a stale connection from a previous load)"));
   }catch(err){
     enableFallbackStore();
-    showErrorBanner("Persistent storage unavailable (\"" + err.message + "\") — running in temporary memory for this session only; nothing will be saved after you close this tab. This usually means the page is open in an embedded preview inside your server app rather than the real Chrome app, or a browser storage setting is blocking it. Try opening the address directly in Chrome, or check Chrome's Site Settings for this address.");
+    // v: SecurityError specifically means the page's browsing context itself has no
+    // storage access — most commonly a sandboxed third-party iframe (an embedded
+    // "preview" of this file rather than the file loaded as its own page/tab). That has
+    // a different real fix than "check Site Settings", so it gets called out by name
+    // instead of being lumped into the generic message below.
+    const msg = (err.name === "SecurityError")
+      ? `Persistent storage blocked ("${err.message}") — this browsing context has no storage access at all, which almost always means the page is running inside a sandboxed preview/iframe rather than as its own tab. Open this file's address directly in Chrome (not through a preview panel) to fix this — nothing wrong with your device.`
+      : `Persistent storage unavailable ("${err.message}") — running in temporary memory for this session only; nothing will be saved after you close this tab. This usually means the page is open in an embedded preview inside your server app rather than the real Chrome app, or a browser storage setting is blocking it. Try opening the address directly in Chrome, or check Chrome's Site Settings for this address.`;
+    showErrorBanner(msg);
   }
   await requestPersistentStorage();
   const cacheCheck = await checkModelCachePersistence();
   await loadTarget();
   await loadSettings();
+  await reconnectMemoryFolder(true); // best-effort, silent: re-activates the memory upload/export folder without needing a manual click if the browser still honors the earlier grant
   await seedMemoryIfEmpty();
   await checkVersionBanner();
   renderMemory();
