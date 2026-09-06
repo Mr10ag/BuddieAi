@@ -84,9 +84,19 @@
   #search-bar input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:13px}
   #search-bar input:focus{outline:none;border-color:var(--accent2);box-shadow:var(--glow-accent2)}
   /* MEMORY VIEW */
-  #memory-view{flex-direction:row;overflow:hidden}
-  .mem-col{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden}
+  #memory-view{flex-direction:row;overflow-x:auto;overflow-y:hidden}
+  .mem-col{flex:1;min-width:220px;display:flex;flex-direction:column;border-right:1px solid var(--border);overflow:hidden}
   .mem-col:last-child{border-right:none}
+  /* LIBRARY VIEW */
+  #library-view{flex-direction:column;overflow:hidden}
+  #library-toolbar{display:flex;gap:8px;padding:8px 10px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap}
+  #library-toolbar input{flex:1;min-width:140px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:13px}
+  #library-scan{display:flex;gap:8px;padding:0 10px 8px;flex-wrap:wrap}
+  #library-scan input{flex:1;min-width:140px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px;font-size:13px}
+  #library-grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;padding:12px;align-content:start}
+  .library-card h3{margin:0 0 6px;font-size:14px}
+  #library-detail{flex:1;overflow-y:auto;padding:12px 16px}
+  #library-detail pre{white-space:pre-wrap;font-family:inherit;font-size:13px;line-height:1.5}
   .mem-list{flex:1;overflow-y:auto;padding:8px}
   .mem-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px;font-size:12px}
   .mem-item .meta{color:var(--dim);font-size:11px;margin-top:4px;display:flex;justify-content:space-between}
@@ -142,7 +152,7 @@
 
 <header>
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFqUlEQVR4nO3dPXbbOBiFYchn+ilzsoRM6eV4gVlOSnsJOS69gkxjObQsSgDxR37v+3QpIpLQvQBoWfQpTfTvt//+zDy+9uPt9fk047jDDmrYVWpEKboewNCrlV5l6PKiBl+9tC5C0xcz+BqlVRGavIjB1yy1RXioPQHDr5lq81dVAMOvPajJ4ablw+Brr0q3RMUrgOHXnpXms6gAhl9HUJLT7AIYfh1Jbl6zCmD4dUQ5ub1bAMOvI7uX3+rPAaQju1kAZ39FcCvHqwUw/IpkLc9XC2D4FdG1XHsPILQvBXD2V2SX+XYFENqnAjj7i2CZc1cAoX0UwNlfJOe8uwIIzQII7ZSS2x9xuQIIzQIIzQIIzQII7cEbYJG5AgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjNAgjtn9knQPDj569N/+/l6bHxmejSyd8Famtr2HNZirYsQAO9Q7/GMtSzABVmBf+SRdjOAhTaS+jXWIYyFiDT3oN/ySLk8cegGY4W/pSOec4zuALcECVErgbrXAFWRAl/SrGupTVXgAvRw+Jq8JkrwEL08KfEuMYSFuAdKRika73HAiRmIIjXfA2+AOQgkK/9DF0AA+AYYAtAf+OXyGOBLAD5DV9DHRNcAahvdA7i2OAKIC2hCkCc4UrRxghTANobW4M0VpgCSNcgCkCa0VqhjFn4AlDeyB4IYxe+ANItoQtAmMF6iz6GoQsg3RO2ANFnrpEij2XYAkg5fDhupWvfse01Y448FkXIL8WPCEXOl8tbncfIY9Wex9G4BdogNwgtAjPyWEQWQGjhCrC35/PXzMwjj5Uj4v1GuAJIJSyA0CyA0CxAodJ9cM2+eeSxqEIVwAD0F22MQxVglNwQtAjLyGMR+asQG50DN+LXE0Yei8YCVBoZQMPenlsgoVkAoVkAoVkAoVkAoVkAoVkAoVkAoVkAoYUqgN+L7S/aGIcqgFTKAgjNAgjNAggtXAGi3aTtScSxDVcAqYQFEFrIAkRcqmeLOqYhCzDKHkKxh3M4MguwwcvT40fwZgZweQ4WYZuwBegZiD1+Ob3nOUUuV9gCjDQjIJFDOVLoAoxcBUYG8vJYzv7bhS5AbzNKMDL8BCH/RtilGX80o/UxZzwVLvrsnxKkACnNC0vtcXu97tbjRuOjERtZe37n8t+5ob0VPrc8bWFWgJTGhafX7Hn0898jVAFSGj+D1obpaOd7NG6BOlsGODdcbnPGwa0AKRmwNbTZPyXo5wDEN/oe6pggC5AS9w2/hjwW2AKkxH7jz+hjgC5ASuwAkK/9DF+AlJhBIF7zNRbgHSkQpGu9xwIsEIJBuMYSyM8BckT7rMDgX+cKsCJSYCJdS2uuABmOuhoY/PtcATIcMUhHPOcZXAEK7X01MPhlLECFvZTB0G9nARqYVQSDX88CNOZ3dY/FAgywtRSGvT8LIDR/DCo0CyA0CyA0CyA0CyA0CyA0H4y14sfPX79nn0NrL0+P32efw974OcCFiMG/ZBH+cgu0QAh/SpzrzGEBhGYB3tFmRdr1rrEAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQrMAQnt4e30+zT6JPaA9KoR2vWtcAYAM/18WYIEQDMI1ljillJJPh/sq4mNDDP9XFkBoDyml5I2wiN5en0/eAwjNAgjtowBug0RyzrsrgNA+FcBVQATLnLsCCO1LAVwFFNllvl0BhHa1AK4CiuharldXAEugSNbyfHMLZAkUwa0cew8gtLsFcBXQkd3Lb9YKYAl0RDm5zd4CWQIdSW5ei+4BLIGOoCSnxTfBlkB7VprPqjD7VUrtxdaJuerHoK4G2oOaHFZ/DmAJNFNt/pqG1y2RRmk18XaZvS2Cemm94+i6fbEIaqXXVnvY/t0yqNSI+8v/ATaQ7h8YNg8KAAAAAElFTkSuQmCC" alt="">
-  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.13.1</span></h1>
+  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.15</span></h1>
   <span id="storage-mode-badge" style="font-size:10px;color:var(--bad);display:none"></span>
   <div id="target-bar" onclick="editTarget()">🎯 No active project target — tap to set</div>
   <span id="model-badge" style="font-size:11px;color:var(--dim);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px 8px;white-space:nowrap;flex-shrink:0" title="Model status — visible from every tab, not just Settings">🧠 …</span>
@@ -155,6 +165,7 @@
   <button data-view="projects-view">Projects</button>
   <button data-view="pet-view">Pet</button>
   <button data-view="memory-view">Memory</button>
+  <button data-view="library-view">Library</button>
   <button data-view="settings-view">Settings</button>
 </nav>
 
@@ -215,6 +226,37 @@
     <div class="status-line" id="compact-status" style="padding:6px 10px 0"></div>
     <div class="mem-list" id="post-list"></div>
   </div>
+  <div class="mem-col">
+    <div class="col-label">📁 Manual Uploads <span style="color:var(--dim);font-weight:normal">— exempt from scraper trust scoring</span></div>
+    <div class="status-line" style="padding:6px 10px 0">Upload your own text-based files (.txt, .md, .csv, .json) as memory for a subject. Each file still goes through the same on-topic check and AI Verify pass as everything else — but passing or failing here never changes "Your Scraper"'s (or any other source's) trust weight, and Buddie never builds a trust score for your own files either. You vouched for the file; it's judged on content only.</div>
+    <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px">
+      <input id="upload-topic-input" placeholder="Subject/topic for these files">
+      <input id="upload-file-input" type="file" multiple accept=".txt,.md,.markdown,.csv,.json,text/plain">
+      <button class="ghost" onclick="uploadManualDocuments()">📤 Upload &amp; Queue for Verification</button>
+    </div>
+    <div class="status-line" id="upload-status" style="padding:0 10px"></div>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<div class="view" id="library-view" hidden>
+  <div id="library-toolbar">
+    <input id="library-search" placeholder="Filter subjects..." oninput="renderLibrary()">
+    <input id="library-add-input" placeholder="+ Add subject (e.g. active listening)" onkeydown="if(event.key==='Enter'){addLibrarySubject();}">
+    <button class="ghost" onclick="addLibrarySubject()">+ Add subject</button>
+    <button class="primary" onclick="trainAllUntrainedSubjects()">Train all untrained subjects</button>
+  </div>
+  <div class="status-line" style="padding:6px 10px">
+    Coverage grows continuously from whatever's already been verified — not a false "100% instant" claim. Curated sources are rate-limited on purpose (arXiv alone is throttled to ~1 request per 3.2s) so Buddie doesn't get IP-banned; opening a subject shows whatever's already verified instantly, with no network or model call, and growth keeps happening in the background as you train more subjects.
+  </div>
+  <div id="library-scan">
+    <input id="library-scan-url" placeholder="Page URL to scan (fetched via your scraper endpoint)">
+    <input id="library-scan-topic" placeholder="Attach to subject">
+    <button class="ghost" onclick="scanPageIntoLibrary()" title="Runs one full-page text pass through your scraper endpoint and condenses it into a single memory candidate — this is a text pass, not a pixel screenshot (a browser can't screenshot cross-origin pages client-side).">📄 Scan this page</button>
+  </div>
+  <div id="library-status" class="status-line" style="padding:0 10px"></div>
+  <div id="library-grid"></div>
+  <div id="library-detail" style="display:none"></div>
 </div>
 
 <!-- SETTINGS -->
@@ -385,14 +427,14 @@ const DB_NAME = "buddie-ai-db";
 // in-memory store so the app still works for the session rather than refusing
 // to start. Data won't survive closing the tab in that mode — clearly flagged.
 let usingFallbackStore = false;
-const memStore = { pre_verified:[], post_verified:[], projects:[], plans:[], meta:[], tor_review:[], chat_log:[], canvas_log:[] };
+const memStore = { pre_verified:[], post_verified:[], projects:[], plans:[], meta:[], tor_review:[], chat_log:[], canvas_log:[], library_sheets:[] };
 let memIdCounter = 1;
 
 function openDB(){
   return new Promise((res,rej)=>{
     let req;
     try{
-      req = indexedDB.open(DB_NAME, 4); // v2.5.2: bumped 3→4 to add chat_log + canvas_log — the chat transcript and canvas/project-work log were living only in the DOM and vanished on every reload
+      req = indexedDB.open(DB_NAME, 5); // v2.15: bumped 4→5 to add library_sheets (Library tab — cached study sheets keyed by topic, see generateLibrarySheet)
     }catch(err){ rej(err); return; }
     req.onupgradeneeded = (e)=>{
       const d = e.target.result;
@@ -404,6 +446,7 @@ function openDB(){
       if(!d.objectStoreNames.contains("tor_review")) d.createObjectStore("tor_review",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("chat_log")) d.createObjectStore("chat_log",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("canvas_log")) d.createObjectStore("canvas_log",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("library_sheets")) d.createObjectStore("library_sheets",{keyPath:"topic"});
     };
     req.onsuccess = (e)=>{ db=e.target.result; dbReadyResolve(db); res(db); };
     req.onerror = (e)=>rej(e.target.error || new Error("IndexedDB failed to open"));
@@ -453,13 +496,28 @@ async function dbDelete(store, id){
 async function dbPut(store, obj){
   await dbReadyPromise;
   if(usingFallbackStore){
-    const keyField = store === "meta" ? "key" : "id";
+    // BUG FIX (v2.15): this assumed every non-"meta" store is keyed by "id" — true for
+    // every store that existed before, but library_sheets (added this version) is keyed
+    // by "topic". In fallback/in-memory mode (IndexedDB unavailable) this would have
+    // silently mis-keyed every sheet upsert, either duplicating rows or overwriting the
+    // wrong one instead of updating by topic.
+    const keyField = store === "meta" ? "key" : (store === "library_sheets" ? "topic" : "id");
     const idx = memStore[store].findIndex(x => x[keyField] === obj[keyField]);
     if(idx >= 0) memStore[store][idx] = obj;
     else { if(keyField==="id" && obj.id===undefined) obj.id = memIdCounter++; memStore[store].push(obj); }
     return;
   }
   return new Promise((res,rej)=>{ const r=tx(store,"readwrite").put(obj); r.onsuccess=()=>res(); r.onerror=()=>rej(dbErr(r,store,"write")); });
+}
+// Single-key read by primary key (used for library_sheets, keyed by topic, so we can
+// check/update one subject's cached sheet without pulling the whole store every time).
+async function dbGet(store, key){
+  await dbReadyPromise;
+  if(usingFallbackStore){
+    const keyField = store === "meta" ? "key" : (store === "library_sheets" ? "topic" : "id");
+    return (memStore[store]||[]).find(x => x[keyField] === key) || null;
+  }
+  return new Promise((res,rej)=>{ const r=tx(store).get(key); r.onsuccess=()=>res(r.result||null); r.onerror=()=>rej(dbErr(r,store,"read")); });
 }
 async function metaGet(key){
   await dbReadyPromise;
@@ -755,23 +813,29 @@ function scoreDocForQuery(queryWords, item){
 }
 async function retrieveRelevantMemory(queryText, limit=5, maxChars=1400){
   const post = await dbGetAll("post_verified");
-  if(!post.length) return {context:"", used:[]};
+  if(!post.length) return {context:"", used:[], usedSources:[]};
   const queryWords = tokenize(queryText);
   const scored = post
     .map(item => ({item, score: scoreDocForQuery(queryWords, item)}))
     .filter(s => s.score > 0)
     .sort((a,b) => b.score - a.score)
     .slice(0, limit);
-  if(!scored.length) return {context:"", used:[]};
+  if(!scored.length) return {context:"", used:[], usedSources:[]};
   let context = "";
   const used = [];
+  // v2.14: also track which ORIGINAL SOURCE each used memory item came from, not just
+  // its topic. This is what lets a chat 👍/👎 flow back to source-trust weights (see
+  // rateReply) instead of trust only ever updating during a manual AI Verify pass.
+  const usedSources = [];
   for(const {item} of scored){
     const chunk = `[${item.topic}] ${item.doc.replace(/^---[\s\S]*?---\n/, "").trim()}\n`;
     if(context.length + chunk.length > maxChars) break;
     context += chunk;
     used.push(item.topic);
+    const srcName = sourceNameFromItem(item.source);
+    if(srcName && !usedSources.includes(srcName)) usedSources.push(srcName);
   }
-  return {context, used};
+  return {context, used, usedSources};
 }
 
 /* ================= KEYBOARD / ARROW-KEY NAVIGATION ================= */
@@ -831,6 +895,7 @@ document.querySelectorAll("nav button").forEach(b=>{
     // new one, so the browser can't coalesce/skip the repaint of either step.
     void activeView.offsetHeight;
     if(b.dataset.view==="memory-view") renderMemory();
+    if(b.dataset.view==="library-view") renderLibrary();
     if(b.dataset.view==="projects-view") renderProjects();
     if(b.dataset.view==="pet-view") renderPetView();
   };
@@ -950,6 +1015,23 @@ async function rateReply(msgId, reportedConfidence, direction){
   updateTokenBadge(p);
   if(document.getElementById("pet-view").classList.contains("active")) renderPetView(p);
 
+  // v2.14: if this reply was grounded in Post-Verified memory, your real thumbs now also
+  // flow back to THAT memory's original source(s) — not just the generic pet economy and
+  // confidence calibration above. A 👍 rewards those sources' trust weight the same as a
+  // passed AI-verify check would; a 👎 punishes it (EMA fail + a visible strike), since a
+  // human catching a bad/unhelpful answer is at least as strong a signal as the automated
+  // verifier catching one during ingestion.
+  const srcNames = usedMemorySourcesByMsg[msgId];
+  if(srcNames && srcNames.length){
+    let weights = (await metaGet("sourceWeights")) || {};
+    for(const srcName of srcNames){
+      weights = await recordSourceOutcome(srcName, direction === "up", weights);
+      if(direction === "down") await recordScraperStrike(srcName, "a chat reply that leaned on this source was marked unhelpful (👎)");
+    }
+    addCanvasStep("Source weights updated from feedback", `${direction==="up"?"👍":"👎"} on this reply ${direction==="up"?"rewarded":"penalized"}: ${srcNames.join(", ")}`);
+    delete usedMemorySourcesByMsg[msgId];
+  }
+
   const ack = document.getElementById(msgId + "-feedback-ack");
   if(ack) ack.textContent = (direction === "up" ? "— thanks, noted ✓" : "— noted, will calibrate down slightly ✓") + ackExtra;
 }
@@ -978,6 +1060,10 @@ const AUTO_EXPLORE_RATE = 0.25;    // ~1 in 4 ratings, deliberately try a differ
 // Which reply each still-unscored auto-score belongs to, so a later human thumbs-tap
 // on that same message can be checked against it. Lives only in memory (this session).
 const autoScorePending = {};
+// Which Post-Verified source(s) backed each reply's grounding memory, so a later human
+// thumbs-tap on that reply can reward/punish THOSE sources too (see rateReply). Also
+// session-only — same tradeoff as autoScorePending above.
+const usedMemorySourcesByMsg = {};
 
 async function pickAutoWeight(){
   const scores = (await metaGet("autoWeightScores")) || {};
@@ -1157,6 +1243,32 @@ async function sendChat(){
   if(!text) return;
   await addMsg("user", text);
   input.value="";
+
+  // Chat-driven search: "look up X" starts a real search without touching the search
+  // bar; a short natural-language correction right after ("not turkey, ham") refines
+  // and re-runs it instead of being treated as a normal chat question. See the
+  // CHAT-DRIVEN SEARCH block above for detectChatSearchAction/startChatSearch/
+  // refineChatSearch.
+  const chatAction = await detectChatSearchAction(text);
+  if(chatAction.action === "search"){
+    await addMsg("ai", `🔍 On it — searching for "${chatAction.topic}" and checking it against trusted sources.`);
+    await startChatSearch(chatAction.topic);
+    const {context} = await retrieveRelevantMemory(chatAction.topic);
+    await addMsg("ai", context
+      ? `Done — found something on "${chatAction.topic}" that passed verification. Ask me about it, or tell me if you meant something more specific.`
+      : `Done searching "${chatAction.topic}" — nothing cleared verification yet. If you meant something more specific (e.g. a particular kind), just tell me and I'll refine the search.`);
+    return;
+  }
+  if(chatAction.action === "refine"){
+    await addMsg("ai", `Got it — refining away from "${chatAction.oldTopic}"...`);
+    const refinedTopic = await refineChatSearch(chatAction.oldTopic, chatAction.clarification);
+    const {context} = await retrieveRelevantMemory(refinedTopic);
+    await addMsg("ai", context
+      ? `Updated — now searching for "${refinedTopic}" instead. Found something that already passed verification; ask me about it.`
+      : `Updated — now searching for "${refinedTopic}" instead. Nothing verified yet, but the old (wrong) results are cleared out.`);
+    return;
+  }
+
   // READ TARGET AND LOCKED PLAN FIRST — required before any reply/action, every time.
   await loadTarget();
   const plan = await getActivePlanFor(currentTarget);
@@ -1170,7 +1282,7 @@ async function sendChat(){
   // v2.9: pull in verified memory relevant to this message + the project target so the
   // reply is grounded in what Buddie actually researched, instead of only its own raw
   // model weights. See retrieveRelevantMemory() above.
-  const {context: memoryContext, used: memoryUsed} = await retrieveRelevantMemory(`${currentTarget||""} ${text}`);
+  const {context: memoryContext, used: memoryUsed, usedSources} = await retrieveRelevantMemory(`${currentTarget||""} ${text}`);
   const memoryBlock = memoryContext
     ? `\nVERIFIED MEMORY (treat as ground truth; prefer this over your own guesses when it's relevant):\n${memoryContext}`
     : `\nVERIFIED MEMORY: none found relevant to this message yet. Say so plainly if the question needs research rather than guessing — the user can run a search or ▶ Run Project to build it.`;
@@ -1187,7 +1299,81 @@ async function sendChat(){
   confidencePct = Math.max(0, Math.min(100, confidencePct + calib.adjustment));
 
   const aiMsgId = await addMsg("ai", displayText, confidencePct);
+  if(usedSources && usedSources.length) usedMemorySourcesByMsg[aiMsgId] = usedSources;
   autoScoreAndCalibrate(aiMsgId, text, displayText, confidencePct); // fire-and-forget: fills in once it's done, doesn't block the next message
+}
+
+/* ================= CHAT-DRIVEN SEARCH (talk to the search bar, don't just type into it) ================= */
+// v2.14: the search bar previously only understood exact, literal comma-separated
+// topics typed directly into it — ask for "sandwiches" and that's exactly, and only,
+// what gets searched, with no way to steer it from chat. This lets the normal chat box
+// itself trigger a search ("look up sandwiches") AND accept a natural-language
+// correction afterward ("he means ham sandwiches, not turkey") that refines and
+// re-runs the same search instead of you having to retype the whole thing in the bar.
+const PENDING_SEARCH_TTL_MS = 20*60*1000; // a clarification only attaches to a search from the last 20 min
+const SEARCH_TRIGGER_PATTERN = /\b(look up|look into|search for|search|find (?:out |more )?(?:about|on)|research|dig up (?:info(?:rmation)? )?on|what do you know about)\b/i;
+const REFINEMENT_HINT_PATTERN = /\b(not|actually|i mean|i meant|meant|instead of|rather than|correction|no,? i|he means|she means|they mean)\b/i;
+async function getPendingSearchTopic(){
+  const p = await metaGet("pendingSearchTopic");
+  if(!p || !p.topic) return null;
+  if(Date.now() - p.at > PENDING_SEARCH_TTL_MS) return null;
+  return p;
+}
+async function setPendingSearchTopic(topic){
+  await metaSet("pendingSearchTopic", {topic, at: Date.now()});
+}
+// Runs an actual search from chat (same round-robin/throttled pipeline the search bar
+// uses), keeps the search-bar input in sync so it's visible what Buddie is doing, and
+// immediately tries an AI Verify pass on just this topic so a chat request can produce
+// a usable answer without a separate manual step.
+async function startChatSearch(topic){
+  const input = document.getElementById("search-input");
+  if(input) input.value = topic;
+  await setPendingSearchTopic(topic);
+  addCanvasStep("Chat-triggered search", `Searching for "${topic}" (requested from chat).`);
+  await processTopicQueue([topic]);
+  if(engine) await verifyAll(new Set([topic]));
+  renderMemory();
+}
+// Combines the earlier topic with the new clarification into one corrected topic, then
+// discards whatever was already gathered under the OLD (now-known-wrong) topic before
+// re-running the search — this is the actual fix for "downloads the wrong stuff": once
+// you say "not turkey", the turkey-sandwich results stop being kept around at all.
+async function refineChatSearch(oldTopic, clarification){
+  let refinedTopic = clarification.trim();
+  try{
+    const out = await askAI(`Original search topic: "${oldTopic}". The user just clarified what they actually want: "${clarification}". Reply with ONLY a short, corrected search topic (a few words, no explanation, no quotes).`);
+    if(out && out.trim() && out.trim().length < 120 && !/^\[No local model/i.test(out)){
+      refinedTopic = out.trim().replace(/^["']|["']$/g, "");
+    }
+  }catch(err){ /* fall back to the raw clarification text set above */ }
+
+  const stale = (await dbGetAll("pre_verified")).filter(i => i.topic === oldTopic);
+  for(const item of stale) await dbDelete("pre_verified", item.id);
+  if(stale.length) addCanvasStep("Refined — discarded stale results", `Cleared ${stale.length} pending result(s) gathered under "${oldTopic}" now that you've clarified.`);
+
+  await startChatSearch(refinedTopic);
+  return refinedTopic;
+}
+// Cheap heuristics first (no AI call) since most messages are plain chat; only asks the
+// model to extract a clean topic phrase once a search/refine trigger is already likely.
+async function detectChatSearchAction(text){
+  const pending = await getPendingSearchTopic();
+  if(pending && text.length < 140 && REFINEMENT_HINT_PATTERN.test(text) && !SEARCH_TRIGGER_PATTERN.test(text)){
+    return {action:"refine", oldTopic: pending.topic, clarification: text};
+  }
+  if(SEARCH_TRIGGER_PATTERN.test(text)){
+    let topic = text.replace(SEARCH_TRIGGER_PATTERN, "").trim().replace(/^(on|about|for|into)\b/i, "").trim();
+    if(!topic) topic = text;
+    try{
+      const extracted = await askAI(`Extract just the concise search topic (a few words) the user wants looked up, from this message. Reply with ONLY the topic phrase, no quotes, no explanation.\n\nMessage: "${text}"`);
+      if(extracted && extracted.trim() && extracted.trim().length < 120 && !/^\[No local model/i.test(extracted)){
+        topic = extracted.trim().replace(/^["']|["']$/g, "");
+      }
+    }catch(err){ /* fall back to the regex-stripped topic set above */ }
+    return {action:"search", topic};
+  }
+  return {action:"chat"};
 }
 
 /* ================= LOCAL LLM (WebLLM) ================= */
@@ -1380,12 +1566,22 @@ function sourceNameFromItem(sourceField){
 // (2) pass/fail counts are kept too, purely for the human-readable summary in
 //     updateWeights() and so old data isn't lost — but the bonus below is EMA-driven.
 const TRUST_EMA_ALPHA = 0.25;
+// v2.15: the tag used for anything the user personally uploaded (Memory tab → Manual
+// Uploads). These are exempt from the evolving trust-weight system below — the whole
+// point of a manual upload is that a human already vouched for it, so a pass/fail during
+// verification should judge THAT FILE's content, not feed into (or be judged by) a
+// trust score shared with unattended scraped/curated sources. See the guards in
+// recordSourceOutcome, recordScraperStrike, and preCheckAdmit below.
+const MANUAL_SOURCE_NAME = "Manual Upload";
 // PERF (v2.13): accepts an already-loaded weights object (see verifyAll) so a run that
 // checks many items doesn't re-read "sourceWeights" from IndexedDB once per item just to
 // mutate one key and write it straight back — one read for the whole run, still one
 // write per item (so a mid-run interruption doesn't lose already-recorded outcomes).
 // Returns the updated object so the caller's cache stays current for the next item.
 async function recordSourceOutcome(sourceName, passed, preloadedWeights){
+  // v2.15: manual uploads never build (or affect) a trust weight — see MANUAL_SOURCE_NAME
+  // above. Return the cache untouched and skip the IndexedDB write entirely.
+  if(sourceName === MANUAL_SOURCE_NAME) return preloadedWeights || (await metaGet("sourceWeights")) || {};
   const weights = preloadedWeights || (await metaGet("sourceWeights")) || {};
   const w = weights[sourceName] || {pass:0, fail:0, ema:0.5};
   if(passed) w.pass++; else w.fail++;
@@ -1409,6 +1605,40 @@ function sourceTrustBonus(weights, sourceName){
   return Math.round((ema - 0.5) * 16 * sampleConfidence); // up to -8..+8
 }
 
+/* ================= SCRAPER PUNISHMENT STRIKES + AI SELF-REWARD ================= */
+// Separate from the continuous EMA trust score above: a plain incrementing strike
+// counter per source, specifically for "this source was caught supplying wrong or
+// unhelpful info." EMA recovers gracefully over many checks (that's the point of it);
+// strikes are a blunt, visible, non-decaying tally so you can see at a glance which
+// source — especially "Your Scraper" — keeps striking out, independent of how its
+// recent recovery might be nudging the EMA back up.
+async function recordScraperStrike(sourceName, reason){
+  // v2.15: manual uploads are exempt from the strike tally too (see MANUAL_SOURCE_NAME) —
+  // a rejected manual file just doesn't get promoted; it doesn't count against anything.
+  if(sourceName === MANUAL_SOURCE_NAME) return (await metaGet("sourceStrikes")) || {};
+  const strikes = (await metaGet("sourceStrikes")) || {};
+  const s = strikes[sourceName] || {count:0, lastAt:null, lastReason:""};
+  s.count += 1;
+  s.lastAt = new Date().toISOString();
+  s.lastReason = reason || "";
+  strikes[sourceName] = s;
+  await metaSet("sourceStrikes", strikes);
+  addCanvasStep("⚠️ Strike recorded", `"${sourceName}" now has ${s.count} strike(s)${reason ? ` — ${reason}` : ""}.`);
+  return strikes;
+}
+// Rewards Buddie itself (pet-economy tokens, same currency as a human 👍) for correctly
+// catching bad/wrong/unhelpful info — i.e. good judgement during verification, not just
+// the user liking a chat reply. Keeps the incentive symmetric: get it right (promote) or
+// correctly catch it being wrong (reject) both earn tokens; only silently passing along
+// bad info earns nothing.
+async function rewardAIForCorrectRejection(sourceName){
+  const p = await loadPet();
+  p.tokens += 1;
+  await savePet(p);
+  updateTokenBadge(p);
+  if(document.getElementById("pet-view")?.classList.contains("active")) renderPetView(p);
+  addCanvasStep("🤖 AI reward", `+1 token (👍) — Buddie correctly rejected bad/unhelpful info from "${sourceName}".`);
+}
 async function updateWeights(){
   if(!window.webllm){
     document.getElementById("model-status").textContent = "Model engine still loading — wait a second and try again.";
@@ -1432,11 +1662,13 @@ async function updateWeights(){
     // counts, since those two can diverge — e.g. a source that started rough but has
     // recently improved will show a higher EMA than its lifetime rate suggests.
     const weights = (await metaGet("sourceWeights")) || {};
+    const strikes = (await metaGet("sourceStrikes")) || {};
     const summary = Object.entries(weights).map(([name,w]) => {
       const total = w.pass+w.fail;
       const lifetimeRate = total ? Math.round((w.pass/total)*100) : 0;
       const emaRate = Math.round((w.ema ?? 0.5)*100);
-      return `${name}: ${emaRate}% trust (recent) / ${lifetimeRate}% lifetime (${w.pass} passed / ${w.fail} trashed, ${total} total)`;
+      const strikeCount = strikes[name]?.count || 0;
+      return `${name}: ${emaRate}% trust (recent) / ${lifetimeRate}% lifetime (${w.pass} passed / ${w.fail} trashed, ${total} total) — ${strikeCount} strike(s)`;
     }).join("  |  ") || "No verification history yet — trust weights will build up as items are verified.";
     addCanvasStep("Source trust weights", summary);
   }catch(err){
@@ -1811,7 +2043,11 @@ async function preCheckAdmit(topic, text, sourceName){
   const weights = (await metaGet("sourceWeights")) || {};
   const w = weights[sourceName];
   const total = w ? w.pass + w.fail : 0;
-  if(w && total >= 5){
+  // v2.15: manual uploads never carry a trust weight (see MANUAL_SOURCE_NAME/
+  // recordSourceOutcome), so `w` is always undefined for them here and this gate is a
+  // no-op already — kept explicit so the exemption is obvious at a glance, not just an
+  // accidental side effect of never writing a weight for them.
+  if(w && total >= 5 && sourceName !== MANUAL_SOURCE_NAME){
     const ema = w.ema ?? (w.pass/total);
     if(ema <= 0.2){
       addCanvasStep("Pre-check auto-rejected", `${sourceName} on "${topic}": this source's trust score has fallen to ${Math.round(ema*100)}% over its last ${total} checks — skipping the AI call and rejecting automatically. It'll recover on its own if it starts passing checks again (trust is recency-weighted, not a permanent ban).`);
@@ -1864,6 +2100,28 @@ async function buildActiveSources(){
   }
   return sources;
 }
+// v2.15: shared dedupe helper — a store row's `source` field is always written as
+// `"Name: url"` (see the dbAdd calls in processTopicQueue/uploadManualDocuments/
+// scanPageIntoLibrary), so matching on endsWith(url) finds an existing row for that exact
+// URL (or, for manual uploads, that exact filename) regardless of which source produced
+// it. Guards against an empty url — "".endsWith("") is true for every row, which would
+// otherwise match the first item in the store by accident.
+async function findExistingByUrl(store, url){
+  if(!url) return null;
+  const all = await dbGetAll(store);
+  return all.find(x => (x.source||"").endsWith(url)) || null;
+}
+// v2.15: new/refreshed Post-Verified content for a topic invalidates any cached Library
+// sheet for it (see Feature 1e) — marks it `stale` rather than deleting it, so the old
+// sheet keeps showing (with a "↻ refresh sheet" affordance) until the user opts into
+// spending a model call to regenerate it.
+async function markLibrarySheetStale(topic){
+  const sheet = await dbGet("library_sheets", topic);
+  if(sheet && !sheet.stale){
+    sheet.stale = true;
+    await dbPut("library_sheets", sheet);
+  }
+}
 async function processTopicQueue(topics){
   const sources = await buildActiveSources();
   const tasks = [];
@@ -1885,8 +2143,27 @@ async function processTopicQueue(topics){
       // verification pass later. This just filters obvious junk/off-topic noise before
       // it ever lands in Pre-Verified, so that folder holds "plausible", not "everything".
       const {admit} = await preCheckAdmit(task.topic, item.text, item.source);
-      if(!admit){ preRejected++; }
-      if(admit){
+      if(!admit){ preRejected++; continue; }
+      // v2.15: dedupe by URL instead of always inserting. Re-scanning/re-fetching the
+      // same URL (most relevant to "Your Scraper" and the Library page-scanner, but
+      // applied here to every source for consistency) now updates the existing row in
+      // place instead of piling a duplicate on top of it.
+      const existingPost = await findExistingByUrl("post_verified", item.url);
+      if(existingPost){
+        existingPost.doc = toMemoryDoc({topic:existingPost.topic, source:existingPost.source, confidence:existingPost.confidence, facts:[item.text.slice(0,300).replace(/\n/g," ")]});
+        existingPost.timestamp = new Date().toISOString();
+        await dbPut("post_verified", existingPost);
+        await markLibrarySheetStale(existingPost.topic);
+        addCanvasStep("Re-fetch updated existing note", `${item.source} on "${task.topic}": this URL was already Post-Verified — refreshed in place instead of duplicating.`);
+        continue;
+      }
+      const existingPre = await findExistingByUrl("pre_verified", item.url);
+      if(existingPre){
+        existingPre.raw = item.text;
+        existingPre.timestamp = new Date().toISOString();
+        existingPre.confidence = item.confidence;
+        await dbPut("pre_verified", existingPre);
+      } else {
         await dbAdd("pre_verified", { topic:task.topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
       }
     }
@@ -2301,6 +2578,8 @@ async function verifyAll(topicFilter=null){
     if(confidencePct < 60){ // clearly bad — no point running further checks
       await dbDelete("pre_verified", item.id);
       sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
+      await recordScraperStrike(sourceName, `"${item.topic}" scored only ${confidencePct}/100 on plausibility`);
+      await rewardAIForCorrectRejection(sourceName);
       trashedCount++;
       addCanvasStep("Trashed", `"${item.topic}" scored ${confidencePct}/100 on plausibility — discarded.`);
       continue;
@@ -2327,7 +2606,11 @@ async function verifyAll(topicFilter=null){
     // first result from your own scraper, permanently — which is why nothing from it ever
     // seemed to "stick." Corroboration now raises the bar further instead of being an
     // absolute block, so genuinely strong, on-topic content can still get in.
-    const isCurated = CURATED_SOURCE_NAMES.has(sourceName);
+    // v2.15: a manual upload is judged at the same (non-raised) bar as a curated source —
+    // a human already vouched for the file, so it shouldn't need extra corroboration the
+    // way an anonymous scrape does. It still has to clear the real plausibility/
+    // consistency checks above; this only affects which bar applies.
+    const isCurated = CURATED_SOURCE_NAMES.has(sourceName) || sourceName === MANUAL_SOURCE_NAME;
     const corroborated = isCurated || langHits.length > 0 || related.length > 0;
     const effectiveThreshold = isCurated ? CONFIDENCE_THRESHOLD
                               : corroborated ? Math.min(0.97, CONFIDENCE_THRESHOLD + 0.06)
@@ -2351,6 +2634,7 @@ async function verifyAll(topicFilter=null){
       await dbDelete("pre_verified", item.id);
       sourceWeightsCache = await recordSourceOutcome(sourceName, true, sourceWeightsCache);
       runningTopicWords[item.topic] = topicWordsSoFar + docWords;
+      await markLibrarySheetStale(item.topic); // v2.15: new Post-Verified content invalidates any cached Library sheet for this topic
       verifiedCount++;
       // ACCURACY FIX (v2.13): `post` was a one-time snapshot taken before this loop
       // started, so the Pass 2 cross-check a few lines up ("related = post.filter(...)")
@@ -2363,8 +2647,10 @@ async function verifyAll(topicFilter=null){
     } else {
       await dbDelete("pre_verified", item.id);
       sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
-      trashedCount++;
       const why = !corroborated ? `below the ${Math.round(effectiveThreshold*100)}% bar required without corroboration` : `below the ${Math.round(effectiveThreshold*100)}% bar${isCurated?"":" (raised — uncurated source)"}`;
+      await recordScraperStrike(sourceName, `"${item.topic}" — ${why}`);
+      await rewardAIForCorrectRejection(sourceName);
+      trashedCount++;
       addCanvasStep("Trashed", `"${item.topic}" — ${confidencePct}% confidence, ${why}. Discarded, not kept.`);
     }
   }
@@ -2550,6 +2836,251 @@ async function clearChatHistory(){
   addMsg("ai", "Chat and canvas history cleared. Verified memory is untouched.");
 }
 
+/* ================= MANUAL UPLOADS (Memory tab) ================= */
+// v2.15: lets the user attach their own text-based files to a subject as memory
+// candidates. They flow through the exact same on-topic pre-check and AI Verify pass as
+// everything else — but see MANUAL_SOURCE_NAME above for why passing/failing here never
+// touches the scraper (or any other source's) trust weight.
+async function uploadManualDocuments(){
+  const topicInput = document.getElementById("upload-topic-input");
+  const fileInput = document.getElementById("upload-file-input");
+  const statusEl = document.getElementById("upload-status");
+  const topic = (topicInput.value||"").trim();
+  const files = fileInput.files;
+  if(!topic){ statusEl.textContent = "Enter a subject/topic for these files first."; return; }
+  if(!files || !files.length){ statusEl.textContent = "Choose at least one file."; return; }
+  let added = 0, updated = 0, rejected = 0;
+  for(const file of Array.from(files)){
+    statusEl.textContent = `Reading ${file.name}…`;
+    let raw;
+    try{ raw = await file.text(); }catch(err){ statusEl.textContent = `Couldn't read ${file.name}: ${err.message}`; rejected++; continue; }
+    const text = (extractReadableText(raw) || raw.trim()).slice(0, 6000);
+    if(!text){ rejected++; continue; }
+    const sourceTag = `${MANUAL_SOURCE_NAME}: ${file.name}`;
+    const {admit, reason} = await preCheckAdmit(topic, text, MANUAL_SOURCE_NAME);
+    if(!admit){ rejected++; addCanvasStep("Manual upload rejected", `${file.name}: ${reason||"failed on-topic check"}`); continue; }
+    const existingPost = await findExistingByUrl("post_verified", file.name);
+    if(existingPost){
+      existingPost.doc = toMemoryDoc({topic:existingPost.topic, source:sourceTag, confidence:existingPost.confidence, facts:[text.slice(0,300).replace(/\n/g," ")]});
+      existingPost.timestamp = new Date().toISOString();
+      await dbPut("post_verified", existingPost);
+      await markLibrarySheetStale(existingPost.topic);
+      updated++;
+      continue;
+    }
+    const existingPre = await findExistingByUrl("pre_verified", file.name);
+    if(existingPre){
+      existingPre.raw = text;
+      existingPre.timestamp = new Date().toISOString();
+      await dbPut("pre_verified", existingPre);
+      updated++;
+    } else {
+      // v2.15: baseConfidence of 0.75 reflects a human-vouched file — well above the
+      // uncurated 0.3 given to raw scraper hits, but this is still only the starting
+      // point; verifyAll()'s real plausibility/consistency checks decide the outcome.
+      await dbAdd("pre_verified", { topic, source:sourceTag, raw:text, timestamp:new Date().toISOString(), confidence:0.75 });
+      added++;
+    }
+  }
+  statusEl.textContent = `${added} added, ${updated} updated in place, ${rejected} rejected out of ${files.length} file(s). Run "AI Verify All" above to promote to Post-Verified.`;
+  fileInput.value = "";
+  renderMemory();
+}
+
+/* ================= LIBRARY ================= */
+// Feature described in buddie-ai-library-and-scanner-prompt.md: subjects are declared up
+// front (no fetch triggered just by naming one), trained explicitly, and — once at least
+// one Post-Verified item exists for a topic — a study sheet is generated ONCE and cached,
+// so opening a subject afterward is instant with zero network/model calls.
+let libraryOpenTopic = null;
+async function getLibrarySubjects(){ return (await metaGet("librarySubjects")) || []; }
+function setLibraryStatus(msg){ const el = document.getElementById("library-status"); if(el) el.textContent = msg; }
+async function addLibrarySubject(){
+  const input = document.getElementById("library-add-input");
+  const name = (input.value||"").trim();
+  if(!name) return;
+  const subs = await getLibrarySubjects();
+  if(!subs.some(s => s.toLowerCase() === name.toLowerCase())){
+    subs.push(name);
+    await metaSet("librarySubjects", subs);
+  }
+  input.value = "";
+  renderLibrary();
+}
+async function trainAllUntrainedSubjects(){
+  const subs = await getLibrarySubjects();
+  const post = await dbGetAll("post_verified");
+  const trainedTopics = new Set(post.map(p=>p.topic));
+  const untrained = subs.filter(s => !trainedTopics.has(s));
+  if(!untrained.length){ setLibraryStatus("Every subject already has at least some verified coverage."); return; }
+  setLibraryStatus(`Training ${untrained.length} untrained subject(s) — this reuses the same throttled, pre-checked pipeline as ▶ Run Project.`);
+  await processTopicQueue(untrained);
+  if(engine) await verifyAll(new Set(untrained));
+  setLibraryStatus(`Finished training ${untrained.length} subject(s).`);
+  renderLibrary();
+}
+async function runLibrarySubjectTraining(topic){
+  setLibraryStatus(`Training "${topic}"…`);
+  await processTopicQueue([topic]);
+  if(engine) await verifyAll(new Set([topic]));
+  setLibraryStatus(`Finished training "${topic}".`);
+  renderLibrary();
+}
+function openLibrarySubject(topic){ libraryOpenTopic = topic; renderLibrary(); }
+function closeLibrarySubject(){ libraryOpenTopic = null; renderLibrary(); }
+// Feature 1d: picks the single highest-trust source backing this topic's Post-Verified
+// notes (favoring curated sources over "Your Scraper"/manual uploads when scores are
+// close), condenses everything into a fixed-template study sheet, and upserts it into
+// library_sheets keyed by topic so future opens are instant.
+async function generateLibrarySheet(topic){
+  const post = (await dbGetAll("post_verified")).filter(p => p.topic === topic);
+  if(!post.length) return null;
+  const weights = (await metaGet("sourceWeights")) || {};
+  let best = post[0], bestScore = -Infinity;
+  for(const p of post){
+    const srcName = sourceNameFromItem(p.source);
+    const score = (p.confidence||0)*100 + sourceTrustBonus(weights, srcName) + (CURATED_SOURCE_NAMES.has(srcName) ? 5 : 0);
+    if(score > bestScore){ bestScore = score; best = p; }
+  }
+  const bestSrcName = sourceNameFromItem(best.source);
+  const bestUrl = (best.source||"").includes(":") ? best.source.split(":").slice(1).join(":").trim() : "";
+  const combined = trimToTokenBudget(post.map(p=>p.doc).join("\n\n"), 1800);
+  const prompt = `Condense the verified notes below into a hyper-fast study sheet for "${topic}": (1) one-sentence core definition, (2) 5-8 bullet key facts with concrete numbers/names, (3) one paragraph max of deeper context, (4) nothing padded or hedged. Notes:\n${combined}`;
+  const sheetMarkdown = (await askAI(prompt)).trim();
+  const record = {
+    topic,
+    sheetMarkdown,
+    bestSource: {name: bestSrcName, url: bestUrl, confidence: best.confidence},
+    generatedAt: new Date().toISOString(),
+    sourceCountAtGeneration: post.length,
+    wordCount: countWords(sheetMarkdown),
+    stale: false
+  };
+  await dbPut("library_sheets", record);
+  return record;
+}
+async function regenerateLibrarySheet(topic){
+  setLibraryStatus(`Refreshing sheet for "${topic}"…`);
+  await generateLibrarySheet(topic);
+  setLibraryStatus(`Sheet refreshed for "${topic}".`);
+  renderLibrary();
+}
+function libraryCoverageBadge(topic, sheets, sourceCounts){
+  if(sheets[topic]) return {label:"Sheet ready", cls:"ok"};
+  const n = sourceCounts[topic] || 0;
+  if(n > 0) return {label:`Growing (${n} source${n===1?"":"s"})`, cls:"warn"};
+  return {label:"No data", cls:"warn"};
+}
+async function renderLibraryDetail(topic, sheets, post){
+  const detail = document.getElementById("library-detail");
+  const sheet = sheets[topic];
+  const hasPost = post.some(p => p.topic === topic);
+  let body;
+  if(sheet){
+    body = `<div class="mem-item"><pre>${escapeHtml(sheet.sheetMarkdown)}</pre>
+      <div class="meta"><span>best source: ${escapeHtml(sheet.bestSource?.name || "unknown")}</span><span>${new Date(sheet.generatedAt).toLocaleString()}</span></div></div>
+      ${sheet.stale ? `<button class="ghost" onclick="regenerateLibrarySheet('${topic.replace(/'/g,"\\'")}')">↻ Refresh sheet — new verified material has landed since this was generated</button>` : ""}`;
+  } else if(hasPost){
+    body = `<div class="status-line">Generating study sheet from verified memory…</div>`;
+  } else {
+    body = `<div class="status-line">Not trained yet — nothing verified for this subject.</div>
+      <button class="primary" onclick="runLibrarySubjectTraining('${topic.replace(/'/g,"\\'")}')">▶ Train this subject</button>`;
+  }
+  detail.innerHTML = `<button class="ghost" onclick="closeLibrarySubject()">← Back</button>
+    <h2 style="margin:10px 0 4px">${escapeHtml(topic)}</h2>
+    ${body}`;
+  if(!sheet && hasPost){
+    await generateLibrarySheet(topic); // Feature 1c-2: generate once, cache it — this only runs the first time after new material lands
+    renderLibrary();
+  }
+}
+async function renderLibrary(){
+  const subs = await getLibrarySubjects();
+  const filter = (document.getElementById("library-search")?.value || "").toLowerCase();
+  const post = await dbGetAll("post_verified");
+  const sheetsArr = await dbGetAll("library_sheets");
+  const sheets = {}; sheetsArr.forEach(s => sheets[s.topic] = s);
+  await refreshWordTotal(); // populates topicWordTotals, reused here for the word-count badge
+  const sourceCounts = {};
+  for(const p of post) sourceCounts[p.topic] = (sourceCounts[p.topic]||0) + 1;
+  const grid = document.getElementById("library-grid");
+  const detail = document.getElementById("library-detail");
+  if(!grid || !detail) return;
+  if(libraryOpenTopic){
+    grid.style.display = "none";
+    detail.style.display = "block";
+    await renderLibraryDetail(libraryOpenTopic, sheets, post);
+    return;
+  }
+  grid.style.display = "grid";
+  detail.style.display = "none";
+  const shown = subs.filter(s => s.toLowerCase().includes(filter));
+  grid.innerHTML = shown.map(topic => {
+    const badge = libraryCoverageBadge(topic, sheets, sourceCounts);
+    const words = topicWordTotals[topic] || 0;
+    return `<div class="library-card project-card" tabindex="0" onclick="openLibrarySubject('${topic.replace(/'/g,"\\'")}')">
+      <h3>${escapeHtml(topic)}</h3>
+      <div class="meta" style="display:flex;justify-content:space-between;align-items:center">
+        <span class="badge ${badge.cls}">${badge.label}</span>
+        <span style="color:var(--dim);font-size:11px">${words.toLocaleString()} words</span>
+      </div>
+    </div>`;
+  }).join("") || `<div class="status-line" style="padding:12px">No subjects yet — add one above with "+ Add subject".</div>`;
+}
+// Feature 2: Page Scanner. Honest framing (see buddie-ai-library-and-scanner-prompt.md
+// §2a) — a browser page can't take a real pixel screenshot of an arbitrary external URL
+// client-side (cross-origin canvas access is blocked), which is exactly why this app
+// already routes fetches through the user's own wifiEndpoint proxy instead of fetching
+// pages directly. This is one clean full-page TEXT pass through that same proxy,
+// condensed ONCE, written as exactly one memory candidate — not a fake screenshot, and
+// not the old 3-chunks-per-page split.
+async function scanPageIntoLibrary(){
+  const urlInput = document.getElementById("library-scan-url");
+  const topicInput = document.getElementById("library-scan-topic");
+  const url = (urlInput.value||"").trim();
+  const topic = (topicInput.value||"").trim();
+  if(!url || !topic){ setLibraryStatus("Enter both a page URL and a subject to attach it to."); return; }
+  const endpoint = (await metaGet("wifiEndpoint")) || "";
+  if(!endpoint){ setLibraryStatus("Set a scraper endpoint in Settings first — a browser page can't fetch an arbitrary external site directly (CORS)."); return; }
+  setLibraryStatus(`Scanning ${url}…`);
+  try{
+    const sourceUrl = endpoint + "?q=" + encodeURIComponent(url);
+    const r = await fetch(sourceUrl);
+    const raw = await r.text();
+    const extracted = extractReadableText(raw);
+    if(!extracted){ setLibraryStatus("Nothing readable came back from that page."); return; }
+    // Single condensed write (Feature 2b): one condense pass over the WHOLE page, one
+    // item — never split into multiple chunks, and falls back to a plain slice if no
+    // scraper model is loaded, same as buildActiveSources()'s scraper source.
+    const condensed = scraperEngine ? await condenseWithScraperModel(extracted.slice(0,4000)) : extracted.slice(0,1500);
+    const {admit, reason} = await preCheckAdmit(topic, condensed, "Your Scraper");
+    if(!admit){ setLibraryStatus(`That page didn't pass the on-topic/quality check (${reason||"rejected"}) — not saved.`); return; }
+    const existingPost = await findExistingByUrl("post_verified", url);
+    if(existingPost){
+      existingPost.doc = toMemoryDoc({topic:existingPost.topic, source:existingPost.source, confidence:existingPost.confidence, facts:[condensed.slice(0,300).replace(/\n/g," ")]});
+      existingPost.timestamp = new Date().toISOString();
+      await dbPut("post_verified", existingPost);
+      await markLibrarySheetStale(existingPost.topic);
+      setLibraryStatus("This page was already Post-Verified — refreshed in place, not duplicated.");
+      renderMemory(); renderLibrary();
+      return;
+    }
+    const existingPre = await findExistingByUrl("pre_verified", url);
+    if(existingPre){
+      existingPre.raw = condensed;
+      existingPre.timestamp = new Date().toISOString();
+      await dbPut("pre_verified", existingPre);
+      setLibraryStatus("This page was already in Pre-Verified — updated in place, not duplicated.");
+    } else {
+      await dbAdd("pre_verified", { topic, source:`Your Scraper: ${url}`, raw:condensed, timestamp:new Date().toISOString(), confidence:0.3 });
+      setLibraryStatus(`Added one Pre-Verified entry for "${topic}" from that page. Run "AI Verify All" on the Memory tab to promote it.`);
+    }
+    renderMemory(); renderLibrary();
+  }catch(err){
+    setLibraryStatus(`Scan failed: ${err.message}`);
+  }
+}
+
 /* ================= PROJECTS ================= */
 async function newProject(){
   const name = prompt("Project name:");
@@ -2655,7 +3186,39 @@ async function seedMemoryIfEmpty(){
 // own. What this DOES guarantee: whatever version is in the file you replace + reload
 // is exactly what runs — nothing changes silently mid-session. This banner just makes
 // that visible so you can confirm an update actually landed after you swap the file.
-const BUILD_VERSION = "v2.13.1"; // v2.2 added the virtual pet + shop; v2.3 added the second-AI critic;
+// BUG FIX (v2.15): this constant had drifted to "v2.13.1" while the header badge next to
+// the app title was hardcoded separately and had already moved on to "v2.14" — two
+// independent version strings, silently out of sync since v2.14 shipped. The only visible
+// effect was the "Updated" canvas-log line (see checkVersionBanner below) under-reporting
+// which version you'd actually just loaded. Both now read the same string.
+const BUILD_VERSION = "v2.15"; // v2.2 added the virtual pet + shop; v2.3 added the second-AI critic;
+// v2.15 — Library tab + Page Scanner fix + manual document uploads (see
+// buddie-ai-library-and-scanner-prompt.md):
+// (1) NEW: Library tab — subjects are declared up front (no fetch just from naming one),
+//     trained explicitly ("Train all untrained subjects" or per-subject), and a study
+//     sheet is generated ONCE per subject and cached in the new library_sheets store
+//     (DB bumped 4→5) — opening a trained subject afterward is instant, zero network/
+//     model calls. New Post-Verified material for a topic marks its cached sheet stale
+//     (a "↻ refresh sheet" affordance) rather than silently going out of date or
+//     auto-regenerating (model calls stay opt-in).
+// (2) FIX: added findExistingByUrl() and wired it into processTopicQueue() — re-fetching
+//     a URL already in Pre-/Post-Verified now updates that row in place instead of adding
+//     a duplicate. (The 3-chunks-per-page scraper split this was originally paired with,
+//     per the same doc, was already fixed in this codebase before v2.15 — buildActiveSources()
+//     already returned exactly one item per page.)
+// (3) NEW: "📄 Scan this page" in the Library tab — one clean full-page text pass through
+//     the user's own scraper endpoint, condensed once, written as exactly one memory
+//     candidate. Framed honestly as a text pass, not a screenshot: a browser can't take a
+//     real pixel screenshot of an arbitrary cross-origin page client-side.
+// (4) NEW: Manual Uploads panel on the Memory tab — the user's own text-based files enter
+//     the same pre-check + AI Verify pipeline as everything else, tagged with the new
+//     MANUAL_SOURCE_NAME ("Manual Upload"). recordSourceOutcome/recordScraperStrike both
+//     no-op for that name and preCheckAdmit's trust-based auto-reject skips it, so a
+//     manually uploaded file's pass/fail never feeds into (or is gated by) the evolving
+//     scraper/source trust-weight system — it's judged on content only.
+// (5) BUG FIX: BUILD_VERSION (used by checkVersionBanner's "Updated" canvas note) had
+//     drifted out of sync with the header's hardcoded version badge — see the note above
+//     this constant.
 // v2.13 — speed + accuracy pass (bugs found reviewing the whole file, no feature changes):
 // (1) BIGGEST ACCURACY FIX: the Settings "scraper helper model" was fully functional to
 //     load, but nothing on the real ingestion path (throttledSourceFetch, used by every
