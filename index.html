@@ -152,7 +152,7 @@
 
 <header>
   <img src="data:image/png;base64,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" alt="">
-  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.15</span></h1>
+  <h1>Buddie AI <span style="font-size:10px;color:var(--dim);font-weight:normal">v2.17</span></h1>
   <span id="storage-mode-badge" style="font-size:10px;color:var(--bad);display:none"></span>
   <div id="target-bar" onclick="editTarget()">🎯 No active project target — tap to set</div>
   <span id="model-badge" style="font-size:11px;color:var(--dim);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px 8px;white-space:nowrap;flex-shrink:0" title="Model status — visible from every tab, not just Settings">🧠 …</span>
@@ -179,6 +179,10 @@
     <button class="primary" onclick="runSearch()">Find</button>
     <button class="ghost" onclick="runProject()" title="Auto-research the current project target using verified sources">▶ Run Project</button>
     <button class="ghost" onclick="regroundAI()" title="Force Buddie to re-read the full chat (and target/plan if a project is active) — use this if it seems to be looping or hallucinating">🧭 Reground</button>
+  </div>
+  <div style="padding:4px 10px;border-bottom:1px solid var(--border)">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim)">Topic queue — remembered, processed one at a time</div>
+    <div id="topic-queue-list"></div>
   </div>
   <div id="split">
     <div id="chat-col">
@@ -267,6 +271,16 @@
     <div class="status-line">Your tablet is already on WiFi just to load this page — this field isn't about connecting to WiFi. It's a separate restriction: browsers block a webpage from directly fetching most other sites' content (CORS), no matter how good your connection is. Buddie sends search-bar queries here first; run a small local proxy on your network to fetch pages for Buddie. Leave blank to use direct fetch (works for open APIs only, like Wikipedia/arXiv).</div>
   </div>
   <div class="field">
+    <label>Verification network — separate "second brain" server (your hotspot-tethered device)</label>
+    <input id="hotspot-endpoint" placeholder="http://<device-on-your-hotspot>:PORT">
+    <div class="status-line">
+      This is the independent double-check on scraped content, running on a separate device/server so it's never the same model or connection as your main chat. A browser page can't force your OS to route calls over Bluetooth/hotspot specifically instead of WiFi — that's decided by whichever network your OS has active, not by this app — so point this at whatever address that second server has, and it'll be reached however your device is currently routed to it.
+      <br>Expected contract: this address must accept <code>POST {endpoint}/verify</code> with JSON <code>{"topic","text"}</code> and reply with JSON <code>{"onTopic": true/false, "confidence": 0-100, "reason": "..."}</code>. When set, no item is promoted to Post-Verified unless BOTH your main model's check AND this endpoint agree — see the separate verification-token ledger below.
+      <br>Leave blank to skip dual-verification entirely (single-brain checking continues as before, unaffected).
+    </div>
+    <div class="status-line" id="verify-token-badge">Verification ledger: 👍 0 / 👎 0</div>
+  </div>
+  <div class="field">
     <label>Tor / .onion relay endpoint (optional, advanced — a SOCKS→HTTP bridge you run yourself)</label>
     <input id="tor-endpoint" placeholder="http://127.0.0.1:PORT">
     <div class="status-line">
@@ -345,6 +359,14 @@
     <div class="status-line">v2.4 removed the second-model "critic" — it cost a whole extra AI call per reply just to grade the first one. Auto-scoring replaces it with a free, instant, rule-based check (topical relevance, hedging language, placeholder/error detection, and self-reported-confidence consistency) — no extra model call, no extra wait. Its score nudges confidence calibration alongside your own thumbs, and Buddie keeps tuning how much weight to give it based on how often it agrees with your real feedback.</div>
   </div>
   <div class="field">
+    <label>Pause learning during big replies only</label>
+    <div style="display:flex;gap:6px;align-items:center">
+      <input id="chat-pause-threshold" type="number" min="100" step="100" style="width:90px" onchange="onChatPauseThresholdChange()">
+      <span style="color:var(--dim);font-size:12px">characters — a reply's assembled prompt at or above this size pauses the scraper/verification queue until that reply finishes; anything smaller doesn't touch it</span>
+    </div>
+    <div class="status-line">Fixes "app freezes/stutters while learning" without touching the network — short replies no longer pause anything, only ones big enough to actually compete for the device's compute. Lower this if it still stutters on medium replies; raise it if short replies feel like they're stealing time from learning.</div>
+  </div>
+  <div class="field">
     <label>Storage check</label>
     <button class="ghost" onclick="testStoragePersistence()">Test if memory is really saving</button>
     <button class="ghost" onclick="forceUpdateCheck()">🔄 Force Update Check (get a fresh copy, no cache)</button>
@@ -362,6 +384,18 @@
     <button class="ghost" onclick="wipeMemory()">Wipe all local memory</button>
     <button class="ghost" onclick="clearChatHistory()">Clear chat + canvas history</button>
     <div class="status-line">v2.5.2: chat messages and the canvas/project-work log now save to this device and reload with you — kept separate from "Wipe all local memory" since the conversation transcript and verified knowledge are different things. The last 400 chat messages / 500 canvas steps are kept; older ones roll off automatically.</div>
+  </div>
+  <div class="field">
+    <label>Save Now</label>
+    <button class="primary" onclick="saveEverythingNow()">💾 Save Now — settings + memory + pet + chats + reward weights</button>
+    <div class="status-line" id="save-now-status">Everything here already lives in this device's IndexedDB and reloads automatically on its own — this button additionally writes it all out as real files (to the folder chosen above, or your Downloads if none is chosen) so you have a portable backup.</div>
+    <label style="flex-direction:row;align-items:center;gap:6px;display:flex;margin-top:8px">
+      <input type="checkbox" id="autosave-enabled-toggle" onchange="onAutoSaveToggle()"> Auto-run Save Now every
+    </label>
+    <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+      <input id="autosave-interval-min" type="number" min="1" value="15" style="width:70px" onchange="onAutoSaveIntervalChange()"> minutes
+    </div>
+    <div class="status-line" id="autosave-status">Auto-save is off.</div>
   </div>
   <div class="status-line">
     Buddie AI stores everything in this browser's local IndexedDB, on this device only. Nothing leaves your tablet except the search bar's lookups (sent only to the endpoint you set above) and the one-time model download.
@@ -427,14 +461,14 @@ const DB_NAME = "buddie-ai-db";
 // in-memory store so the app still works for the session rather than refusing
 // to start. Data won't survive closing the tab in that mode — clearly flagged.
 let usingFallbackStore = false;
-const memStore = { pre_verified:[], post_verified:[], projects:[], plans:[], meta:[], tor_review:[], chat_log:[], canvas_log:[], library_sheets:[] };
+const memStore = { pre_verified:[], post_verified:[], projects:[], plans:[], meta:[], tor_review:[], chat_log:[], canvas_log:[], library_sheets:[], topic_queue:[] };
 let memIdCounter = 1;
 
 function openDB(){
   return new Promise((res,rej)=>{
     let req;
     try{
-      req = indexedDB.open(DB_NAME, 5); // v2.15: bumped 4→5 to add library_sheets (Library tab — cached study sheets keyed by topic, see generateLibrarySheet)
+      req = indexedDB.open(DB_NAME, 6); // v2.16: bumped 5→6 to add topic_queue (persistent, one-at-a-time scraper queue — see processTopicQueue)
     }catch(err){ rej(err); return; }
     req.onupgradeneeded = (e)=>{
       const d = e.target.result;
@@ -447,6 +481,7 @@ function openDB(){
       if(!d.objectStoreNames.contains("chat_log")) d.createObjectStore("chat_log",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("canvas_log")) d.createObjectStore("canvas_log",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("library_sheets")) d.createObjectStore("library_sheets",{keyPath:"topic"});
+      if(!d.objectStoreNames.contains("topic_queue")) d.createObjectStore("topic_queue",{keyPath:"id",autoIncrement:true});
     };
     req.onsuccess = (e)=>{ db=e.target.result; dbReadyResolve(db); res(db); };
     req.onerror = (e)=>rej(e.target.error || new Error("IndexedDB failed to open"));
@@ -1026,7 +1061,13 @@ async function rateReply(msgId, reportedConfidence, direction){
     let weights = (await metaGet("sourceWeights")) || {};
     for(const srcName of srcNames){
       weights = await recordSourceOutcome(srcName, direction === "up", weights);
-      if(direction === "down") await recordScraperStrike(srcName, "a chat reply that leaned on this source was marked unhelpful (👎)");
+      if(direction === "down"){
+        await recordScraperStrike(srcName, "a chat reply that leaned on this source was marked unhelpful (👎)");
+        // Spec: "if AI uses a memory that's been fully verified and it's wrong, AI gets a
+        // thumbsdown" — this is a verify-ledger event (the verification system's earlier
+        // "this is true" call turned out wrong), kept separate from the -2 pet.tokens above.
+        await recordVerifyToken("down", `A reply grounded in fully-verified memory from "${srcName}" was marked unhelpful by the user.`);
+      }
     }
     addCanvasStep("Source weights updated from feedback", `${direction==="up"?"👍":"👎"} on this reply ${direction==="up"?"rewarded":"penalized"}: ${srcNames.join(", ")}`);
     delete usedMemorySourcesByMsg[msgId];
@@ -1287,7 +1328,20 @@ async function sendChat(){
     ? `\nVERIFIED MEMORY (treat as ground truth; prefer this over your own guesses when it's relevant):\n${memoryContext}`
     : `\nVERIFIED MEMORY: none found relevant to this message yet. Say so plainly if the question needs research rather than guessing — the user can run a search or ▶ Run Project to build it.`;
   if(memoryUsed.length) addCanvasStep("Grounded reply", `Pulled ${memoryUsed.length} verified memory item(s) into context: ${memoryUsed.join(", ")}`);
-  const rawReply = await askAI(`Project target: ${currentTarget||"(none set)"}${planStatusText}${memoryBlock}\n\nUser: ${text}\n\nAfter your answer, on a new final line only, output exactly: CONFIDENCE: NN — where NN is 0-100, your own honest estimate of how confident you are in this specific answer.`);
+  // v2.17: only pause the scraper/verification queue when THIS particular reply's prompt
+  // is actually big enough to compete for the device's compute — a short question with
+  // little/no memory context shouldn't stall learning at all. See
+  // DEFAULT_CHAT_PAUSE_THRESHOLD_CHARS / waitWhileChatGenerating() / chatGenerating.
+  const chatPrompt = `Project target: ${currentTarget||"(none set)"}${planStatusText}${memoryBlock}\n\nUser: ${text}\n\nAfter your answer, on a new final line only, output exactly: CONFIDENCE: NN — where NN is 0-100, your own honest estimate of how confident you are in this specific answer.`;
+  const pauseThreshold = (await metaGet("chatPauseThresholdChars")) ?? DEFAULT_CHAT_PAUSE_THRESHOLD_CHARS;
+  const bigReply = chatPrompt.length >= pauseThreshold;
+  if(bigReply){ chatGenerating = true; addCanvasStep("Learning paused", `This reply's prompt is ${chatPrompt.length} chars (threshold ${pauseThreshold}) — scraper/verification paused until it's done.`); }
+  let rawReply;
+  try{
+    rawReply = await askAI(chatPrompt);
+  } finally {
+    if(bigReply) chatGenerating = false;
+  }
 
   let confidencePct = 60; // sensible default if parsing fails
   let displayText = rawReply;
@@ -1639,6 +1693,55 @@ async function rewardAIForCorrectRejection(sourceName){
   if(document.getElementById("pet-view")?.classList.contains("active")) renderPetView(p);
   addCanvasStep("🤖 AI reward", `+1 token (👍) — Buddie correctly rejected bad/unhelpful info from "${sourceName}".`);
 }
+
+/* ================= VERIFICATION LEDGER (separate from pet/main-chat economy) ================= */
+// Deliberately its own counter, NOT pet.tokens. Everything above (rewardAIForCorrectRejection,
+// rateReply's pet.tokens +1/-2) is the MAIN chat-facing economy — a human liking/disliking an
+// actual reply. This ledger is only for the dual-verification subsystem below (the hotspot
+// "second brain" agreeing/disagreeing with the scraper + main check) so that subsystem can be
+// graded, and can fail, without that failure bleeding into or punishing the main AI/pet economy.
+// A dip here never touches pet.tokens; a dip in pet.tokens never touches this.
+async function loadVerifyTokens(){ return (await metaGet("verifyTokens")) || {up:0, down:0, history:[]}; }
+async function recordVerifyToken(direction, reason){
+  const v = await loadVerifyTokens();
+  if(direction === "up") v.up += 1; else v.down += 1;
+  v.history = v.history || [];
+  v.history.push({direction, reason, at: new Date().toISOString()});
+  if(v.history.length > 200) v.history = v.history.slice(-200); // bounded log, oldest trimmed
+  await metaSet("verifyTokens", v);
+  const badge = document.getElementById("verify-token-badge");
+  if(badge) badge.textContent = `Verification ledger: 👍 ${v.up} / 👎 ${v.down}`;
+  addCanvasStep(direction === "up" ? "🔒 Verify-ledger 👍" : "🔒 Verify-ledger 👎", reason || "");
+  return v;
+}
+
+// The "double head" — an independent AI check running on a SEPARATE endpoint (a small
+// server you run on your Bluetooth/hotspot-tethered device), reached over whatever network
+// route the OS is already using — this app has no way to force a specific interface (see
+// Settings note). It never uses `engine`/askAI/your cloud keys; it is a totally separate
+// HTTP call to a totally separate address, so a failure or a wrong verdict here can never be
+// mistaken for — or blamed on — the main chat model.
+// Contract expected of your hotspot-side server: POST { topic, text } → JSON
+// { onTopic: boolean, confidence: 0-100, reason: string }. Returns null (not false) when the
+// endpoint isn't configured or isn't reachable, so callers can tell "no second opinion
+// available" apart from "second opinion said no."
+async function verifyWithHotspot(topic, text){
+  const endpoint = (await metaGet("hotspotEndpoint")) || "";
+  if(!endpoint) return null;
+  try{
+    const r = await fetch(endpoint.replace(/\/$/,"") + "/verify", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({topic, text: (text||"").slice(0,2000)})
+    });
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const j = await r.json();
+    return { onTopic: !!j.onTopic, confidence: Math.max(0, Math.min(100, Number(j.confidence)||0)), reason: (j.reason||"").toString().slice(0,300) };
+  }catch(err){
+    addCanvasStep("Verification endpoint unreachable", `"${topic}": ${err.message} — held in Pre-Verified, no token/weight change made (inconclusive, not a rejection).`);
+    return {unreachable:true};
+  }
+}
 async function updateWeights(){
   if(!window.webllm){
     document.getElementById("model-status").textContent = "Model engine still loading — wait a second and try again.";
@@ -1989,7 +2092,25 @@ function sleep(ms){ return new Promise(res=>setTimeout(res, ms)); }
 // a given source landing at a perfectly periodic, easily-throttled cadence.
 function withJitter(ms){ return Math.round(ms * (0.85 + Math.random()*0.3)); }
 
+// v2.16: LEARNING/VERIFY PAUSE. Set true only around the one big, expensive main-chat
+// reply call in sendChat() (not the scraper's own small internal checks — those would
+// otherwise deadlock against themselves). Every scraper network/verification step polls
+// this before firing, so a real chat reply in progress always gets the device's full
+// attention; the scraper picks back up automatically the moment it clears.
+// v2.17: this used to pause for EVERY reply, including short/quick ones that never
+// actually strained the device — reported as "app freezes/stutters while learning."
+// Now it only pauses when the assembled prompt (memory context + plan + history) is at
+// or above CHAT_PAUSE_THRESHOLD_CHARS characters — see sendChat(), which measures the
+// real prompt size before deciding whether to set chatGenerating. Small/simple replies
+// no longer touch this flag at all, so the scraper keeps working through them.
+const DEFAULT_CHAT_PAUSE_THRESHOLD_CHARS = 1200; // ~300 tokens — configurable in Settings
+let chatGenerating = false;
+async function waitWhileChatGenerating(){
+  while(chatGenerating) await sleep(250);
+}
+
 async function throttledSourceFetch(src, topic){
+  await waitWhileChatGenerating();
   const now = Date.now();
   const readyAt = sourceNextAvailable[src.name] || 0;
   if(now < readyAt) await sleep(readyAt - now);
@@ -2054,11 +2175,34 @@ async function preCheckAdmit(topic, text, sourceName){
       return {admit:false, reason:"source trust too low"};
     }
   }
-  if(!engine) return {admit:true, reason:null}; // no model loaded yet — can't judge, let it through to Pre-Verified for later human/AI review
-  const check = await askAI(`Quick check only: is this snippet plausible, genuinely on-topic for "${topic}", and not spam/garbage/boilerplate/navigation-menu-HTML? Reply with ONLY "OK" or "REJECT" and a 3-5 word reason.\n\n${text.slice(0,600)}`);
-  const admit = /^OK/i.test(check.trim());
-  if(!admit) addCanvasStep("Pre-check rejected before ingestion", `${sourceName} on "${topic}": ${check.trim()}`);
-  return {admit, reason: check.trim()};
+  // v2.16: STRICT gate — the old version blind-admitted everything whenever no model was
+  // loaded yet, which is a real source of "it grabs off-topic junk" (any scrape that landed
+  // before the model finished loading went straight into Pre-Verified unchecked). Now it
+  // rejects instead — nothing is treated as safe by default. The scraper naturally revisits
+  // topics on its next pass, so a rejected-for-now item isn't lost, just re-tried later once
+  // a model IS available to actually judge it.
+  // Also prefers the tiny scraper/condenser model (Settings → "Scraper helper model") for
+  // this check when loaded, instead of always spending a call on the main chat model — the
+  // on-topic gate stays its own small, fast, separate judgment.
+  const judge = scraperEngine || engine;
+  if(!judge){
+    addCanvasStep("Pre-check held", `${sourceName} on "${topic}": no model loaded yet (main or scraper helper) — rejected for now rather than admitted unchecked. Will be re-checked once one is loaded.`);
+    return {admit:false, reason:"no model loaded — strict mode rejects rather than assumes"};
+  }
+  const topicWords = topic.toLowerCase().split(/\W+/).filter(w=>w.length>2);
+  const hay = text.toLowerCase();
+  const overlap = topicWords.length ? topicWords.filter(w=>hay.includes(w)).length / topicWords.length : 1;
+  if(overlap === 0){
+    addCanvasStep("Pre-check rejected — zero keyword overlap", `${sourceName} on "${topic}": none of the topic's own words appear in the snippet — rejected before spending an AI call on it.`);
+    return {admit:false, reason:"zero keyword overlap with topic"};
+  }
+  const prompt = `STRICT topic-match check. Topic: "${topic}"\nSnippet:\n${text.slice(0,600)}\n\nReply with ONLY "OK" or "REJECT" on the first line, then a 3-6 word reason. Default to REJECT unless the snippet is clearly, specifically about "${topic}" — tangentially related, generic, navigation/boilerplate, or off-topic all mean REJECT.`;
+  const raw = judge === scraperEngine
+    ? (await scraperEngine.chat.completions.create({ messages:[{role:"user", content:prompt}], temperature:0.1 })).choices[0].message.content
+    : await askAI(prompt);
+  const admit = /^OK/i.test(raw.trim());
+  if(!admit) addCanvasStep("Pre-check rejected before ingestion", `${sourceName} on "${topic}" (judged by ${judge===scraperEngine?"scraper helper model":"main model"}): ${raw.trim()}`);
+  return {admit, reason: raw.trim()};
 }
 // Strips tags/scripts/styles from a raw scraper response so the AI checks and stored
 // memory see readable text instead of HTML soup (nav bars, script blobs, attribute
@@ -2122,62 +2266,98 @@ async function markLibrarySheetStale(topic){
     await dbPut("library_sheets", sheet);
   }
 }
+// v2.16: PERSISTENT, VISIBLE, ONE-AT-A-TIME TOPIC QUEUE. Topics are written to the
+// topic_queue store the moment they're requested — a local saved list that survives a
+// reload — and each topic's status flips queued → processing → (removed once fully done
+// across every active source) so you can see exactly which single topic is in flight.
+// Still genuinely one at a time: a topic is only marked "processing" once its predecessor
+// has cleared every source and been removed from the queue.
+async function addTopicsToQueue(topics){
+  const existing = await dbGetAll("topic_queue");
+  const already = new Set(existing.map(r=>r.topic));
+  for(const topic of topics){
+    if(!already.has(topic)) await dbAdd("topic_queue", {topic, status:"queued", addedAt:new Date().toISOString()});
+  }
+  renderTopicQueueUI();
+}
+async function removeTopicFromQueueRow(id){ await dbDelete("topic_queue", id); renderTopicQueueUI(); }
+async function renderTopicQueueUI(){
+  const el = document.getElementById("topic-queue-list");
+  if(!el) return;
+  const rows = await dbGetAll("topic_queue");
+  el.innerHTML = rows.length ? rows.map(r=>
+    `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px">
+       <span>${r.status==="processing"?"⏳":"⏸"}</span>
+       <span style="flex:1">"${escapeHtml(r.topic)}" — ${r.status}</span>
+       <button class="ghost" style="padding:2px 6px" onclick="removeTopicFromQueueRow(${r.id})" title="Remove from queue">✕</button>
+     </div>`
+  ).join("") : `<div class="status-line">No queued topics.</div>`;
+}
 async function processTopicQueue(topics){
   const sources = await buildActiveSources();
-  const tasks = [];
-  // True round robin: topic-major, source-minor. For each topic, hit every active source
-  // once before moving to the next topic — so consecutive requests are ALWAYS different
-  // sites, and any single source is only revisited once every `sources.length` requests
-  // no matter how many topics are queued.
-  for(const topic of topics){
-    for(const src of sources){
-      tasks.push({src, topic});
-    }
-  }
+  await addTopicsToQueue(topics);
   let done = 0;
   let preRejected = 0;
-  for(const task of tasks){
-    const items = await throttledSourceFetch(task.src, task.topic);
-    for(const item of items){
-      // Lightweight pre-check at the point of ingestion — separate from the full 89%
-      // verification pass later. This just filters obvious junk/off-topic noise before
-      // it ever lands in Pre-Verified, so that folder holds "plausible", not "everything".
-      const {admit} = await preCheckAdmit(task.topic, item.text, item.source);
-      if(!admit){ preRejected++; continue; }
-      // v2.15: dedupe by URL instead of always inserting. Re-scanning/re-fetching the
-      // same URL (most relevant to "Your Scraper" and the Library page-scanner, but
-      // applied here to every source for consistency) now updates the existing row in
-      // place instead of piling a duplicate on top of it.
-      const existingPost = await findExistingByUrl("post_verified", item.url);
-      if(existingPost){
-        existingPost.doc = toMemoryDoc({topic:existingPost.topic, source:existingPost.source, confidence:existingPost.confidence, facts:[item.text.slice(0,300).replace(/\n/g," ")]});
-        existingPost.timestamp = new Date().toISOString();
-        await dbPut("post_verified", existingPost);
-        await markLibrarySheetStale(existingPost.topic);
-        addCanvasStep("Re-fetch updated existing note", `${item.source} on "${task.topic}": this URL was already Post-Verified — refreshed in place instead of duplicating.`);
-        continue;
+  const totalTasks = topics.length * sources.length;
+  for(const topic of topics){
+    const rows = await dbGetAll("topic_queue");
+    const row = rows.find(r=>r.topic===topic);
+    if(row){ row.status = "processing"; await dbPut("topic_queue", row); renderTopicQueueUI(); }
+    // True round robin within this one topic: hit every active source once before this
+    // topic is considered done and the queue moves to the next one.
+    for(const src of sources){
+      const items = await throttledSourceFetch(src, topic);
+      for(const item of items){
+        // Lightweight pre-check at the point of ingestion — separate from the full 89%
+        // verification pass later. This just filters obvious junk/off-topic noise before
+        // it ever lands in Pre-Verified, so that folder holds "plausible", not "everything".
+        const {admit} = await preCheckAdmit(topic, item.text, item.source);
+        if(!admit){ preRejected++; continue; }
+        // v2.15: dedupe by URL instead of always inserting. Re-scanning/re-fetching the
+        // same URL (most relevant to "Your Scraper" and the Library page-scanner, but
+        // applied here to every source for consistency) now updates the existing row in
+        // place instead of piling a duplicate on top of it.
+        const existingPost = await findExistingByUrl("post_verified", item.url);
+        if(existingPost){
+          existingPost.doc = toMemoryDoc({topic:existingPost.topic, source:existingPost.source, confidence:existingPost.confidence, facts:[item.text.slice(0,300).replace(/\n/g," ")]});
+          existingPost.timestamp = new Date().toISOString();
+          await dbPut("post_verified", existingPost);
+          await markLibrarySheetStale(existingPost.topic);
+          addCanvasStep("Re-fetch updated existing note", `${item.source} on "${topic}": this URL was already Post-Verified — refreshed in place instead of duplicating.`);
+          continue;
+        }
+        const existingPre = await findExistingByUrl("pre_verified", item.url);
+        if(existingPre){
+          existingPre.raw = item.text;
+          existingPre.timestamp = new Date().toISOString();
+          existingPre.confidence = item.confidence;
+          await dbPut("pre_verified", existingPre);
+        } else {
+          await dbAdd("pre_verified", { topic:topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
+        }
       }
-      const existingPre = await findExistingByUrl("pre_verified", item.url);
-      if(existingPre){
-        existingPre.raw = item.text;
-        existingPre.timestamp = new Date().toISOString();
-        existingPre.confidence = item.confidence;
-        await dbPut("pre_verified", existingPre);
-      } else {
-        await dbAdd("pre_verified", { topic:task.topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
-      }
+      done++;
+      if(items.length) addCanvasStep("Progress", `[${done}/${totalTasks}] ${src.name} → "${topic}": ${items.length} result(s)`);
+      // PERF (v2.13): renderMemory() does 3 full-table reads plus a full HTML rebuild of
+      // every item in Pre/Post-Verified — calling it every 5 items made a large research
+      // run (many topics × many sources) pay for that repeatedly for no visible benefit,
+      // since most users are watching the Canvas progress log, not the Memory tab, while a
+      // run is in flight. Every 10 items (still refreshed live if you do have Memory open)
+      // plus always on completion.
+      if(done % 10 === 0 || done===totalTasks) renderMemory();
     }
-    done++;
-    if(items.length) addCanvasStep("Progress", `[${done}/${tasks.length}] ${task.src.name} → "${task.topic}": ${items.length} result(s)`);
-    // PERF (v2.13): renderMemory() does 3 full-table reads plus a full HTML rebuild of
-    // every item in Pre/Post-Verified — calling it every 5 items made a large research
-    // run (many topics × many sources) pay for that repeatedly for no visible benefit,
-    // since most users are watching the Canvas progress log, not the Memory tab, while a
-    // run is in flight. Every 10 items (still refreshed live if you do have Memory open)
-    // plus always on completion.
-    if(done % 10 === 0 || done===tasks.length) renderMemory();
+    if(row){ await dbDelete("topic_queue", row.id); renderTopicQueueUI(); }
   }
   if(preRejected) addCanvasStep("Pre-check summary", `${preRejected} result(s) filtered out before reaching Pre-Verified.`);
+}
+// v2.16: resumes any topics left mid-queue from before a reload/close — a "processing" or
+// "queued" row means that topic never finished. Fire-and-forget on startup; doesn't block
+// the rest of the app.
+async function resumeQueuedTopicsOnStartup(){
+  const rows = await dbGetAll("topic_queue");
+  if(!rows.length) return;
+  addCanvasStep("Resuming queued topics", `${rows.length} topic(s) left over from before: ${rows.map(r=>r.topic).join(", ")}`);
+  processTopicQueue(rows.map(r=>r.topic));
 }
 
 /* ================= VERIFIED SOURCES ================= */
@@ -2617,6 +2797,34 @@ async function verifyAll(topicFilter=null){
                               : 0.97; // uncorroborated + uncurated: very high bar, but not impossible
     const finalConfidence = confidencePct / 100;
     if(finalConfidence >= effectiveThreshold){
+      // v2.16: DUAL-VERIFICATION GATE. The checks above are all still the same single
+      // "main brain" (askAI/engine). If a hotspot endpoint is configured (Settings →
+      // Verification Network), a passing item now ALSO needs the independent second
+      // opinion before it's allowed to promote — this is the actual "two heads" check,
+      // and it runs on a separate connection/device, never through `engine`/askAI.
+      const hotspot = await verifyWithHotspot(item.topic, item.raw);
+      if(hotspot && hotspot.unreachable){
+        // Inconclusive: neither side is graded, item stays in Pre-Verified untouched for
+        // a later retry once the endpoint is reachable again.
+        continue;
+      }
+      if(hotspot){
+        const hotspotAgrees = hotspot.onTopic && hotspot.confidence >= Math.round(effectiveThreshold*100) - 10;
+        if(!hotspotAgrees){
+          // Verify-AI catches something the main check + scraper both thought was fine:
+          // verify-ledger is right (+1), scraper is wrong (trust down + strike), item is
+          // NOT promoted. This is "ai rejects a scraper verified drop" from the spec.
+          await dbDelete("pre_verified", item.id);
+          sourceWeightsCache = await recordSourceOutcome(sourceName, false, sourceWeightsCache);
+          await recordScraperStrike(sourceName, `"${item.topic}" passed the main check (${confidencePct}%) but the independent verification endpoint disagreed: ${hotspot.reason||"no reason given"}`);
+          await recordVerifyToken("up", `Caught a false-positive from "${sourceName}" on "${item.topic}" that the main check missed.`);
+          trashedCount++;
+          addCanvasStep("Trashed — second opinion disagreed", `"${item.topic}": main check said ${confidencePct}%, hotspot verifier said ${hotspot.confidence}% / on-topic=${hotspot.onTopic}.`);
+          continue;
+        }
+        // Both independent checks agree the item is true and on-topic: +1 verify token.
+        await recordVerifyToken("up", `Main check and hotspot verifier agreed on "${item.topic}" (${confidencePct}% / ${hotspot.confidence}%).`);
+      }
       const doc = toMemoryDoc({topic:item.topic, source:item.source, confidence:finalConfidence, facts:[item.raw.slice(0,300).replace(/\n/g," ")]});
       const docWords = countWords(doc);
       const topicWordsSoFar = runningTopicWords[item.topic] || 0;
@@ -2632,7 +2840,19 @@ async function verifyAll(topicFilter=null){
       const newId = await dbAdd("post_verified", {topic:item.topic, source:item.source, confidence:finalConfidence, doc, timestamp:new Date().toISOString()});
       await writeMemoryFileToFolder({id:newId, topic:item.topic, doc});
       await dbDelete("pre_verified", item.id);
+      const weightsBefore = JSON.stringify(sourceWeightsCache[sourceName]||null);
       sourceWeightsCache = await recordSourceOutcome(sourceName, true, sourceWeightsCache);
+      if(hotspot){
+        // Confirm the weight update actually happened before awarding the second token.
+        // Per spec: if the weight change silently didn't take (or got rejected), that's a
+        // thumbs-down on the VERIFICATION half only — never on pet.tokens/main economy.
+        const weightsAfter = JSON.stringify(sourceWeightsCache[sourceName]||null);
+        if(weightsAfter !== weightsBefore){
+          await recordVerifyToken("up", `Scraper trust weight for "${sourceName}" updated and the hotspot auto-check agreed with the change.`);
+        } else {
+          await recordVerifyToken("down", `Weight update for "${sourceName}" did not take effect — verification half only, not counted against the main AI.`);
+        }
+      }
       runningTopicWords[item.topic] = topicWordsSoFar + docWords;
       await markLibrarySheetStale(item.topic); // v2.15: new Post-Verified content invalidates any cached Library sheet for this topic
       verifiedCount++;
@@ -2819,6 +3039,97 @@ async function exportMemory(){
     a.remove();
     setTimeout(()=>URL.revokeObjectURL(url), 1000);
   });
+}
+// v2.16: SAVE NOW — one button that writes out literally everything: settings, both
+// Pre-Verified and Post-Verified memory, the pet, chat/canvas history, projects/plans,
+// the topic queue, and every reward/weight ledger (source trust, strikes, verify tokens,
+// confidence calibration). This is IN ADDITION to IndexedDB, which already autoloads all
+// of this on every reload (see the window "load" handler at the bottom) — this button's
+// job is producing a real portable file, not making the app remember things it doesn't
+// already remember.
+async function buildFullBackupBundle(){
+  const [pre, post, pet, sourceWeights, sourceStrikes, verifyTokens, calib, autoWeightScores,
+         projects, plans, chatLog, canvasLog, topicQueue, cloudKeys] = await Promise.all([
+    dbGetAll("pre_verified"), dbGetAll("post_verified"), loadPet(),
+    metaGet("sourceWeights"), metaGet("sourceStrikes"), loadVerifyTokens(),
+    metaGet("confidenceCalibration"), metaGet("autoWeightScores"),
+    dbGetAll("projects"), dbGetAll("plans"), dbGetAll("chat_log"), dbGetAll("canvas_log"),
+    dbGetAll("topic_queue"), getCloudKeys()
+  ]);
+  return {
+    exportedAt: new Date().toISOString(),
+    appVersion: "2.17",
+    settings: {
+      wifiEndpoint: await metaGet("wifiEndpoint"),
+      torEndpoint: await metaGet("torEndpoint"),
+      hotspotEndpoint: await metaGet("hotspotEndpoint"),
+      selectedModelId: await metaGet("selectedModelId"),
+      scraperModelId: await metaGet("scraperModelId"),
+      preferCloud: await metaGet("preferCloud"),
+      autoScoreEnabled: await metaGet("autoScoreEnabled"),
+      autoSaveEnabled: await metaGet("autoSaveEnabled"),
+      autoSaveIntervalMin: await metaGet("autoSaveIntervalMin"),
+      chatPauseThresholdChars: await metaGet("chatPauseThresholdChars"),
+      cloudKeys // note: includes raw key values, same trust model as this device's IndexedDB already storing them — see the warning in Settings
+    },
+    pet,
+    rewardWeights: { sourceWeights, sourceStrikes, verifyTokens, confidenceCalibration: calib, autoWeightScores },
+    memory: { preVerified: pre, postVerified: post },
+    projectsAndPlans: { projects, plans },
+    chatLog, canvasLog, topicQueue
+  };
+}
+async function saveEverythingNow(){
+  const statusEl = document.getElementById("save-now-status");
+  try{
+    await exportMemory(); // existing Post-Verified .md export — folder or download, per current setup
+    const bundle = await buildFullBackupBundle();
+    const json = JSON.stringify(bundle, null, 2);
+    const filename = `buddie-full-backup-${new Date().toISOString().replace(/[:.]/g,"-")}.json`;
+    if(memoryDirHandle){
+      const fileHandle = await memoryDirHandle.getFileHandle(filename, {create:true});
+      const writable = await fileHandle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      statusEl.textContent = `Saved — settings/memory/pet/chats/weights written to "${memoryDirHandle.name}/${filename}" at ${new Date().toLocaleTimeString()}.`;
+    } else {
+      const blob = new Blob([json], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 1000);
+      statusEl.textContent = `Saved — downloaded "${filename}" at ${new Date().toLocaleTimeString()} (choose a folder above to save directly instead of downloading each time).`;
+    }
+  }catch(err){
+    statusEl.textContent = `Save failed: ${err.message}`;
+  }
+}
+let autoSaveTimer = null;
+function startAutoSaveTimer(minutes){
+  if(autoSaveTimer) clearInterval(autoSaveTimer);
+  autoSaveTimer = setInterval(saveEverythingNow, Math.max(1, minutes) * 60000);
+  document.getElementById("autosave-status").textContent = `Auto-saving every ${minutes} minute(s).`;
+}
+function stopAutoSaveTimer(){
+  if(autoSaveTimer) clearInterval(autoSaveTimer);
+  autoSaveTimer = null;
+  document.getElementById("autosave-status").textContent = "Auto-save is off.";
+}
+async function onAutoSaveToggle(){
+  const enabled = document.getElementById("autosave-enabled-toggle").checked;
+  await metaSet("autoSaveEnabled", enabled);
+  const minutes = parseInt(document.getElementById("autosave-interval-min").value, 10) || 15;
+  if(enabled) startAutoSaveTimer(minutes); else stopAutoSaveTimer();
+}
+async function onAutoSaveIntervalChange(){
+  const minutes = parseInt(document.getElementById("autosave-interval-min").value, 10) || 15;
+  await metaSet("autoSaveIntervalMin", minutes);
+  if(document.getElementById("autosave-enabled-toggle").checked) startAutoSaveTimer(minutes);
+}
+async function onChatPauseThresholdChange(){
+  const chars = parseInt(document.getElementById("chat-pause-threshold").value, 10) || DEFAULT_CHAT_PAUSE_THRESHOLD_CHARS;
+  await metaSet("chatPauseThresholdChars", chars);
 }
 async function wipeMemory(){
   if(!confirm("This deletes all local memory permanently. Continue?")) return;
@@ -3116,11 +3427,14 @@ function activateProject(id, goal){
 /* ================= SETTINGS PERSISTENCE ================= */
 document.getElementById("wifi-endpoint").addEventListener("change", (e)=>metaSet("wifiEndpoint", e.target.value.trim()));
 document.getElementById("tor-endpoint").addEventListener("change", (e)=>metaSet("torEndpoint", e.target.value.trim()));
+document.getElementById("hotspot-endpoint").addEventListener("change", (e)=>metaSet("hotspotEndpoint", e.target.value.trim()));
 async function loadSettings(){
   const ep = await metaGet("wifiEndpoint");
   if(ep) document.getElementById("wifi-endpoint").value = ep;
   const torEp = await metaGet("torEndpoint");
   if(torEp) document.getElementById("tor-endpoint").value = torEp;
+  const hotspotEp = await metaGet("hotspotEndpoint");
+  if(hotspotEp) document.getElementById("hotspot-endpoint").value = hotspotEp;
   document.getElementById("autoscore-toggle").checked = await loadAutoScoreSetting();
   // BUG FIX (v2.13): this checkbox defaults to checked in the HTML and was never
   // restored from storage on load — turning "Prefer cloud" off, then reloading, showed
@@ -3128,6 +3442,18 @@ async function loadSettings(){
   // from metaGet. The setting worked; the checkbox was lying about its own state.
   const preferCloud = await metaGet("preferCloud");
   document.getElementById("prefer-cloud-toggle").checked = preferCloud === null ? true : !!preferCloud;
+  // v2.16: restore Save Now / auto-save + verification-ledger badge state
+  const v = await loadVerifyTokens();
+  const vBadge = document.getElementById("verify-token-badge");
+  if(vBadge) vBadge.textContent = `Verification ledger: 👍 ${v.up} / 👎 ${v.down}`;
+  const autoMinutes = (await metaGet("autoSaveIntervalMin")) || 15;
+  document.getElementById("autosave-interval-min").value = autoMinutes;
+  const autoOn = !!(await metaGet("autoSaveEnabled"));
+  document.getElementById("autosave-enabled-toggle").checked = autoOn;
+  if(autoOn) startAutoSaveTimer(autoMinutes);
+  // v2.17: restore the big-reply pause threshold (see sendChat/onChatPauseThresholdChange)
+  const pauseChars = (await metaGet("chatPauseThresholdChars")) ?? DEFAULT_CHAT_PAUSE_THRESHOLD_CHARS;
+  document.getElementById("chat-pause-threshold").value = pauseChars;
 }
 
 function toggleCanvas(){
@@ -3495,6 +3821,8 @@ window.addEventListener("load", async ()=>{
   await petTick();               // catch up pet state (drain/death/AI spending) for time since last open
   setInterval(petTick, 30000);   // re-check every 30s while the app is open
   await loadCanvasLog();
+  renderTopicQueueUI();
+  resumeQueuedTopicsOnStartup(); // fire-and-forget — picks back up any topics left mid-queue
   const restoredCount = await loadChatLog();
   if(restoredCount === 0){
     addMsg("ai", "Hey — I'm Buddie. I've started with baseline communication, listening, planning, and comprehension knowledge in memory. Set a project target above — I'm loading a local model in the background now (see Settings for progress), then use ▶ Run Project to have me research it against verified sources automatically. Rate my replies 👍/👎 to earn me tokens — check the Pet tab to watch me spend them myself (eggs, food, water) and see my purchase log.");
