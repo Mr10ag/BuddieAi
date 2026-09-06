@@ -7,7 +7,17 @@
 // cached by the app itself via IndexedDB/Cache Storage, and we don't
 // want to interfere with that.
 
-const CACHE_NAME = "buddie-ai-shell-v3";
+// BUG FIX: this was "buddie-ai-shell-v3" with a cache-first fetch strategy
+// (`return cached || network`) — every load served the OLD cached index.html
+// immediately and only updated the cache in the BACKGROUND for next time, so
+// replacing index.html on disk needed two full reloads to actually take
+// effect, and since this file's own bytes never changed, the browser never
+// even re-checked for a newer service worker in the meantime. Bumping the
+// cache name here forces this fix itself to install as a real update, and
+// the fetch handler below is now network-first: whenever you're online you
+// always get the real current file from disk, with the cache only used as
+// an offline fallback.
+const CACHE_NAME = "buddie-ai-shell-v4";
 const SHELL_FILES = [
   "./",
   "./index.html",
@@ -44,18 +54,21 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Network-first, cache as offline fallback. This is the opposite priority
+  // from before on purpose: for a local app shell you edit and replace by
+  // hand, "always show the current file when I have a connection" is the
+  // correct default — the cache should only ever be seen when genuinely
+  // offline, not silently substituted for a fresher file that's sitting
+  // right there on disk/network.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const network = fetch(event.request)
-        .then((response) => {
-          if (response && response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-          }
-          return response;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
