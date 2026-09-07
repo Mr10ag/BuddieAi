@@ -416,7 +416,7 @@ function openDB(){
   return new Promise((res,rej)=>{
     let req;
     try{
-      req = indexedDB.open(DB_NAME, 7); // v2.15: bumped 4→7 — a VersionError ("requested version (4) is less than the existing version (6)") means some previous build of this app already created this browser's "buddie-ai-db" at a higher version than this file was requesting. IndexedDB refuses to open at a LOWER version than what's already there, so it doesn't matter what schema changes actually happened — the number just has to be higher than anything ever opened on a given device. No new object stores needed this bump; onupgradeneeded's create-if-missing checks below are already safe to run again.
+      req = indexedDB.open(DB_NAME, 8); // v2.16: bumped 7→8 — added the "strategy_items" store for the new per-project Goals→Initiatives→Features strategy tree. Same rule as every past bump: the number only needs to be higher than whatever's already on a given device, no other schema changes required.
     }catch(err){ rej(err); return; }
     req.onupgradeneeded = (e)=>{
       const d = e.target.result;
@@ -428,6 +428,7 @@ function openDB(){
       if(!d.objectStoreNames.contains("tor_review")) d.createObjectStore("tor_review",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("chat_log")) d.createObjectStore("chat_log",{keyPath:"id",autoIncrement:true});
       if(!d.objectStoreNames.contains("canvas_log")) d.createObjectStore("canvas_log",{keyPath:"id",autoIncrement:true});
+      if(!d.objectStoreNames.contains("strategy_items")) d.createObjectStore("strategy_items",{keyPath:"id",autoIncrement:true});
     };
     req.onsuccess = (e)=>{ db=e.target.result; dbReadyResolve(db); res(db); };
     req.onerror = (e)=>rej(e.target.error || new Error("IndexedDB failed to open"));
@@ -876,6 +877,7 @@ document.querySelectorAll("nav button").forEach(b=>{
     if(b.dataset.view==="memory-view") renderMemory();
     if(b.dataset.view==="projects-view") renderProjects();
     if(b.dataset.view==="pet-view") renderPetView();
+    if(b.dataset.view==="settings-view"){ ensureSettingsViewLoaded(); renderSystemStatus(); }
   };
 });
 
@@ -1454,7 +1456,7 @@ function onModelSourceChange(){
   // BUG FIX (v2.14.1): this choice was applied at runtime (loadModel() reads the radio
   // directly) but never actually saved anywhere, so a reload always silently reset the
   // page back to "cdn" even if you'd picked "local" and set a server address. Now saved
-  // and restored in loadSettings() below, same pattern as every other settings field.
+  // and restored in restoreCriticalModelSettings() below, same pattern as every other settings field.
   metaSet("modelSource", val);
   renderSystemStatus();
 }
@@ -2679,14 +2681,16 @@ document.getElementById("tor-endpoint").addEventListener("change", (e)=>{ metaSe
 // clicked "Load Model" (inside loadModel()) — if you typed it and reloaded before
 // loading, it was lost. Saving on change too, same pattern as wifi/tor above.
 document.getElementById("local-model-url").addEventListener("change", (e)=>metaSet("localModelUrl", e.target.value.trim()));
-async function loadSettings(){
-  const ep = await metaGet("wifiEndpoint");
-  if(ep) document.getElementById("wifi-endpoint").value = ep;
-  const torEp = await metaGet("torEndpoint");
-  if(torEp) document.getElementById("tor-endpoint").value = torEp;
-  document.getElementById("autoscore-toggle").checked = await loadAutoScoreSetting();
-  // BUG FIX (v2.14.1): model-source radio (cdn/local) + local-model-url were never
-  // restored on load — see onModelSourceChange() above for the save-side half of this fix.
+// v2.16: split what used to be one loadSettings() into two functions.
+// restoreCriticalModelSettings() MUST still run at startup regardless of whether the
+// Settings tab is ever opened — loadModel() (called automatically by
+// autoLoadModelOnStartup on every page load) reads the model-source radio and the
+// local-model-url field straight off the DOM, not from storage. If restoring those
+// were deferred until someone actually opened Settings, anyone using "local server"
+// mode would silently fall back to CDN mode on every reload until they happened to
+// visit that tab. Everything else in the old function only affects what the Settings
+// view itself displays, so it's safe to defer until that tab is first opened.
+async function restoreCriticalModelSettings(){
   const modelSource = await metaGet("modelSource");
   const localUrl = await metaGet("localModelUrl");
   if(localUrl) document.getElementById("local-model-url").value = localUrl;
@@ -2695,7 +2699,24 @@ async function loadSettings(){
     if(radio) radio.checked = true;
   }
   onModelSourceChange();
-  await renderSystemStatus();
+}
+let settingsViewInitialized = false;
+async function ensureSettingsViewLoaded(){
+  // PERF: lazy-load — this used to run unconditionally at startup (populating fields
+  // on a tab most sessions never open), racing against the model catalog CDN import,
+  // IndexedDB reads, and everything else in the load handler for no visible benefit
+  // until Settings was actually opened. Runs once, the first time the tab is opened.
+  if(settingsViewInitialized) return;
+  settingsViewInitialized = true;
+  const [ep, torEp, autoScoreOn] = await Promise.all([
+    metaGet("wifiEndpoint"),
+    metaGet("torEndpoint"),
+    loadAutoScoreSetting()
+  ]);
+  if(ep) document.getElementById("wifi-endpoint").value = ep;
+  if(torEp) document.getElementById("tor-endpoint").value = torEp;
+  document.getElementById("autoscore-toggle").checked = autoScoreOn;
+  await populateScraperModelSelect();
 }
 
 /* ================= SYSTEM STATUS PANEL (Settings tab) =================
@@ -3093,12 +3114,16 @@ window.addEventListener("load", async ()=>{
   await requestPersistentStorage();
   const cacheCheck = await checkModelCachePersistence();
   await loadTarget();
-  await loadSettings();
+  // PERF: only the model-source/local-model-url state is restored eagerly here — it's
+  // load-bearing for autoLoadModelOnStartup() below regardless of which tab is open.
+  // The rest of the Settings view (wifi/tor fields, scraper model dropdown, etc.) and
+  // the Memory view's initial render are deferred to ensureSettingsViewLoaded() / the
+  // nav handler's renderMemory() call, so a normal page load doesn't do the work for
+  // two tabs nobody has looked at yet — see those functions for the full reasoning.
+  await restoreCriticalModelSettings();
   await reconnectMemoryFolder(true); // best-effort, silent: re-activates the memory upload/export folder without needing a manual click if the browser still honors the earlier grant
   await seedMemoryIfEmpty();
   await checkVersionBanner();
-  renderMemory();
-  await populateScraperModelSelect();
   await petTick();               // catch up pet state (drain/death/AI spending) for time since last open
   setInterval(petTick, 30000);   // re-check every 30s while the app is open
   await loadCanvasLog();
