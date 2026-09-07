@@ -279,36 +279,6 @@
     </div>
   </div>
 
-  <!-- ============ CLOUD: optional dev-key rotation ============ -->
-  <div class="settings-group">
-    <div class="settings-group-header"><h3>☁️ Cloud AI <span style="color:var(--dim);font-weight:400">(optional)</span></h3><span class="loc-badge cloud">Cloud · leaves device</span></div>
-    <div class="field">
-      <label>Cloud dev keys — optional, round-robin pool (all calls still fall back to the local model above if every key fails or none are added)</label>
-      <div class="status-line">
-        Add as many keys from as many providers as you have. Every reply request tries the next healthy key in rotation; a key that errors out (bad key, rate-limited, or blocked by the browser's CORS rules — some providers don't allow direct browser calls at all) gets put on a cooldown and skipped automatically, so only keys that actually connect stay in active use. If every key is cooling down or none are configured, Buddie transparently uses the local on-device model instead — nothing ever just fails silently.
-        <br>⚠️ Keys are stored only in this device's local IndexedDB (same as everything else in this app) — never written into the HTML file itself, never sent anywhere except straight to that provider's own API. Still, this is a browser page holding raw API keys in memory to call providers directly — treat it like any other place you'd paste a real dev key, and use keys you're comfortable exposing client-side (e.g. capped-spend/test keys), not a production key.
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
-        <select id="cloud-key-provider" onchange="onCloudProviderChange()" style="flex:1;min-width:120px">
-          <option value="openai">OpenAI</option>
-          <option value="anthropic">Anthropic (Claude)</option>
-          <option value="gemini">Google (Gemini)</option>
-          <option value="custom">Custom (OpenAI-compatible endpoint)</option>
-        </select>
-      </div>
-      <div class="status-line"><a id="cloud-key-get-link" href="#" target="_blank" rel="noopener" style="color:var(--accent)">Get an OpenAI key →</a></div>
-      <input id="cloud-key-label" placeholder="label for this key, e.g. \"personal acct\" or \"work key #2\" (your own note — helps when managing several of the same provider)" style="margin-top:6px">
-      <input id="cloud-key-model" placeholder="model name, e.g. gpt-4o-mini" style="margin-top:6px">
-      <input id="cloud-key-baseurl" placeholder="https://your-endpoint/v1/chat/completions" style="margin-top:6px;display:none">
-      <input id="cloud-key-value" type="password" placeholder="paste API key" style="margin-top:6px">
-      <button class="ghost" style="margin-top:6px;width:fit-content" onclick="addCloudKey()">+ Add key to rotation</button>
-      <div id="cloud-keys-list" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"></div>
-      <label style="flex-direction:row;align-items:center;gap:6px;display:flex;margin-top:6px">
-        <input type="checkbox" id="prefer-cloud-toggle" checked onchange="metaSet('preferCloud', this.checked); renderSystemStatus()"> Prefer cloud rotation over local model when at least one key is healthy
-      </label>
-    </div>
-  </div>
-
   <!-- ============ NETWORK: endpoints you point Buddie at yourself ============ -->
   <div class="settings-group">
     <div class="settings-group-header"><h3>🌐 Network &amp; Search Endpoints</h3><span class="loc-badge network">Network · your own endpoint</span></div>
@@ -1740,201 +1710,10 @@ async function benchmarkModel(){
 }
 checkWebGPU();
 
-/* ================= CLOUD DEV KEY ROTATION ================= */
-// v2.13: optional pool of your own dev-account API keys, round-robined across requests.
-// Nothing here replaces the local WebLLM model — it's an extra tier tried FIRST (when
-// healthy keys exist and "prefer cloud" is on), with the local `engine` from above as the
-// unconditional fallback, so the app behaves exactly as before if you never add a key.
-const CLOUD_PROVIDERS = {
-  openai: {
-    label: "OpenAI",
-    defaultModel: "gpt-4o-mini",
-    keyUrl: "https://platform.openai.com/api-keys",
-    endpoint: () => "https://api.openai.com/v1/chat/completions",
-    headers: (key) => ({ "Content-Type":"application/json", "Authorization": `Bearer ${key}` }),
-    body: (model, messages, maxTokens) => JSON.stringify({ model, messages, max_tokens: maxTokens }),
-    parse: (j) => j.choices?.[0]?.message?.content ?? ""
-  },
-  anthropic: {
-    label: "Anthropic",
-    defaultModel: "claude-haiku-4-5-20251001",
-    keyUrl: "https://console.anthropic.com/settings/keys",
-    // anthropic-dangerous-direct-browser-access is required for this API to accept a
-    // call made straight from browser JS at all (it's blocked by default otherwise).
-    headers: (key) => ({ "Content-Type":"application/json", "x-api-key": key, "anthropic-version":"2023-06-01", "anthropic-dangerous-direct-browser-access":"true" }),
-    body: (model, messages, maxTokens) => JSON.stringify({ model, max_tokens: maxTokens, messages }),
-    parse: (j) => (j.content||[]).map(c=>c.text||"").join("")
-  },
-  gemini: {
-    label: "Gemini",
-    defaultModel: "gemini-2.0-flash",
-    keyUrl: "https://aistudio.google.com/app/apikey",
-    endpoint: (key, model) => `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`,
-    headers: () => ({ "Content-Type":"application/json" }),
-    body: (model, messages, maxTokens) => JSON.stringify({
-      contents: messages.map(m=>({ role: m.role==="assistant"?"model":"user", parts:[{text:m.content}] })),
-      generationConfig: { maxOutputTokens: maxTokens }
-    }),
-    parse: (j) => j.candidates?.[0]?.content?.parts?.map(p=>p.text).join("") ?? ""
-  },
-  custom: {
-    label: "Custom",
-    defaultModel: "",
-    keyUrl: null,
-    endpoint: (key, model, baseUrl) => baseUrl,
-    headers: (key) => ({ "Content-Type":"application/json", "Authorization": `Bearer ${key}` }),
-    body: (model, messages, maxTokens) => JSON.stringify({ model, messages, max_tokens: maxTokens }),
-    parse: (j) => j.choices?.[0]?.message?.content ?? j.content ?? ""
-  }
-};
-function onCloudProviderChange(){
-  const p = document.getElementById("cloud-key-provider").value;
-  const cfg = CLOUD_PROVIDERS[p];
-  document.getElementById("cloud-key-model").placeholder = `model name, e.g. ${cfg.defaultModel || "your-model-id"}`;
-  document.getElementById("cloud-key-baseurl").style.display = p === "custom" ? "block" : "none";
-  const link = document.getElementById("cloud-key-get-link");
-  if(cfg.keyUrl){
-    link.style.display = "inline";
-    link.href = cfg.keyUrl;
-    link.textContent = `Get a${/^[aeiou]/i.test(cfg.label)?"n":""} ${cfg.label} key →`;
-  } else {
-    link.style.display = "none"; // custom endpoints don't have a universal signup page
-  }
-}
-function maskKey(k){ return k.length <= 8 ? "••••" : k.slice(0,4) + "…" + k.slice(-4); }
-async function getCloudKeys(){ return (await metaGet("cloudKeys")) || []; }
-async function saveCloudKeys(keys){ await metaSet("cloudKeys", keys); }
-async function addCloudKey(){
-  const provider = document.getElementById("cloud-key-provider").value;
-  const label = document.getElementById("cloud-key-label").value.trim();
-  const model = document.getElementById("cloud-key-model").value.trim() || CLOUD_PROVIDERS[provider].defaultModel;
-  const baseUrl = document.getElementById("cloud-key-baseurl").value.trim();
-  const key = document.getElementById("cloud-key-value").value.trim();
-  if(!key){ alert("Paste a key first."); return; }
-  if(provider === "custom" && !baseUrl){ alert("Custom provider needs an endpoint URL."); return; }
-  const keys = await getCloudKeys();
-  keys.push({ id: Date.now()+Math.random(), provider, label, model, baseUrl, key, enabled:true, cooldownUntil:0, fails:0, uses:0, lastUsed:0, lastStatus:"untested" });
-  await saveCloudKeys(keys);
-  document.getElementById("cloud-key-label").value = "";
-  document.getElementById("cloud-key-value").value = "";
-  renderCloudKeysList();
-}
-async function removeCloudKey(id){
-  const keys = (await getCloudKeys()).filter(k=>k.id!==id);
-  await saveCloudKeys(keys);
-  renderCloudKeysList();
-}
-async function toggleCloudKey(id, enabled){
-  const keys = await getCloudKeys();
-  const k = keys.find(k=>k.id===id); if(k) k.enabled = enabled;
-  await saveCloudKeys(keys);
-}
-async function renderCloudKeysList(){
-  const el = document.getElementById("cloud-keys-list");
-  if(!el) return;
-  const keys = await getCloudKeys();
-  const statusBadge = k => {
-    if(k.cooldownUntil > Date.now()) return `<span class="badge warn">cooling down ~${Math.ceil((k.cooldownUntil-Date.now())/1000)}s</span>`;
-    if(k.lastStatus === "healthy") return `<span class="badge ok">connected</span>`;
-    if(k.lastStatus === "error") return `<span class="badge bad">failed last try</span>`;
-    return `<span class="badge warn">untested</span>`;
-  };
-  el.innerHTML = keys.map(k => `
-    <div class="mem-item" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-      <div>
-        <b>${escapeHtml(k.label || CLOUD_PROVIDERS[k.provider]?.label || k.provider)}</b>
-        <span style="color:var(--dim);font-size:11px">(${escapeHtml(CLOUD_PROVIDERS[k.provider]?.label || k.provider)} — ${escapeHtml(k.model)})</span>
-        <div class="meta"><span>${escapeHtml(maskKey(k.key))} · used ${k.uses||0}×</span> ${statusBadge(k)}</div>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center">
-        <label style="flex-direction:row;gap:4px;display:flex;font-size:11px"><input type="checkbox" ${k.enabled?"checked":""} onchange="toggleCloudKey(${JSON.stringify(k.id)}, this.checked)">on</label>
-        <button class="ghost" onclick="removeCloudKey(${JSON.stringify(k.id)})">Remove</button>
-      </div>
-    </div>`).join("") || `<div class="status-line">No keys added — using local model only.</div>`;
-  renderSystemStatus();
-}
-// Round-robin by least-recently-used among enabled, non-cooling keys — spreads load
-// across the whole pool instead of hammering key #1 until it rate-limits.
-function pickNextHealthyKey(keys){
-  const now = Date.now();
-  const usable = keys.filter(k => k.enabled && k.cooldownUntil <= now);
-  if(!usable.length) return null;
-  usable.sort((a,b) => a.lastUsed - b.lastUsed);
-  return usable[0];
-}
-function backoffFor(fails){ return Math.min(60000, 2000 * Math.pow(2, Math.min(fails,5))); } // 2s,4s,8s...capped at 60s
-
-/* ---- token-budget optimizer: trims what gets SENT so each cloud call burns the least
-   possible tokens, instead of always shipping the full prompt/context every time. This
-   is a char-count heuristic (~4 chars/token) since real tokenizers differ per provider
-   and aren't worth shipping client-side just to estimate. ---- */
-const CLOUD_INPUT_TOKEN_BUDGET = 1400;
-const CLOUD_OUTPUT_TOKEN_BUDGET = 300;
-function estimateTokens(text){ return Math.ceil((text||"").length / 4); }
-// Keeps the most recent/most important tail of the prompt (system instructions +
-// question are usually near the end of Buddie's prompts) and trims older bulk context
-// from the front first, rather than blindly hard-cutting the whole thing.
-function trimToTokenBudget(text, maxTokens){
-  if(estimateTokens(text) <= maxTokens) return text;
-  const maxChars = maxTokens * 4;
-  return "[...older context trimmed to save tokens...]\n" + text.slice(-maxChars);
-}
-
-async function callCloudModel(entry, prompt){
-  const cfg = CLOUD_PROVIDERS[entry.provider];
-  const trimmedPrompt = trimToTokenBudget(prompt, CLOUD_INPUT_TOKEN_BUDGET);
-  const messages = [{ role:"user", content: trimmedPrompt }];
-  const url = cfg.endpoint(entry.key, entry.model, entry.baseUrl);
-  const res = await fetch(url, {
-    method: "POST",
-    headers: cfg.headers(entry.key),
-    body: cfg.body(entry.model, messages, CLOUD_OUTPUT_TOKEN_BUDGET)
-  });
-  if(!res.ok) throw new Error(`HTTP ${res.status}`);
-  const j = await res.json();
-  const text = cfg.parse(j);
-  if(!text) throw new Error("empty response");
-  return text;
-}
-
-// v2.14.2: tracks which judge (which cloud provider/key, or the local model) actually
-// answered the MOST RECENT askAI() call. Needed because cloud key rotation means two
-// consecutive askAI() calls in the same verify pass (e.g. Pass 1 then Pass 2 on the same
-// item) can silently be answered by two DIFFERENT providers if a key fails and rotation
-// moves to the next one mid-run — a real, previously invisible source of inconsistent
-// verification judgments ("memories have been weird"). Read via lastAskAISource()
-// immediately after each askAI() call that needs to attribute its result.
+/* ================= AI CALL (local model only — cloud rotation removed) ================= */
 let _lastAskAISource = "local model";
 function lastAskAISource(){ return _lastAskAISource; }
 async function askAI(prompt){
-  const preferCloud = (await metaGet("preferCloud")) ?? true;
-  if(preferCloud){
-    let keys = await getCloudKeys();
-    // Try each currently-usable key once, in rotation order, before giving up on cloud
-    // entirely for this request — a single flaky key shouldn't force a local fallback
-    // when three other keys in the pool are fine.
-    for(let attempt = 0; attempt < keys.length; attempt++){
-      const entry = pickNextHealthyKey(keys);
-      if(!entry) break;
-      entry.lastUsed = Date.now();
-      try{
-        const text = await callCloudModel(entry, prompt);
-        entry.lastStatus = "healthy"; entry.fails = 0; entry.cooldownUntil = 0; entry.uses = (entry.uses||0) + 1;
-        await saveCloudKeys(keys);
-        renderCloudKeysList();
-        _lastAskAISource = `cloud · ${CLOUD_PROVIDERS[entry.provider]?.label || entry.provider}${entry.label ? " (\""+entry.label+"\")" : ""}`;
-        return text;
-      }catch(err){
-        entry.fails = (entry.fails||0) + 1;
-        entry.lastStatus = "error";
-        entry.cooldownUntil = Date.now() + backoffFor(entry.fails);
-        await saveCloudKeys(keys);
-        renderCloudKeysList();
-        keys = await getCloudKeys(); // re-read in case another call mutated it concurrently
-      }
-    }
-  }
-  // Local fallback — unchanged from before cloud rotation existed.
   if(!engine){
     _lastAskAISource = "none (no model available)";
     return "[No local model loaded yet — go to Settings → Load Model. Until then I can still file things to memory and run searches, I just can't reason over them.]";
@@ -1949,8 +1728,7 @@ async function askAI(prompt){
 /* ================= SCRAPER HELPER MODEL (tiny, local) ================= */
 // A second, deliberately-small local model used ONLY to condense raw scraped source
 // text down to its essentials before that text is stored in memory or handed to
-// askAI/cloud — keeps both IndexedDB and any cloud dev-key call above lean, since
-// nothing downstream ever sees the raw, noisy scrape.
+// askAI() — keeps IndexedDB lean, since nothing downstream ever sees the raw, noisy scrape.
 let scraperEngine = null;
 async function populateScraperModelSelect(){
   const sel = document.getElementById("scraper-model-select");
@@ -2051,11 +1829,21 @@ const WORDS_PER_TOPIC_CAP = 25000;
 let memoryWordTotal = 0;
 let topicWordTotals = {};
 function countWords(text){ return (text||"").trim().split(/\s+/).filter(Boolean).length; }
-async function refreshWordTotal(){
-  const post = await dbGetAll("post_verified");
-  memoryWordTotal = post.reduce((sum,i)=> sum + countWords(i.doc), 0);
+async function refreshWordTotal(post){
+  // PERF: caller (renderMemory) already has the post_verified array in hand — accept it
+  // instead of re-querying IndexedDB for the same data a second time. Falls back to a
+  // fresh read only if called with no argument, so nothing else that might call this
+  // breaks. Also merged what used to be two separate passes over `post` (one via
+  // .reduce() for the grand total, one via a for-loop for the per-topic map) into a
+  // single pass — countWords() was being run twice per item for no reason.
+  if(!post) post = await dbGetAll("post_verified");
+  memoryWordTotal = 0;
   topicWordTotals = {};
-  for(const i of post){ topicWordTotals[i.topic] = (topicWordTotals[i.topic]||0) + countWords(i.doc); }
+  for(const i of post){
+    const words = countWords(i.doc);
+    memoryWordTotal += words;
+    topicWordTotals[i.topic] = (topicWordTotals[i.topic]||0) + words;
+  }
 }
 
 // v2.9: pulled the ingestion pre-check into a shared helper. Previously ONLY items from
@@ -2067,8 +1855,11 @@ async function refreshWordTotal(){
 // sourceTrustBonus below) BEFORE spending an AI call — a source that has earned a
 // track record of consistently failing verification gets auto-rejected here instead of
 // burning a model call every time to re-discover the same thing.
-async function preCheckAdmit(topic, text, sourceName){
-  const weights = (await metaGet("sourceWeights")) || {};
+async function preCheckAdmit(topic, text, sourceName, weights){
+  // PERF: falls back to a fresh read only if called without the shared cache (e.g. from
+  // some other future call site) — see the note in processTopicQueue for why the normal
+  // scraping pipeline now passes this in instead of hitting IndexedDB per item.
+  if(!weights) weights = (await metaGet("sourceWeights")) || {};
   const w = weights[sourceName];
   const total = w ? w.pass + w.fail : 0;
   if(w && total >= 5){
@@ -2105,7 +1896,7 @@ function extractReadableText(raw){
 // never used it at all, only the 3 built-in sources. Folding it into the same active-
 // source list means: one round-robin schedule, one rate-limit system, and Run Project
 // now actually benefits from whatever you've pointed the scraper at.
-async function buildActiveSources(){
+async function buildActiveSources(weights){
   const sources = [...VERIFIED_SOURCES];
   const endpoint = (await metaGet("wifiEndpoint")) || "";
   if(endpoint){
@@ -2128,7 +1919,6 @@ async function buildActiveSources(){
   // yet keeps its original relative position (falls back to baseConfidence) rather than
   // being penalized for simply being untested. Ties (e.g. everything still untested)
   // preserve original order since Array.sort is stable.
-  const weights = (await metaGet("sourceWeights")) || {};
   const trustOf = (src) => {
     const w = weights[src.name];
     if(w && (w.pass + w.fail) >= 3) return w.ema ?? 0.5;
@@ -2138,7 +1928,15 @@ async function buildActiveSources(){
   return sources;
 }
 async function processTopicQueue(topics){
-  const sources = await buildActiveSources();
+  // PERF: sourceWeights doesn't change during a scrape run (preCheckAdmit only READS
+  // it — the only thing that ever writes it, recordSourceOutcome, runs later in
+  // verifyAll()). Previously preCheckAdmit() re-read it from IndexedDB on every single
+  // fetched item, and buildActiveSources() read it again separately — for a run with
+  // many topics × many sources × several items each, that was one IndexedDB round-trip
+  // per item for data that was static the whole time. Load it once here and hand it to
+  // both instead.
+  const sourceWeights = (await metaGet("sourceWeights")) || {};
+  const sources = await buildActiveSources(sourceWeights);
   const tasks = [];
   // True round robin: topic-major, source-minor. For each topic, hit every active source
   // once before moving to the next topic — so consecutive requests are ALWAYS different
@@ -2157,7 +1955,7 @@ async function processTopicQueue(topics){
       // Lightweight pre-check at the point of ingestion — separate from the full 89%
       // verification pass later. This just filters obvious junk/off-topic noise before
       // it ever lands in Pre-Verified, so that folder holds "plausible", not "everything".
-      const {admit} = await preCheckAdmit(task.topic, item.text, item.source);
+      const {admit} = await preCheckAdmit(task.topic, item.text, item.source, sourceWeights);
       if(!admit){ preRejected++; }
       if(admit){
         await dbAdd("pre_verified", { topic:task.topic, source:`${item.source}: ${item.url}`, raw:item.text, timestamp:new Date().toISOString(), confidence:item.confidence });
@@ -2777,7 +2575,7 @@ async function renderMemory(){
         </div>
       </div>`).join("") || `<div class="status-line">Empty — nothing waiting. Turn on 🧅 Tor next to the search bar to add candidates here.</div>`;
   }
-  await refreshWordTotal();
+  await refreshWordTotal(post);
   const el = document.getElementById("word-total");
   const topicCount = Object.keys(topicWordTotals).length;
   if(el) el.textContent = `(${memoryWordTotal.toLocaleString()} words total · ${topicCount} topic${topicCount===1?"":"s"} · ${WORDS_PER_TOPIC_CAP.toLocaleString()}/topic cap)`;
@@ -2887,12 +2685,6 @@ async function loadSettings(){
   const torEp = await metaGet("torEndpoint");
   if(torEp) document.getElementById("tor-endpoint").value = torEp;
   document.getElementById("autoscore-toggle").checked = await loadAutoScoreSetting();
-  // BUG FIX (v2.13): this checkbox defaults to checked in the HTML and was never
-  // restored from storage on load — turning "Prefer cloud" off, then reloading, showed
-  // it checked again even though askAI() was correctly still reading the saved `false`
-  // from metaGet. The setting worked; the checkbox was lying about its own state.
-  const preferCloud = await metaGet("preferCloud");
-  document.getElementById("prefer-cloud-toggle").checked = preferCloud === null ? true : !!preferCloud;
   // BUG FIX (v2.14.1): model-source radio (cdn/local) + local-model-url were never
   // restored on load — see onModelSourceChange() above for the save-side half of this fix.
   const modelSource = await metaGet("modelSource");
@@ -2920,12 +2712,21 @@ async function renderSystemStatus(){
     `<div class="status-row"><span class="k">${escapeHtml(label)}</span><span class="v ${cls}">${escapeHtml(value)}</span></div>`
   );
 
+  // PERF: these four metaGet() reads are independent of each other — no need to await
+  // them one at a time in sequence. Firing them together and awaiting once means the
+  // panel waits on however long the SLOWEST read takes, not the sum of all four.
+  const [modelSource, wifiEp, torEp, folderHandle] = await Promise.all([
+    metaGet("modelSource"),
+    metaGet("wifiEndpoint"),
+    metaGet("torEndpoint"),
+    metaGet("memoryDirHandle")
+  ]);
+
   // --- LOCAL: on-device chat model ---
   const modelStatusText = document.getElementById("model-status")?.textContent || "";
   const modelLoaded = !!engine;
   row("🧠 Local chat model", modelLoaded ? (modelStatusText.split(" — ")[0] || "Loaded") : "Not loaded", modelLoaded ? "ok" : "warn");
-  const modelSource = (await metaGet("modelSource")) || "cdn";
-  row("　↳ source", modelSource === "local" ? "your own network server" : "CDN download (cached after first load)");
+  row("　↳ source", (modelSource || "cdn") === "local" ? "your own network server" : "CDN download (cached after first load)");
   const webgpuText = document.getElementById("webgpu-status")?.textContent || "Checking…";
   row("⚡ WebGPU", webgpuText, /not|unsupported|fail/i.test(webgpuText) ? "bad" : "ok");
 
@@ -2933,30 +2734,17 @@ async function renderSystemStatus(){
   const scraperOn = !!scraperEngine;
   row("🗜️ Scraper helper model", scraperOn ? "Loaded" : "Not loaded (raw text used instead)", scraperOn ? "ok" : "warn");
 
-  // --- CLOUD: dev key rotation ---
-  const keys = await getCloudKeys();
-  const enabledKeys = keys.filter(k=>k.enabled);
-  const healthyKeys = keys.filter(k=>k.lastStatus==="healthy" && k.cooldownUntil<=Date.now());
-  const preferCloud = (await metaGet("preferCloud")) ?? true;
-  row("☁️ Cloud keys configured", String(keys.length), keys.length ? "ok" : "");
-  if(keys.length){
-    row("　↳ enabled / healthy now", `${enabledKeys.length} enabled, ${healthyKeys.length} healthy`, healthyKeys.length ? "ok" : "warn");
-  }
-  row("　↳ preference", preferCloud ? "Prefer cloud when a key is healthy" : "Local model only (cloud rotation off)", preferCloud && keys.length ? "warn" : "ok");
-  const actuallyUsingCloud = preferCloud && keys.some(k=>k.enabled);
-  row("🎯 Chat / Verify / Compact judge", actuallyUsingCloud ? "Cloud rotation (falls back to local if all keys fail)" : "Local on-device model only", actuallyUsingCloud ? "warn" : "ok");
-  if(actuallyUsingCloud && enabledKeys.length > 1){
-    row("　↳ note", `${enabledKeys.length} cloud keys enabled — rotation means two calls in the SAME verify pass can be judged by different providers`, "warn");
-  }
-
   // --- NETWORK: endpoints you point Buddie at ---
-  const wifiEp = await metaGet("wifiEndpoint");
   row("🌐 WiFi/scraper endpoint", wifiEp ? wifiEp : "Not set (direct fetch, open APIs only)", wifiEp ? "warn" : "");
-  const torEp = await metaGet("torEndpoint");
   row("🧅 Tor bridge endpoint", torEp ? torEp + " (only used when Tor toggle is on)" : "Not set", torEp ? "warn" : "");
 
   // --- LOCAL: storage ---
-  const folderHandle = await metaGet("memoryDirHandle");
+  row("💾 Memory save folder", folderHandle ? (folderHandle.name ? `"${folderHandle.name}/" (tap Reconnect after reload)` : "Chosen (tap Reconnect after reload)") : "Not set (browser storage only)", folderHandle ? "ok" : "");
+  // --- NETWORK: endpoints you point Buddie at ---
+  row("🌐 WiFi/scraper endpoint", wifiEp ? wifiEp : "Not set (direct fetch, open APIs only)", wifiEp ? "warn" : "");
+  row("🧅 Tor bridge endpoint", torEp ? torEp + " (only used when Tor toggle is on)" : "Not set", torEp ? "warn" : "");
+
+  // --- LOCAL: storage ---
   row("💾 Memory save folder", folderHandle ? (folderHandle.name ? `"${folderHandle.name}/" (tap Reconnect after reload)` : "Chosen (tap Reconnect after reload)") : "Not set (browser storage only)", folderHandle ? "ok" : "");
 
   panel.innerHTML = rows.join("");
@@ -3310,8 +3098,6 @@ window.addEventListener("load", async ()=>{
   await seedMemoryIfEmpty();
   await checkVersionBanner();
   renderMemory();
-  renderCloudKeysList();
-  onCloudProviderChange();
   await populateScraperModelSelect();
   await petTick();               // catch up pet state (drain/death/AI spending) for time since last open
   setInterval(petTick, 30000);   // re-check every 30s while the app is open
